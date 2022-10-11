@@ -29,26 +29,62 @@ namespace Infrastructure.Listing
 
             if (spanElementsUnderFactsAndFeatures != null && spanElementsUnderFactsAndFeatures.Count > 0)
             {
-                listingDetail.NumOfBedrooms = ExtractNumOfBedRooms(spanElementsUnderFactsAndFeatures);
-                listingDetail.NumOfBathrooms = ExtractNumOfBathRooms(spanElementsUnderFactsAndFeatures);
+                listingDetail.NumOfBedrooms = ExtractNumFromFirstNode(spanElementsUnderFactsAndFeatures,
+                element => element.InnerHtml.Contains("Bedrooms: "));
+                listingDetail.NumOfBathrooms = ExtractNumFromFirstNode(spanElementsUnderFactsAndFeatures,
+                element => element.InnerHtml.Contains("Bathrooms: "));
+                listingDetail.NumOfStories = ExtractNumFromFirstNode(spanElementsUnderFactsAndFeatures,
+                    (element => element.InnerHtml.Contains("Stories: ")));
+                listingDetail.NumOfParkingSpaces = ExtractNumFromFirstNode(spanElementsUnderFactsAndFeatures,
+                    element => element.InnerHtml.Contains("Total spaces: "));
+                listingDetail.LotSizeInSqrtFt = ExtractNumFromFirstNode(spanElementsUnderFactsAndFeatures,
+                    element => element.InnerHtml.Contains("Lot size: "));
+                listingDetail.NumOfGarageSpaces = ExtractNumFromFirstNode(spanElementsUnderFactsAndFeatures,
+                    element => element.InnerHtml.Contains("Garage spaces: "));
+                listingDetail.HomeType = ExtractTextFromFirstNode(spanElementsUnderFactsAndFeatures,
+                    element => element.InnerHtml.Contains("Home type: "))?.Replace("Home type: ", "");
+                listingDetail.PropertyCondition = ExtractTextFromFirstNode(spanElementsUnderFactsAndFeatures,
+                    element => element.InnerHtml.Contains("Property condition: "))?.Replace("Property condition: ", "");
+                listingDetail.YearBuilt = ExtractNumFromFirstNode(spanElementsUnderFactsAndFeatures,
+                    element => element.InnerHtml.Contains("Year built: "));
+                listingDetail.HasHOA = ParseHasHOA(spanElementsUnderFactsAndFeatures);
             }
         }
 
-        private int ExtractNumOfBathRooms(HtmlNodeCollection spanElementsUnderFactsAndFeatures)
+        private bool ParseHasHOA(HtmlNodeCollection spanElementsUnderFactsAndFeatures)
         {
-            var numbOfBathsElement = spanElementsUnderFactsAndFeatures.Where(element => element.InnerHtml.Contains("Bathrooms: "));
-            var data = Regex.Match(numbOfBathsElement.First().InnerHtml, @"\d+").Value;
-
-            return int.Parse(data);
+            bool hasHOA;
+            bool.TryParse(ExtractTextFromFirstNode(spanElementsUnderFactsAndFeatures,
+                    element => element.InnerHtml.Contains("Has HOA: "))?.Replace("Has HOA: ", ""), out hasHOA);
+            return hasHOA;
         }
 
-        private int ExtractNumOfBedRooms(HtmlNodeCollection spanElementsUnderFactsAndFeatures)
+        private string? ExtractTextFromFirstNode(HtmlNodeCollection nodeCollection, Func<HtmlNode, bool> predicate)
         {
-            var numOfBedroomsElement = spanElementsUnderFactsAndFeatures.Where(element => element.InnerHtml.Contains("Bedrooms: "));
-            var data = Regex.Match(numOfBedroomsElement.First().InnerHtml, @"\d+").Value;
-
-            return int.Parse(data);
+            var filteredNodes = nodeCollection.Where(predicate);
+            if (filteredNodes == null || filteredNodes.Count() == 0)
+            {
+                return null;
+            }
+            return filteredNodes.First().InnerHtml;
         }
+
+        private int ExtractNumFromFirstNode(HtmlNodeCollection nodeCollection, Func<HtmlNode, bool> predicate)
+        {
+            var filteredNodes = nodeCollection.Where(predicate);
+            if (filteredNodes == null || filteredNodes.Count() == 0)
+            {
+                return 0;
+            }
+            var match = Regex.Match(filteredNodes.First().InnerHtml.Replace(",", ""), @"\d+").Value;
+            if (match == null)
+            {
+                return 0;
+            }
+            return int.Parse(match);
+
+        }
+
 
         private decimal ParseListingPrice(HtmlDocument htmlDoc)
         {
