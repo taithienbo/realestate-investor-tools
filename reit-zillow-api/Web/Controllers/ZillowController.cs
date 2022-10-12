@@ -1,3 +1,6 @@
+using Core.Dto;
+using Core.Listing;
+using Core.Zillow;
 using HtmlAgilityPack;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,28 +10,18 @@ namespace reit_zillow_api.Controllers
     [Route("[controller]")]
     public class ZillowController : ControllerBase
     {
-        private static readonly string[] Summaries = new[]
-        {
-        "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-        };
+        private readonly IZillowClient _zillowClient;
 
         private readonly ILogger<ZillowController> _logger;
+        private readonly IListingParser _listingParser;
 
-        public ZillowController(ILogger<ZillowController> logger)
+        public ZillowController(ILogger<ZillowController> logger,
+            IZillowClient zillowClient,
+            IListingParser listingParser)
         {
             _logger = logger;
-        }
-
-        [HttpGet(Name = "GetWeatherForecast")]
-        public IEnumerable<WeatherForecast> Get()
-        {
-            return Enumerable.Range(1, 5).Select(index => new WeatherForecast
-            {
-                Date = DateTime.Now.AddDays(index),
-                TemperatureC = Random.Shared.Next(-20, 55),
-                Summary = Summaries[Random.Shared.Next(Summaries.Length)]
-            })
-            .ToArray();
+            _zillowClient = zillowClient;
+            _listingParser = listingParser;
         }
 
         [HttpGet]
@@ -45,6 +38,12 @@ namespace reit_zillow_api.Controllers
             var listingPrice = htmlDoc.DocumentNode.SelectSingleNode("//span[@data-testid=\"price\"]/span[1]");
             var listingPriceString = listingPrice.InnerHtml;
             return listingPriceString;
+        }
+
+        public async Task<ListingDetail> GetListingInfo(string address)
+        {
+            var html = await _zillowClient.GetHtml(address);
+            return _listingParser.Parse(html);
         }
     }
 }
