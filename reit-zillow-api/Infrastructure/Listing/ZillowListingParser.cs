@@ -30,25 +30,55 @@ namespace Infrastructure.Listing
             if (spanElementsUnderFactsAndFeatures != null && spanElementsUnderFactsAndFeatures.Count > 0)
             {
                 listingDetail.NumOfBedrooms = ExtractNumFromFirstNode(spanElementsUnderFactsAndFeatures,
-                element => element.InnerHtml.Contains("Bedrooms: "));
+                element => element.InnerText.Contains("Bedrooms: "));
                 listingDetail.NumOfBathrooms = ExtractNumFromFirstNode(spanElementsUnderFactsAndFeatures,
-                element => element.InnerHtml.Contains("Bathrooms: "));
+                element => element.InnerText.Contains("Bathrooms: "));
                 listingDetail.NumOfStories = ExtractNumFromFirstNode(spanElementsUnderFactsAndFeatures,
-                    (element => element.InnerHtml.Contains("Stories: ")));
+                    (element => element.InnerText.Contains("Stories: ")));
                 listingDetail.NumOfParkingSpaces = ExtractNumFromFirstNode(spanElementsUnderFactsAndFeatures,
-                    element => element.InnerHtml.Contains("Total spaces: "));
+                    element => element.InnerText.Contains("Total spaces: "));
                 listingDetail.LotSizeInSqrtFt = ExtractNumFromFirstNode(spanElementsUnderFactsAndFeatures,
-                    element => element.InnerHtml.Contains("Lot size: "));
+                    element => element.InnerText.Contains("Lot size: "));
                 listingDetail.NumOfGarageSpaces = ExtractNumFromFirstNode(spanElementsUnderFactsAndFeatures,
-                    element => element.InnerHtml.Contains("Garage spaces: "));
-                listingDetail.HomeType = ExtractTextFromFirstNode(spanElementsUnderFactsAndFeatures,
-                    element => element.InnerHtml.Contains("Home type: "))?.Replace("Home type: ", "");
-                listingDetail.PropertyCondition = ExtractTextFromFirstNode(spanElementsUnderFactsAndFeatures,
-                    element => element.InnerHtml.Contains("Property condition: "))?.Replace("Property condition: ", "");
+                    element => element.InnerText.Contains("Garage spaces: "));
+                listingDetail.HomeType = ExtractHomeTypeFromText(ExtractTextFromFirstNode(spanElementsUnderFactsAndFeatures,
+                    element => element.InnerText.Contains("Home type: ")));
+                listingDetail.PropertyCondition = ExtractPropertyConditionFromText(ExtractTextFromFirstNode(spanElementsUnderFactsAndFeatures,
+                    element => element.InnerText.Contains("Property condition: ")));
                 listingDetail.YearBuilt = ExtractNumFromFirstNode(spanElementsUnderFactsAndFeatures,
-                    element => element.InnerHtml.Contains("Year built: "));
+                    element => element.InnerText.Contains("Year built: "));
                 listingDetail.HasHOA = ParseHasHOA(spanElementsUnderFactsAndFeatures);
             }
+        }
+
+        private string? ExtractPropertyConditionFromText(string? text)
+        {
+            if (text == null)
+            {
+                return null;
+            }
+            if (text.Contains("Turnkey"))
+            {
+                return "Turnkey";
+            }
+            if (text.Contains("Fixer"))
+            {
+                return "Fixer";
+            }
+            return null;
+        }
+
+        private string? ExtractHomeTypeFromText(string? text)
+        {
+            if (text == null)
+            {
+                return null;
+            }
+            if (text.Contains("SingleFamily"))
+            {
+                return "SingleFamily";
+            }
+            return null;
         }
 
         private bool ParseHasHOA(HtmlNodeCollection spanElementsUnderFactsAndFeatures)

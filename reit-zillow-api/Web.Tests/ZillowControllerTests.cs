@@ -40,5 +40,15 @@ namespace Web.Tests
             _mockZillowClient.Verify(mockZillowClient => mockZillowClient.GetHtml(It.Is<string>(value => value.Equals(address))));
             Assert.True(listingDetail.ListingPrice > 0);
         }
+
+        [Fact] 
+        public async void GetListingInfo_ThrowExceptionOnNullArgument()
+        {
+            // arrange
+            string address = null;
+            // act, assert
+            var exception = await  Assert.ThrowsAnyAsync<ArgumentNullException>( () =>  _zillowController.GetListingInfo(address!));
+            Assert.NotNull(exception);
+        }
     }
 }

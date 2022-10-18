@@ -14,7 +14,7 @@ namespace Infrastructure.Tests
         }
 
         [Fact]
-        public void GetListingDetail()
+        public void GetListingDetail_Test1()
         {
             var expectedListingDetail = new ListingDetail()
             {
@@ -34,25 +34,56 @@ namespace Infrastructure.Tests
             string html = File.ReadAllText("TestFiles" + Path.DirectorySeparatorChar + "zillow_listing_1.html");
             // act 
             var listingDetail = _listingParser.Parse(html);
-            // assert 
-            Assert.NotNull(listingDetail);
-            Assert.Equal(expectedListingDetail.ListingPrice, listingDetail.ListingPrice);
-            Assert.Equal(expectedListingDetail.NumOfBedrooms, listingDetail.NumOfBedrooms);
-            Assert.Equal(expectedListingDetail.NumOfBathrooms, listingDetail.NumOfBathrooms);
-            Assert.Equal(expectedListingDetail.NumOfStories, listingDetail.NumOfStories);
-            Assert.Equal(expectedListingDetail.NumOfParkingSpaces, listingDetail.NumOfParkingSpaces);
-            Assert.Equal(expectedListingDetail.LotSizeInSqrtFt, listingDetail.LotSizeInSqrtFt);
-            Assert.Equal(expectedListingDetail.NumOfGarageSpaces, listingDetail.NumOfGarageSpaces);
-            Assert.Equal(expectedListingDetail.HomeType, listingDetail.HomeType);
-            Assert.Equal(expectedListingDetail.PropertyCondition, listingDetail.PropertyCondition);
-            Assert.Equal(expectedListingDetail.YearBuilt, listingDetail.YearBuilt);
-            Assert.Equal(expectedListingDetail.HasHOA, listingDetail.HasHOA);
+            // assert
+            AssertCorrectListingDetail(expectedListingDetail, listingDetail);
+        }
+
+        [Fact]
+        public void GetListingDetail_Test2()
+        {
+            var expectedListingDetail = new ListingDetail()
+            {
+                ListingPrice = 885000,
+                NumOfBedrooms = 3,
+                NumOfBathrooms = 2,
+                NumOfStories = 1,
+                NumOfParkingSpaces = 4,
+                LotSizeInSqrtFt = 4796,
+                NumOfGarageSpaces = 2,
+                HomeType = "SingleFamily",
+                PropertyCondition = "Turnkey",
+                YearBuilt = 1971,
+                HasHOA = false
+            };
+            // arrange 
+            string html = File.ReadAllText("TestFiles" + Path.DirectorySeparatorChar + "zillow_listing_2.html");
+            // act 
+            var listingDetail = _listingParser.Parse(html);
+            // assert
+            AssertCorrectListingDetail(expectedListingDetail, listingDetail);
         }
 
         [Fact]
         public void GetListingDetail_ThrowErrorOnNullArgument()
         {
             // arrange
+        }
+
+        private void AssertCorrectListingDetail(ListingDetail expectedListingDetail, ListingDetail actualListingDetail)
+        {
+            // assert 
+            Assert.NotNull(actualListingDetail);
+            Assert.Equal(expectedListingDetail.ListingPrice, actualListingDetail.ListingPrice);
+            Assert.Equal(expectedListingDetail.NumOfBedrooms, actualListingDetail.NumOfBedrooms);
+            Assert.Equal(expectedListingDetail.NumOfBathrooms, actualListingDetail.NumOfBathrooms);
+            Assert.Equal(expectedListingDetail.NumOfStories, actualListingDetail.NumOfStories);
+            Assert.Equal(expectedListingDetail.NumOfParkingSpaces, actualListingDetail.NumOfParkingSpaces);
+            Assert.Equal(expectedListingDetail.LotSizeInSqrtFt, actualListingDetail.LotSizeInSqrtFt);
+            Assert.Equal(expectedListingDetail.NumOfGarageSpaces, actualListingDetail.NumOfGarageSpaces);
+            Assert.Equal(expectedListingDetail.HomeType, actualListingDetail.HomeType);
+            Assert.Equal(expectedListingDetail.PropertyCondition, actualListingDetail.PropertyCondition);
+            Assert.Equal(expectedListingDetail.YearBuilt, actualListingDetail.YearBuilt);
+            Assert.Equal(expectedListingDetail.HasHOA, actualListingDetail.HasHOA);
         }
     }
 }
