@@ -1,8 +1,7 @@
-using Core.Dto;
 using Core.Listing;
 using Infrastructure.Listing;
 
-namespace Infrastructure.Tests
+namespace Infrastructure.Tests.Listing
 {
     public class ZillowListingParserTests
     {

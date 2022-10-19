@@ -1,4 +1,3 @@
-using Core.Dto;
 using Core.Listing;
 using Core.Zillow;
 using Infrastructure.Listing;
@@ -41,13 +40,13 @@ namespace Web.Tests
             Assert.True(listingDetail.ListingPrice > 0);
         }
 
-        [Fact] 
+        [Fact]
         public async void GetListingInfo_ThrowExceptionOnNullArgument()
         {
             // arrange
             string address = null;
             // act, assert
-            var exception = await  Assert.ThrowsAnyAsync<ArgumentNullException>( () =>  _zillowController.GetListingInfo(address!));
+            var exception = await Assert.ThrowsAnyAsync<ArgumentNullException>(() => _zillowController.GetListingInfo(address!));
             Assert.NotNull(exception);
         }
     }

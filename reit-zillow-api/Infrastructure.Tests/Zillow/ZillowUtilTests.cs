@@ -1,6 +1,6 @@
-﻿using Infrastructure.Util;
+﻿using Infrastructure.Zillow;
 
-namespace Infrastructure.Tests.Util
+namespace Infrastructure.Tests.Zillow
 {
     public class ZillowUtilTests
     {
