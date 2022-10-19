@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Core.Listing
+namespace Core.Dto
 {
     public class ListingDetail
     {
