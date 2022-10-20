@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Core.Calculator
+namespace Core.Calculators
 {
-    public interface IExpenseCalculator
+    public interface IMonthlyExpenseCalculator
     {
         public ExpenseDetail CalculateExpenses(ListingDetail listingDetail, LoanDetail loanDetail);
     }
