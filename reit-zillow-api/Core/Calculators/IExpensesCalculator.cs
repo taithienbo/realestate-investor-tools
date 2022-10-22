@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Core.Calculators
 {
-    public interface IMonthlyExpenseCalculator
+    public interface IExpensesCalculator
     {
         public ExpenseDetail CalculateExpenses(ListingDetail listingDetail, LoanDetail loanDetail);
     }

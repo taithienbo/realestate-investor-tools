@@ -8,13 +8,13 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Tests.Calculators
 {
-    public class MonthlyPropertyTaxCalculatorTests
+    public class PropertyTaxCalculatorTests
     {
-        private IMonthlyPropertyTaxCalculator _monthlyPropertyTaxCalculator;
+        private IPropertyTaxCalculator _monthlyPropertyTaxCalculator;
 
-        public MonthlyPropertyTaxCalculatorTests()
+        public PropertyTaxCalculatorTests()
         {
-            _monthlyPropertyTaxCalculator = new MonthlyPropertyTaxCalculator();
+            _monthlyPropertyTaxCalculator = new PropertyTaxCalculator();
         }
 
         [Fact]

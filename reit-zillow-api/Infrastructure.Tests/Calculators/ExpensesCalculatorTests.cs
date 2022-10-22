@@ -6,14 +6,16 @@ using Infrastructure.Calculator;
 
 namespace Infrastructure.Tests.Calculators
 {
-    public class MonthlyExpenseCalculatorTests
+    public class ExpensesCalculatorTests
     {
-        private IMonthlyExpenseCalculator _expenseCalculator;
+        private IExpensesCalculator _expenseCalculator;
 
 
-        public MonthlyExpenseCalculatorTests()
+        public ExpensesCalculatorTests()
         {
-            _expenseCalculator = new MonthlyExpenseCalculator(new MonthlyMortgageCalculator(), new MonthlyPropertyTaxCalculator());
+            _expenseCalculator = new ExpensesCalculator(new MortgageCalculator(),
+                new PropertyTaxCalculator(),
+                new HomeOwnerInsuranceCalculator());
         }
 
         [Fact]
@@ -33,13 +35,15 @@ namespace Infrastructure.Tests.Calculators
             var expectedExpenseDetail = new ExpenseDetail()
             {
                 Mortgage = 4466,
-                PropertyTax = 11062.5 / 12
+                PropertyTax = 11062.5 / 12,
+                HomeOwnerInsurance = 184.37
             };
             // act 
             var actualExpenseDetail = _expenseCalculator.CalculateExpenses(listingDetail, loanDetail);
             Assert.NotNull(actualExpenseDetail);
             Assert.Equal(expectedExpenseDetail.Mortgage, actualExpenseDetail.Mortgage, 0);
-            Assert.Equal(expectedExpenseDetail.PropertyTax, actualExpenseDetail.PropertyTax);
+            Assert.Equal(expectedExpenseDetail.PropertyTax, actualExpenseDetail.PropertyTax, 0);
+            Assert.Equal(expectedExpenseDetail.HomeOwnerInsurance, actualExpenseDetail.HomeOwnerInsurance, 0);
         }
 
         [Fact]
@@ -59,13 +63,15 @@ namespace Infrastructure.Tests.Calculators
             var expectedExpenseDetail = new ExpenseDetail()
             {
                 Mortgage = 3143,
-                PropertyTax = 7575 / 12
+                PropertyTax = 7575 / 12,
+                HomeOwnerInsurance = 126.25 // listingPrice * .25 / 100 / 12; 
             };
             // act 
             var actualExpenseDetail = _expenseCalculator.CalculateExpenses(listingDetail, loanDetail);
             Assert.NotNull(actualExpenseDetail);
             Assert.Equal(expectedExpenseDetail.Mortgage, actualExpenseDetail.Mortgage, 0);
             Assert.Equal(expectedExpenseDetail.PropertyTax, actualExpenseDetail.PropertyTax, 0);
+            Assert.Equal(expectedExpenseDetail.HomeOwnerInsurance, actualExpenseDetail.HomeOwnerInsurance, 0);
         }
     }
 }

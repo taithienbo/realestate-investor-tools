@@ -4,13 +4,13 @@ using Infrastructure.Calculator;
 
 namespace Infrastructure.Tests.Calculators
 {
-    public class MonthlyMortgageCalculatorTests
+    public class MortgageCalculatorTests
     {
-        private IMonthlyMortgageCalculator _mortgageCalculator;
+        private IMortgageCalculator _mortgageCalculator;
 
-        public MonthlyMortgageCalculatorTests()
+        public MortgageCalculatorTests()
         {
-            _mortgageCalculator = new MonthlyMortgageCalculator();
+            _mortgageCalculator = new MortgageCalculator();
         }
 
         [Fact]

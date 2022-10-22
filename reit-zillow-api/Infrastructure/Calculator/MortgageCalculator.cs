@@ -3,7 +3,7 @@ using Core.Constants;
 
 namespace Infrastructure.Calculator
 {
-    public class MonthlyMortgageCalculator : IMonthlyMortgageCalculator
+    public class MortgageCalculator : IMortgageCalculator
     {
         public double Calculate(double mortgagePrincipal, double annualInterestPercentage,
             LoanProgram loanProgram)

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Core.Calculators
 {
-    public interface IMonthlyMortgageCalculator
+    public interface IMortgageCalculator
     {
         public double Calculate(double mortgagePrincipal, double annualIntrestRate,
             LoanProgram loanProgram = LoanProgram.ThirtyYearFixed);

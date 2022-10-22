@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Calculator
 {
-    public class MonthlyPropertyTaxCalculator : IMonthlyPropertyTaxCalculator
+    public class PropertyTaxCalculator : IPropertyTaxCalculator
     {
         public double Calculate(double purchasePrice, double estimatedPropertyTaxRate)
         {
