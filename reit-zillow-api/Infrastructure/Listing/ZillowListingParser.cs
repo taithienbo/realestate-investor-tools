@@ -116,13 +116,13 @@ namespace Infrastructure.Listing
         }
 
 
-        private decimal ParseListingPrice(HtmlDocument htmlDoc)
+        private double ParseListingPrice(HtmlDocument htmlDoc)
         {
             var listingPriceElement = htmlDoc.DocumentNode.SelectSingleNode("//span[@data-testid=\"price\"]/span[1]");
             if (listingPriceElement != null)
             {
                 var listingPriceText = listingPriceElement.InnerHtml;
-                return decimal.Parse(listingPriceText.Replace("$", ""));
+                return double.Parse(listingPriceText.Replace("$", ""));
             }
             return 0;
         }

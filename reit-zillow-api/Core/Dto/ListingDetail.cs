@@ -8,7 +8,7 @@ namespace Core.Dto
 {
     public class ListingDetail
     {
-        public decimal ListingPrice { get; set; }
+        public double ListingPrice { get; set; }
         public int NumOfBedrooms { get; set; }
         public int NumOfBathrooms { get; set; }
         public int NumOfStories { get; set; }

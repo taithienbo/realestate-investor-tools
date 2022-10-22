@@ -10,10 +10,12 @@ namespace Infrastructure.Tests.Calculators
     {
         private IMonthlyExpenseCalculator _expenseCalculator;
 
+
         public MonthlyExpenseCalculatorTests()
         {
-            _expenseCalculator = new MonthlyExpenseCalculator();
+            _expenseCalculator = new MonthlyExpenseCalculator(new MonthlyMortgageCalculator(), new MonthlyPropertyTaxCalculator());
         }
+
         [Fact]
         public void CalculateExpenses_Test1()
         {
@@ -36,7 +38,7 @@ namespace Infrastructure.Tests.Calculators
             // act 
             var actualExpenseDetail = _expenseCalculator.CalculateExpenses(listingDetail, loanDetail);
             Assert.NotNull(actualExpenseDetail);
-            Assert.Equal(expectedExpenseDetail.Mortgage, actualExpenseDetail.Mortgage);
+            Assert.Equal(expectedExpenseDetail.Mortgage, actualExpenseDetail.Mortgage, 0);
             Assert.Equal(expectedExpenseDetail.PropertyTax, actualExpenseDetail.PropertyTax);
         }
 
@@ -62,8 +64,8 @@ namespace Infrastructure.Tests.Calculators
             // act 
             var actualExpenseDetail = _expenseCalculator.CalculateExpenses(listingDetail, loanDetail);
             Assert.NotNull(actualExpenseDetail);
-            Assert.Equal(expectedExpenseDetail.Mortgage, actualExpenseDetail.Mortgage);
-            Assert.Equal(expectedExpenseDetail.PropertyTax, actualExpenseDetail.PropertyTax);
+            Assert.Equal(expectedExpenseDetail.Mortgage, actualExpenseDetail.Mortgage, 0);
+            Assert.Equal(expectedExpenseDetail.PropertyTax, actualExpenseDetail.PropertyTax, 0);
         }
     }
 }
