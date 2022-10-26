@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace Core.ExpenseEstimator
 {
-    public interface IExpensesCalculator
+    public interface IExpenseEstimator
     {
-        public ExpenseDetail CalculateExpenses(ListingDetail listingDetail, LoanDetail loanDetail);
+        public ExpenseDetail CalculateExpenses(ListingDetail listingDetail, LoanDetail loanDetail, double estimatedRentAmount);
     }
 }

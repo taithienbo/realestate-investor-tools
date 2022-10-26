@@ -13,5 +13,6 @@ namespace Core.Dto
         public double HomeOwnerInsurance { get; set; }
         public double CapitalExpenditures { get; set; }
         public double Repairs { get; set; }
+        public double PropertyManagement { get; set; }
     }
 }
