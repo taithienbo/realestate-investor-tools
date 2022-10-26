@@ -9,14 +9,17 @@ namespace Infrastructure.Calculator
         private IMortgageCalculator _mortgageCalculator;
         private IPropertyTaxCalculator _taxCalculator;
         private IHomeOwnerInsuranceCalculator _homeOwnerInsuranceCalculator;
+        private ICapExCalculator _capExCalculator;
 
         public ExpensesCalculator(IMortgageCalculator mortgageCalculator,
             IPropertyTaxCalculator taxCalculator,
-            IHomeOwnerInsuranceCalculator homeOwnerInsuranceCalculator)
+            IHomeOwnerInsuranceCalculator homeOwnerInsuranceCalculator,
+            ICapExCalculator capExCalculator)
         {
             _mortgageCalculator = mortgageCalculator;
             _taxCalculator = taxCalculator;
             _homeOwnerInsuranceCalculator = homeOwnerInsuranceCalculator;
+            _capExCalculator = capExCalculator;
         }
 
         public ExpenseDetail CalculateExpenses(ListingDetail listingDetail, LoanDetail loanDetail)
@@ -29,7 +32,9 @@ namespace Infrastructure.Calculator
                 Mortgage = _mortgageCalculator.Calculate(mortgagePrincipal,
                 loanDetail.InterestRate, loanDetail.LoanProgram),
                 PropertyTax = _taxCalculator.Calculate(listingDetail.ListingPrice),
-                HomeOwnerInsurance = _homeOwnerInsuranceCalculator.CalculateMonthlyAmount(listingDetail.ListingPrice)
+                HomeOwnerInsurance = _homeOwnerInsuranceCalculator.CalculateMonthlyAmount(listingDetail.ListingPrice),
+                CapitalExpenditures = _capExCalculator.CalculateEstimatedMonthlyCapEx(listingDetail.ListingPrice,
+                listingDetail.PropertyAge)
             };
         }
     }

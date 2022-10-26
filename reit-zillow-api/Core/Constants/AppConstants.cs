@@ -9,6 +9,7 @@ namespace Core.Constants
     public static class PropertyCondition
     {
         public const string TurnKey = nameof(TurnKey);
+        public const string Fixer = nameof(Fixer);
     }
 
     public static class HomeType

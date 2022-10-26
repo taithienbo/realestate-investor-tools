@@ -15,7 +15,8 @@ namespace Infrastructure.Tests.Calculators
         {
             _expenseCalculator = new ExpensesCalculator(new MortgageCalculator(),
                 new PropertyTaxCalculator(),
-                new HomeOwnerInsuranceCalculator());
+                new HomeOwnerInsuranceCalculator(),
+                new CapExCalculator());
         }
 
         [Fact]
@@ -53,6 +54,7 @@ namespace Infrastructure.Tests.Calculators
             var listingDetail = new ListingDetail()
             {
                 ListingPrice = 606000,
+                YearBuilt = 1950
             };
             var loanDetail = new LoanDetail()
             {
@@ -64,7 +66,8 @@ namespace Infrastructure.Tests.Calculators
             {
                 Mortgage = 3143,
                 PropertyTax = 7575 / 12,
-                HomeOwnerInsurance = 126.25 // listingPrice * .25 / 100 / 12; 
+                HomeOwnerInsurance = 126.25, // listingPrice * .25 / 100 / 12; 
+                CapitalExpenditures = 173 // (base amount, which is .20% of listing price) + property age 
             };
             // act 
             var actualExpenseDetail = _expenseCalculator.CalculateExpenses(listingDetail, loanDetail);
@@ -72,6 +75,7 @@ namespace Infrastructure.Tests.Calculators
             Assert.Equal(expectedExpenseDetail.Mortgage, actualExpenseDetail.Mortgage, 0);
             Assert.Equal(expectedExpenseDetail.PropertyTax, actualExpenseDetail.PropertyTax, 0);
             Assert.Equal(expectedExpenseDetail.HomeOwnerInsurance, actualExpenseDetail.HomeOwnerInsurance, 0);
+            Assert.Equal(expectedExpenseDetail.CapitalExpenditures, actualExpenseDetail.CapitalExpenditures, 0);
         }
     }
 }

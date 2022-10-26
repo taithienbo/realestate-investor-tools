@@ -19,5 +19,12 @@ namespace Core.Dto
         public string? PropertyCondition { get; set; }
         public int YearBuilt { get; set; }
         public bool HasHOA { get; set; }
+        public int PropertyAge
+        {
+            get
+            {
+                return DateTime.Now.Year - this.YearBuilt;
+            }
+        }
     }
 }
