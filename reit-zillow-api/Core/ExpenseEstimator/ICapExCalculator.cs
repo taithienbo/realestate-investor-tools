@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Core.Calculators
+namespace Core.ExpenseEstimator
 {
-    public interface ICapExCalculator
+    public interface ICapExExpenseEstimator
     {
         public double CalculateEstimatedMonthlyCapEx(double propertyValue, int propertyAge);
     }

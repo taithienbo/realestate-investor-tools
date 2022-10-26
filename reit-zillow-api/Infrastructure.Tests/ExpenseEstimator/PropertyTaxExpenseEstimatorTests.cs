@@ -1,5 +1,5 @@
-﻿using Core.Calculators;
-using Infrastructure.Calculator;
+﻿using Core.ExpenseEstimator;
+using Infrastructure.ExpenseEstimator;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,13 +8,13 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Tests.Calculators
 {
-    public class PropertyTaxCalculatorTests
+    public class PropertyTaxExpenseEstimatorTests
     {
-        private IPropertyTaxCalculator _monthlyPropertyTaxCalculator;
+        private IPropertyTaxExpenseEstimator _monthlyPropertyTaxCalculator;
 
-        public PropertyTaxCalculatorTests()
+        public PropertyTaxExpenseEstimatorTests()
         {
-            _monthlyPropertyTaxCalculator = new PropertyTaxCalculator();
+            _monthlyPropertyTaxCalculator = new PropertyTaxExpenseEstimator();
         }
 
         [Fact]

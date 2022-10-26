@@ -1,5 +1,5 @@
-﻿using Core.Calculators;
-using Infrastructure.Calculator;
+﻿using Core.ExpenseEstimator;
+using Infrastructure.ExpenseEstimator;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,13 +9,13 @@ using System.Threading.Tasks;
 namespace Infrastructure.Tests.Calculators
 {
 
-    public class HomeOwnerInsuranceCalculatorTests
+    public class HomeOwnerInsuranceExpenseEstimatorTests
     {
-        private IHomeOwnerInsuranceCalculator _homeOwnerInsuranceCalculator;
+        private IHomeOwnerInsuranceExpenseEstimator _homeOwnerInsuranceCalculator;
 
-        public HomeOwnerInsuranceCalculatorTests()
+        public HomeOwnerInsuranceExpenseEstimatorTests()
         {
-            _homeOwnerInsuranceCalculator = new HomeOwnerInsuranceCalculator();
+            _homeOwnerInsuranceCalculator = new HomeOwnerInsuranceExpenseEstimator();
         }
 
         [Fact]

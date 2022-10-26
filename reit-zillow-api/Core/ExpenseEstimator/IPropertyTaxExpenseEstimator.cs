@@ -1,8 +1,8 @@
 ﻿
 
-namespace Core.Calculators
+namespace Core.ExpenseEstimator
 {
-    public interface IPropertyTaxCalculator
+    public interface IPropertyTaxExpenseEstimator
     {
         public double Calculate(double purchasePrice, double estimatedPropertyTaxRate = 1.25);
     }

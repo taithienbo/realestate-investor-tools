@@ -1,9 +1,9 @@
-﻿using Core.Calculators;
+﻿using Core.ExpenseEstimator;
 using Core.Constants;
 
-namespace Infrastructure.Calculator
+namespace Infrastructure.ExpenseEstimator
 {
-    public class MortgageCalculator : IMortgageCalculator
+    public class MortgageExpenseEstimator : IMortgageExpenseEstimator
     {
         public double Calculate(double mortgagePrincipal, double annualInterestPercentage,
             LoanProgram loanProgram)

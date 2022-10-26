@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Core.Calculators
+namespace Core.ExpenseEstimator
 {
-    public interface IHomeOwnerInsuranceCalculator
+    public interface IHomeOwnerInsuranceExpenseEstimator
     {
         public double CalculateMonthlyAmount(double listingPrice);
     }

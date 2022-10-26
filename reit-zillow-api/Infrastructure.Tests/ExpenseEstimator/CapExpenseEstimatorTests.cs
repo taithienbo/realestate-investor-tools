@@ -1,6 +1,6 @@
-﻿using Core.Calculators;
+﻿using Core.ExpenseEstimator;
 using Core.Constants;
-using Infrastructure.Calculator;
+using Infrastructure.ExpenseEstimator;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,13 +9,13 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Tests.Calculators
 {
-    public class CapExCalculatorTests
+    public class CapExpenseEstimatorTests
     {
-        private ICapExCalculator _calculator;
+        private ICapExExpenseEstimator _calculator;
 
-        public CapExCalculatorTests()
+        public CapExpenseEstimatorTests()
         {
-            _calculator = new CapExCalculator();
+            _calculator = new CapExEstimator();
         }
 
         [Fact]

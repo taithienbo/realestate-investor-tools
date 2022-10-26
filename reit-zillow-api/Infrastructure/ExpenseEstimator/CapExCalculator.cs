@@ -1,13 +1,9 @@
-﻿using Core.Calculators;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Core.ExpenseEstimator;
 
-namespace Infrastructure.Calculator
+
+namespace Infrastructure.ExpenseEstimator
 {
-    public class CapExCalculator : ICapExCalculator
+    public class CapExEstimator : ICapExExpenseEstimator
     {
         private const double BaseCapExPercentOfPropertyValue = .20;
 

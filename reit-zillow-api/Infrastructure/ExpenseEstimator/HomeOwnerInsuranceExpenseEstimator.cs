@@ -1,14 +1,14 @@
-﻿using Core.Calculators;
+﻿using Core.ExpenseEstimator;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Infrastructure.Calculator
+namespace Infrastructure.ExpenseEstimator
 {
-    public class HomeOwnerInsuranceCalculator
-        : IHomeOwnerInsuranceCalculator
+    public class HomeOwnerInsuranceExpenseEstimator
+        : IHomeOwnerInsuranceExpenseEstimator
     {
         private const double EstimateHomeOwnerInsurancePercentageOfListingPrice = .25;
 

@@ -1,16 +1,16 @@
-﻿using Core.Calculators;
+﻿using Core.ExpenseEstimator;
 using Core.Constants;
-using Infrastructure.Calculator;
+using Infrastructure.ExpenseEstimator;
 
 namespace Infrastructure.Tests.Calculators
 {
-    public class MortgageCalculatorTests
+    public class MortgageExpenseEstimatorTests
     {
-        private IMortgageCalculator _mortgageCalculator;
+        private IMortgageExpenseEstimator _mortgageCalculator;
 
-        public MortgageCalculatorTests()
+        public MortgageExpenseEstimatorTests()
         {
-            _mortgageCalculator = new MortgageCalculator();
+            _mortgageCalculator = new MortgageExpenseEstimator();
         }
 
         [Fact]
