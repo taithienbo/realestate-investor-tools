@@ -1,12 +1,12 @@
-﻿using Core.ExpenseEstimator;
-using Infrastructure.ExpenseEstimator;
+﻿using Core.Expense;
+using Infrastructure.Expense;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Infrastructure.Tests.Calculators
+namespace Infrastructure.Tests.Expense
 {
     public class PropertyTaxExpenseEstimatorTests
     {

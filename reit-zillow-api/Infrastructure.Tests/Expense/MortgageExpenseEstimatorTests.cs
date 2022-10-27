@@ -1,8 +1,8 @@
-﻿using Core.ExpenseEstimator;
+﻿using Core.Expense;
 using Core.Constants;
-using Infrastructure.ExpenseEstimator;
+using Infrastructure.Expense;
 
-namespace Infrastructure.Tests.Calculators
+namespace Infrastructure.Tests.Expense
 {
     public class MortgageExpenseEstimatorTests
     {

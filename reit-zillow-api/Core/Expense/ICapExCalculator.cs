@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Core.ExpenseEstimator
+namespace Core.Expense
 {
     public interface ICapExExpenseEstimator
     {

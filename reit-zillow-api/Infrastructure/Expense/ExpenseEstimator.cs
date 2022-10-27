@@ -1,10 +1,10 @@
-﻿using Core.ExpenseEstimator;
+﻿using Core.Expense;
 using Core.Dto;
 
 
-namespace Infrastructure.ExpenseEstimator
+namespace Infrastructure.Expense
 {
-    public class EspenseEstimator : IExpenseEstimator
+    public class ExpenseEstimator : IExpenseEstimator
     {
         private IMortgageExpenseEstimator _mortgageExpenseEstimator;
         private IPropertyTaxExpenseEstimator _taxExpenseEstimator;
@@ -12,13 +12,15 @@ namespace Infrastructure.ExpenseEstimator
         private ICapExExpenseEstimator _capExExpenseEstimator;
         private IRepairExpenseEstimator _repairExpenseEstimator;
         private IPropertyManagementExpenseEstimator _propertyManagementExpenseEstimator;
+        private IMiscExpenseEstimator _miscExpenseEstimator;
 
-        public EspenseEstimator(IMortgageExpenseEstimator mortgageExpenseEstimator,
+        public ExpenseEstimator(IMortgageExpenseEstimator mortgageExpenseEstimator,
             IPropertyTaxExpenseEstimator propertyTaxExpenseEstimator,
             IHomeOwnerInsuranceExpenseEstimator homeOwnerInsuranceExpenseEstimator,
             ICapExExpenseEstimator capExCalculator,
             IRepairExpenseEstimator repairExpenseEstimator,
-            IPropertyManagementExpenseEstimator propertyManagementExpenseEstimator)
+            IPropertyManagementExpenseEstimator propertyManagementExpenseEstimator,
+            IMiscExpenseEstimator miscExpenseEstimator)
         {
             _mortgageExpenseEstimator = mortgageExpenseEstimator;
             _taxExpenseEstimator = propertyTaxExpenseEstimator;
@@ -26,6 +28,7 @@ namespace Infrastructure.ExpenseEstimator
             _capExExpenseEstimator = capExCalculator;
             _repairExpenseEstimator = repairExpenseEstimator;
             _propertyManagementExpenseEstimator = propertyManagementExpenseEstimator;
+            _miscExpenseEstimator = miscExpenseEstimator;
         }
 
         public ExpenseDetail CalculateExpenses(ListingDetail listingDetail, LoanDetail loanDetail, double estimatedRentAmount)
@@ -42,7 +45,8 @@ namespace Infrastructure.ExpenseEstimator
                 CapitalExpenditures = _capExExpenseEstimator.CalculateEstimatedMonthlyCapEx(listingDetail.ListingPrice,
                 listingDetail.PropertyAge),
                 Repairs = _repairExpenseEstimator.EstimateMonthlyAmount(listingDetail.PropertyAge),
-                PropertyManagement = _propertyManagementExpenseEstimator.EstimateMonthlyAmount(estimatedRentAmount)
+                PropertyManagement = _propertyManagementExpenseEstimator.EstimateMonthlyAmount(estimatedRentAmount),
+                Misc = _miscExpenseEstimator.EstimateMonthlyAmount()
             };
         }
     }

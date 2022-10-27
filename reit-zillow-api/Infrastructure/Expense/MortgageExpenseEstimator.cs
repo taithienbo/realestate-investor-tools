@@ -1,7 +1,7 @@
-﻿using Core.ExpenseEstimator;
+﻿using Core.Expense;
 using Core.Constants;
 
-namespace Infrastructure.ExpenseEstimator
+namespace Infrastructure.Expense
 {
     public class MortgageExpenseEstimator : IMortgageExpenseEstimator
     {

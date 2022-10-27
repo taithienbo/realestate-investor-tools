@@ -14,5 +14,13 @@ namespace Core.Dto
         public double CapitalExpenditures { get; set; }
         public double Repairs { get; set; }
         public double PropertyManagement { get; set; }
+        public double Misc { get; set; }
+        public double Total
+        {
+            get
+            {
+                return 0;
+            }
+        }
     }
 }

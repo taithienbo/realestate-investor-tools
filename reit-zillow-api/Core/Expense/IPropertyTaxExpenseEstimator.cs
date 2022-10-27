@@ -1,6 +1,6 @@
 ﻿
 
-namespace Core.ExpenseEstimator
+namespace Core.Expense
 {
     public interface IPropertyTaxExpenseEstimator
     {

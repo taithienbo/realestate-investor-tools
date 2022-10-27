@@ -1,24 +1,24 @@
-﻿using Core.ExpenseEstimator;
+﻿using Core.Expense;
 using Core.Constants;
 using Core.Dto;
-using Infrastructure.ExpenseEstimator;
+using Infrastructure.Expense;
 
-
-namespace Infrastructure.Tests.Calculators
+namespace Infrastructure.Tests.Expense
 {
     public class ExpensesEstimatorTests
     {
-        private IExpenseEstimator _expenseCalculator;
+        private IExpenseEstimator _expenseEstimator;
 
 
         public ExpensesEstimatorTests()
         {
-            _expenseCalculator = new EspenseEstimator(new MortgageExpenseEstimator(),
+            _expenseEstimator = new ExpenseEstimator(new MortgageExpenseEstimator(),
                 new PropertyTaxExpenseEstimator(),
                 new HomeOwnerInsuranceExpenseEstimator(),
-                new CapExEstimator(),
+                new CapExExpenseEstimator(),
                 new RepairExpenseEstimator(),
-                new PropertyManagementExpenseEstimator());
+                new PropertyManagementExpenseEstimator(),
+                new MiscExpenseEstimator());
         }
 
         [Fact]
@@ -43,6 +43,7 @@ namespace Infrastructure.Tests.Calculators
             const double HomeOwnerInsuranceCostAsPercentageOfPropertyValue = .25;
             const double CapExCostAsPercentageOfPropertyValue = .20;
             const double PropertyManagementCostAsPercentageOfRentAmount = 5.00;
+            const double MiscMonthlyExpense = 100;
 
             var expectedExpenseDetail = new ExpenseDetail()
             {
@@ -51,10 +52,12 @@ namespace Infrastructure.Tests.Calculators
                 HomeOwnerInsurance = listingDetail.ListingPrice * HomeOwnerInsuranceCostAsPercentageOfPropertyValue / 100 / 12,
                 CapitalExpenditures = CapExCostAsPercentageOfPropertyValue / 100 * listingDetail.ListingPrice / 12 + listingDetail.PropertyAge, // (base amount, which is .20% of listing price) + property age 
                 Repairs = BaseMonthlyRepairCost + listingDetail.PropertyAge,
-                PropertyManagement = PropertyManagementCostAsPercentageOfRentAmount / 100 * rentAmount
+                PropertyManagement = PropertyManagementCostAsPercentageOfRentAmount / 100 * rentAmount,
+                Misc = MiscMonthlyExpense
             };
             // act 
-            var actualExpenseDetail = _expenseCalculator.CalculateExpenses(listingDetail, loanDetail, rentAmount);
+            var actualExpenseDetail = _expenseEstimator.CalculateExpenses(listingDetail, loanDetail, rentAmount);
+            // assert
             Assert.NotNull(actualExpenseDetail);
             Assert.Equal(expectedExpenseDetail.Mortgage, actualExpenseDetail.Mortgage, 0);
             Assert.Equal(expectedExpenseDetail.PropertyTax, actualExpenseDetail.PropertyTax, 0);
@@ -62,6 +65,13 @@ namespace Infrastructure.Tests.Calculators
             Assert.Equal(expectedExpenseDetail.CapitalExpenditures, actualExpenseDetail.CapitalExpenditures, 0);
             Assert.Equal(expectedExpenseDetail.Repairs, actualExpenseDetail.Repairs, 0);
             Assert.Equal(expectedExpenseDetail.PropertyManagement, actualExpenseDetail.PropertyManagement, 0);
+            Assert.Equal(expectedExpenseDetail.Misc, actualExpenseDetail.Misc, 0);
+            var expectedTotalExpenses = expectedExpenseDetail.Mortgage + expectedExpenseDetail.PropertyTax
+                + expectedExpenseDetail.HomeOwnerInsurance + expectedExpenseDetail.CapitalExpenditures
+                + expectedExpenseDetail.Repairs + expectedExpenseDetail.PropertyManagement
+                + expectedExpenseDetail.Misc;
+
+            Assert.Equal(expectedExpenseDetail.Total, actualExpenseDetail.Total, 0);
 
         }
     }

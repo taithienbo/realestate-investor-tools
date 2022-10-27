@@ -1,9 +1,9 @@
-﻿using Core.ExpenseEstimator;
+﻿using Core.Expense;
 
 
-namespace Infrastructure.ExpenseEstimator
+namespace Infrastructure.Expense
 {
-    public class CapExEstimator : ICapExExpenseEstimator
+    public class CapExExpenseEstimator : ICapExExpenseEstimator
     {
         private const double BaseCapExPercentOfPropertyValue = .20;
 
