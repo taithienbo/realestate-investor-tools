@@ -1,7 +1,6 @@
 ﻿using Core.Expense;
 using Core.Dto;
 
-
 namespace Infrastructure.Expense
 {
     public class ExpenseEstimator : IExpenseEstimator
@@ -31,21 +30,21 @@ namespace Infrastructure.Expense
             _miscExpenseEstimator = miscExpenseEstimator;
         }
 
-        public ExpenseDetail CalculateExpenses(ListingDetail listingDetail, LoanDetail loanDetail, double estimatedRentAmount)
+        public ExpenseDetail EstimateExpenses(EstimateExpensesRequest estimateExpensesRequest)
         {
-            var mortgagePrincipal = listingDetail.ListingPrice
-                - (listingDetail.ListingPrice * loanDetail.DownPaymentPercent / 100);
+            var mortgagePrincipal = estimateExpensesRequest.PropertyValue
+                - (estimateExpensesRequest.PropertyValue * estimateExpensesRequest.DownPaymentPercent / 100);
 
             return new ExpenseDetail()
             {
                 Mortgage = _mortgageExpenseEstimator.Calculate(mortgagePrincipal,
-                loanDetail.InterestRate, loanDetail.LoanProgram),
-                PropertyTax = _taxExpenseEstimator.Calculate(listingDetail.ListingPrice),
-                HomeOwnerInsurance = _homeOwnerInsuranceExpenseEstimator.CalculateMonthlyAmount(listingDetail.ListingPrice),
-                CapitalExpenditures = _capExExpenseEstimator.CalculateEstimatedMonthlyCapEx(listingDetail.ListingPrice,
-                listingDetail.PropertyAge),
-                Repairs = _repairExpenseEstimator.EstimateMonthlyAmount(listingDetail.PropertyAge),
-                PropertyManagement = _propertyManagementExpenseEstimator.EstimateMonthlyAmount(estimatedRentAmount),
+                estimateExpensesRequest.InterestRate, estimateExpensesRequest.LoanProgram),
+                PropertyTax = _taxExpenseEstimator.Calculate(estimateExpensesRequest.PropertyValue),
+                HomeOwnerInsurance = _homeOwnerInsuranceExpenseEstimator.CalculateMonthlyAmount(estimateExpensesRequest.PropertyValue),
+                CapitalExpenditures = _capExExpenseEstimator.CalculateEstimatedMonthlyCapEx(estimateExpensesRequest.PropertyValue,
+                estimateExpensesRequest.PropertyAge),
+                Repairs = _repairExpenseEstimator.EstimateMonthlyAmount(estimateExpensesRequest.PropertyAge),
+                PropertyManagement = _propertyManagementExpenseEstimator.EstimateMonthlyAmount(estimateExpensesRequest.RentAmount),
                 Misc = _miscExpenseEstimator.EstimateMonthlyAmount()
             };
         }

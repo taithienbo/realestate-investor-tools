@@ -19,7 +19,8 @@ namespace Core.Dto
         {
             get
             {
-                return 0;
+                return Mortgage + PropertyTax + HomeOwnerInsurance + CapitalExpenditures
+                    + Repairs + PropertyManagement + Misc;
             }
         }
     }

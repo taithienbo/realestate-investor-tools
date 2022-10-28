@@ -2,6 +2,7 @@
 using Core.Constants;
 using Core.Dto;
 using Infrastructure.Expense;
+using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 
 namespace Infrastructure.Tests.Expense
 {
@@ -22,22 +23,18 @@ namespace Infrastructure.Tests.Expense
         }
 
         [Fact]
-        public void CalculateExpenses()
+        public void EstimateExpenses()
         {
-            // arrange
-            var listingDetail = new ListingDetail()
+            // arrange 
+            var estimateExpenseRequest = new EstimateExpensesRequest()
             {
-                ListingPrice = 606000,
-                YearBuilt = 1950
-            };
-            var loanDetail = new LoanDetail()
-            {
+                PropertyValue = 606000,
+                PropertyAge = 72,
                 DownPaymentPercent = 20,
                 InterestRate = 6.746,
-                LoanProgram = LoanProgram.ThirtyYearFixed
+                LoanProgram = LoanProgram.ThirtyYearFixed,
+                RentAmount = 2700
             };
-
-            var rentAmount = 2700;
 
             const int BaseMonthlyRepairCost = 110;
             const double HomeOwnerInsuranceCostAsPercentageOfPropertyValue = .25;
@@ -49,14 +46,14 @@ namespace Infrastructure.Tests.Expense
             {
                 Mortgage = 3143,
                 PropertyTax = 7575 / 12,
-                HomeOwnerInsurance = listingDetail.ListingPrice * HomeOwnerInsuranceCostAsPercentageOfPropertyValue / 100 / 12,
-                CapitalExpenditures = CapExCostAsPercentageOfPropertyValue / 100 * listingDetail.ListingPrice / 12 + listingDetail.PropertyAge, // (base amount, which is .20% of listing price) + property age 
-                Repairs = BaseMonthlyRepairCost + listingDetail.PropertyAge,
-                PropertyManagement = PropertyManagementCostAsPercentageOfRentAmount / 100 * rentAmount,
+                HomeOwnerInsurance = estimateExpenseRequest.PropertyValue * HomeOwnerInsuranceCostAsPercentageOfPropertyValue / 100 / 12,
+                CapitalExpenditures = CapExCostAsPercentageOfPropertyValue / 100 * estimateExpenseRequest.PropertyValue / 12 + estimateExpenseRequest.PropertyAge, // (base amount, which is .20% of listing price) + property age 
+                Repairs = BaseMonthlyRepairCost + estimateExpenseRequest.PropertyAge,
+                PropertyManagement = PropertyManagementCostAsPercentageOfRentAmount / 100 * estimateExpenseRequest.RentAmount,
                 Misc = MiscMonthlyExpense
             };
             // act 
-            var actualExpenseDetail = _expenseEstimator.CalculateExpenses(listingDetail, loanDetail, rentAmount);
+            var actualExpenseDetail = _expenseEstimator.EstimateExpenses(estimateExpenseRequest);
             // assert
             Assert.NotNull(actualExpenseDetail);
             Assert.Equal(expectedExpenseDetail.Mortgage, actualExpenseDetail.Mortgage, 0);
@@ -66,13 +63,10 @@ namespace Infrastructure.Tests.Expense
             Assert.Equal(expectedExpenseDetail.Repairs, actualExpenseDetail.Repairs, 0);
             Assert.Equal(expectedExpenseDetail.PropertyManagement, actualExpenseDetail.PropertyManagement, 0);
             Assert.Equal(expectedExpenseDetail.Misc, actualExpenseDetail.Misc, 0);
-            var expectedTotalExpenses = expectedExpenseDetail.Mortgage + expectedExpenseDetail.PropertyTax
-                + expectedExpenseDetail.HomeOwnerInsurance + expectedExpenseDetail.CapitalExpenditures
-                + expectedExpenseDetail.Repairs + expectedExpenseDetail.PropertyManagement
-                + expectedExpenseDetail.Misc;
 
-            Assert.Equal(expectedExpenseDetail.Total, actualExpenseDetail.Total, 0);
 
+            Assert.Equal((int)expectedExpenseDetail.Total, (int)actualExpenseDetail.Total);
         }
+
     }
 }

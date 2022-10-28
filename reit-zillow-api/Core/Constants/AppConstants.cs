@@ -20,5 +20,6 @@ namespace Core.Constants
     public enum LoanProgram
     {
         ThirtyYearFixed
+
     }
 }
