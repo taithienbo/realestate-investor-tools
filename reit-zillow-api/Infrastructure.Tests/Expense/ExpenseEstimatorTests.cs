@@ -6,12 +6,12 @@ using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 
 namespace Infrastructure.Tests.Expense
 {
-    public class ExpensesEstimatorTests
+    public class ExpenseEstimatorTests
     {
         private IExpenseEstimator _expenseEstimator;
 
 
-        public ExpensesEstimatorTests()
+        public ExpenseEstimatorTests()
         {
             _expenseEstimator = new ExpenseEstimator(new MortgageExpenseEstimator(),
                 new PropertyTaxExpenseEstimator(),
@@ -32,7 +32,7 @@ namespace Infrastructure.Tests.Expense
                 PropertyAge = 72,
                 DownPaymentPercent = 20,
                 InterestRate = 6.746,
-                LoanProgram = LoanProgram.ThirtyYearFixed,
+                LoanProgram = LoanProgram.ThirtyYearFixed.ToString(),
                 RentAmount = 2700
             };
 

@@ -1,5 +1,6 @@
 ﻿using Core.Expense;
 using Core.Dto;
+using Core.Constants;
 
 namespace Infrastructure.Expense
 {
@@ -34,11 +35,12 @@ namespace Infrastructure.Expense
         {
             var mortgagePrincipal = estimateExpensesRequest.PropertyValue
                 - (estimateExpensesRequest.PropertyValue * estimateExpensesRequest.DownPaymentPercent / 100);
-
+            LoanProgram loanProgram;
+            Enum.TryParse(estimateExpensesRequest.LoanProgram, out loanProgram);
             return new ExpenseDetail()
             {
                 Mortgage = _mortgageExpenseEstimator.Calculate(mortgagePrincipal,
-                estimateExpensesRequest.InterestRate, estimateExpensesRequest.LoanProgram),
+                estimateExpensesRequest.InterestRate, loanProgram),
                 PropertyTax = _taxExpenseEstimator.Calculate(estimateExpensesRequest.PropertyValue),
                 HomeOwnerInsurance = _homeOwnerInsuranceExpenseEstimator.CalculateMonthlyAmount(estimateExpensesRequest.PropertyValue),
                 CapitalExpenditures = _capExExpenseEstimator.CalculateEstimatedMonthlyCapEx(estimateExpensesRequest.PropertyValue,

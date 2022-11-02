@@ -1,13 +1,19 @@
+using Core.Expense;
 using Core.Listing;
 using Core.Zillow;
+using Infrastructure.Expense;
 using Infrastructure.Listing;
 using Infrastructure.Zillow;
+using reit_zillow_api.JsonConverters;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.Converters.Add(new DoubleConverter());
+});
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -15,6 +21,14 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddHttpClient<IZillowClient>();
 builder.Services.AddSingleton<IZillowClient, ZillowClient>();
 builder.Services.AddSingleton<IListingParser, ZillowListingParser>();
+builder.Services.AddSingleton<IExpenseEstimator, ExpenseEstimator>();
+builder.Services.AddSingleton<IMortgageExpenseEstimator, MortgageExpenseEstimator>();
+builder.Services.AddSingleton<IPropertyTaxExpenseEstimator, PropertyTaxExpenseEstimator>();
+builder.Services.AddSingleton<IHomeOwnerInsuranceExpenseEstimator, HomeOwnerInsuranceExpenseEstimator>();
+builder.Services.AddSingleton<ICapExExpenseEstimator, CapExExpenseEstimator>();
+builder.Services.AddSingleton<IRepairExpenseEstimator, RepairExpenseEstimator>();
+builder.Services.AddSingleton<IPropertyManagementExpenseEstimator, PropertyManagementExpenseEstimator>();
+builder.Services.AddSingleton<IMiscExpenseEstimator, MiscExpenseEstimator>();
 
 var app = builder.Build();
 

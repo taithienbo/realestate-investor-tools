@@ -6,7 +6,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace reit_zillow_api.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class ExpenseController : ControllerBase
     {
@@ -17,7 +17,8 @@ namespace reit_zillow_api.Controllers
             _expenseEstimator = expenseEstimator;
         }
 
-        public ExpenseDetail EstimateExpenses(EstimateExpensesRequest request)
+        [HttpGet]
+        public ExpenseDetail EstimateExpenses([FromQuery] EstimateExpensesRequest request)
         {
             if (request == null)
             {
