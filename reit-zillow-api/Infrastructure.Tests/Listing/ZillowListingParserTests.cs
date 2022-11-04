@@ -63,11 +63,6 @@ namespace Infrastructure.Tests.Listing
             AssertCorrectListingDetail(expectedListingDetail, listingDetail);
         }
 
-        [Fact]
-        public void GetListingDetail_ThrowErrorOnNullArgument()
-        {
-            // arrange
-        }
 
         private void AssertCorrectListingDetail(ListingDetail expectedListingDetail, ListingDetail actualListingDetail)
         {

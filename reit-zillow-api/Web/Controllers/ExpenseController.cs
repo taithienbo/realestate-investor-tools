@@ -34,10 +34,10 @@ namespace reit_zillow_api.Controllers
             return _expenseEstimator.EstimateExpenses(request);
         }
 
-        [HttpGet]
-        public async Task<ExpenseDetail> EstimateExpenses(string propertyAddress)
+        [HttpGet ("{address}")]
+        public async Task<ExpenseDetail> EstimateExpenses(string address)
         {
-            var htmlListingDetail = await _zillowClient.GetHtml(propertyAddress);
+            var htmlListingDetail = await _zillowClient.GetHtml(address);
             var listingDetail = _listingParser.Parse(htmlListingDetail);
             var estimateExpenseRequest = new EstimateExpensesRequest()
             {
