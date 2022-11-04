@@ -52,7 +52,7 @@ namespace Web.Tests
             // arrange 
             var testAddress = "1234 Heaven St, Anaheim, CA";
             var testHTML = "<html></html>";
-            _mockZillowClient.Setup(zillowClient => zillowClient.GetHtml(It.IsAny<string>())).ReturnsAsync(testHTML);
+            _mockZillowClient.Setup(zillowClient => zillowClient.GetListingHtmlPage(It.IsAny<string>())).ReturnsAsync(testHTML);
             var testListingDetail = new ListingDetail()
             {
                 ListingPrice = 600000,

@@ -4,13 +4,13 @@ using Infrastructure.Listing;
 
 namespace Infrastructure.Tests.Listing
 {
-    public class ZillowListingParserTests
+    public class ListingParserTests
     {
         private readonly IListingParser _listingParser;
 
-        public ZillowListingParserTests()
+        public ListingParserTests()
         {
-            _listingParser = new ZillowListingParser();
+            _listingParser = new ListingParser();
         }
 
         [Fact]

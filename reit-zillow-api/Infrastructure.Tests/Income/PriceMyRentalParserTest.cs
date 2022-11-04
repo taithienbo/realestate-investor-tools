@@ -8,13 +8,13 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Tests.Income
 {
-    public class ZillowPriceMyRentalParserTest
+    public class PriceMyRentalParserTest
     {
-        private IPriceMyRentalParser _parser;
+        private IPriceRentalParser _parser;
 
-        public ZillowPriceMyRentalParserTest()
+        public PriceMyRentalParserTest()
         {
-            _parser = new ZillowPriceMyRentalParser();
+            _parser = new PriceRentalParser();
         }
 
         [Fact]

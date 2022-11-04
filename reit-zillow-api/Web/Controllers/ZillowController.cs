@@ -32,7 +32,7 @@ namespace reit_zillow_api.Controllers
             {
                 throw new ArgumentNullException("Address cannot be null");
             }
-            var html = await _zillowClient.GetHtml(address);
+            var html = await _zillowClient.GetListingHtmlPage(address);
             return _listingParser.Parse(html);
         }
     }

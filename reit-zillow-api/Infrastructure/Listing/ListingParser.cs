@@ -10,7 +10,7 @@ using Core.Dto;
 
 namespace Infrastructure.Listing
 {
-    public class ZillowListingParser : IListingParser
+    public class ListingParser : IListingParser
     {
         public ListingDetail Parse(string html)
         {

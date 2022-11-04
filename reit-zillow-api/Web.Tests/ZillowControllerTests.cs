@@ -19,11 +19,11 @@ namespace Web.Tests
         public ZillowControllerTests()
         {
             _mockLogger = Mock.Of<ILogger<ZillowController>>();
-            _listingParser = new ZillowListingParser();
+            _listingParser = new ListingParser();
             _testFile = "TestFiles" + Path.DirectorySeparatorChar + "zillow_listing_1.html";
             _testHtml = File.ReadAllText(_testFile);
             _mockZillowClient = new Mock<IZillowClient>();
-            _mockZillowClient.Setup(zillowClient => zillowClient.GetHtml(It.IsAny<string>())).ReturnsAsync(_testHtml);
+            _mockZillowClient.Setup(zillowClient => zillowClient.GetListingHtmlPage(It.IsAny<string>())).ReturnsAsync(_testHtml);
             _zillowController = new ZillowController(_mockLogger, _mockZillowClient.Object, _listingParser);
         }
 
@@ -36,7 +36,7 @@ namespace Web.Tests
             var listingDetail = await _zillowController.GetListingInfo(address);
             // assert
             Assert.NotNull(listingDetail);
-            _mockZillowClient.Verify(mockZillowClient => mockZillowClient.GetHtml(It.Is<string>(value => value.Equals(address))));
+            _mockZillowClient.Verify(mockZillowClient => mockZillowClient.GetListingHtmlPage(It.Is<string>(value => value.Equals(address))));
             Assert.True(listingDetail.ListingPrice > 0);
         }
 

@@ -4,13 +4,13 @@ using System.Text.RegularExpressions;
 
 namespace Infrastructure.Income
 {
-    public class ZillowPriceMyRentalParser : IPriceMyRentalParser
+    public class PriceRentalParser : IPriceRentalParser
     {
-        public PriceMyRentalDetail Parse(string html)
+        public PriceRentalDetail Parse(string html)
         {
             var match = Regex.Match(html, "\"rentZestimate\":(?<price>\\d+),");
 
-            return new PriceMyRentalDetail()
+            return new PriceRentalDetail()
             {
                 ZEstimateLow = ParseZEstimateLow(html),
                 ZEstimateHigh = ParseZEstimateHigh(html),

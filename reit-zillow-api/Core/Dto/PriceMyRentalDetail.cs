@@ -2,7 +2,7 @@
 
 namespace Core.Dto
 {
-    public class PriceMyRentalDetail
+    public class PriceRentalDetail
     {
         public double ZEstimateLow { get; set; }
         public double ZEstimateHigh { get; set; }

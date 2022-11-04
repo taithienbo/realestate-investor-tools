@@ -11,14 +11,14 @@ namespace Infrastructure.Zillow
             _httpClient = httpClient;
         }
 
-        public Task<string> GetHtml(string address)
+        public Task<string> GetListingHtmlPage(string address)
         {
-            return _httpClient.GetStringAsync(BuildUrl(ZillowUtil.NormalizeAddress(address)));
+            return _httpClient.GetStringAsync(ZillowUtil.BuildListingUrl(address));
         }
 
-        private string BuildUrl(string address)
+        public Task<string> GetPriceMyRentalHtmlPage(string address)
         {
-            return @$"https://www.zillow.com/homes/{address}";
+            return _httpClient.GetStringAsync(ZillowUtil.BuildPriceMyRentalUrl(address));
         }
     }
 }

@@ -8,6 +8,7 @@ namespace Core.Zillow
 {
     public interface IZillowClient
     {
-        Task<string> GetHtml(string address);
+        Task<string> GetListingHtmlPage(string address);
+        Task<string> GetPriceMyRentalHtmlPage(string address);
     }
 }

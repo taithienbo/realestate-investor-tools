@@ -3,8 +3,8 @@
 
 namespace Core.Income
 {
-    public interface IPriceMyRentalParser
+    public interface IPriceRentalParser
     {
-        public PriceMyRentalDetail Parse(string html);
+        public PriceRentalDetail Parse(string html);
     }
 }

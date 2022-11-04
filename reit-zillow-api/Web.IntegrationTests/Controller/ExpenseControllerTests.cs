@@ -9,6 +9,7 @@ using System.Linq;
 using System.Net.Http.Json;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace Web.IntegrationTests.Controller
 {
@@ -55,6 +56,22 @@ namespace Web.IntegrationTests.Controller
             var response = await client.GetAsync("/expense");
             // assert 
             Assert.Equal(System.Net.HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        [Fact]
+        public async void EstimateExpensesGivenAddress()
+        {
+            // arrange 
+            var client = _factory.CreateClient();
+            var address = "230 e susanne st, anaheim, ca 92805";
+            var uri = $"/expense/{address}";
+            // act 
+            var response = await client.GetAsync(uri);
+            // assert 
+            response.EnsureSuccessStatusCode();
+            var expenses = await response.Content.ReadFromJsonAsync<ExpenseDetail>();
+            Assert.NotNull(expenses);
+            Assert.True(expenses!.Total > 0);
         }
     }
 }
