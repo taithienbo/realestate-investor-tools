@@ -1,6 +1,7 @@
 ﻿using Core.Constants;
 using Core.Dto;
 using Core.Expense;
+using Core.Income;
 using Core.Listing;
 using Core.Zillow;
 using Infrastructure.Expense;
@@ -22,7 +23,7 @@ namespace Web.Tests
         private readonly IExpenseEstimator _expenseEstimator;
         private readonly Mock<IZillowClient> _mockZillowClient;
         private readonly Mock<IListingParser> _mockListingParser;
-
+        private readonly Mock<IPriceRentalParser> _mockPriceRentalParser;
         public ExpenseControllerTests()
         {
             // need to update to real expense estimator 
@@ -35,7 +36,8 @@ namespace Web.Tests
                 new MiscExpenseEstimator());
             _mockZillowClient = new Mock<IZillowClient>();
             _mockListingParser = new Mock<IListingParser>();
-            _expenseController = new ExpenseController(_expenseEstimator, _mockZillowClient.Object, _mockListingParser.Object);
+            _mockPriceRentalParser = new Mock<IPriceRentalParser>();
+            _expenseController = new ExpenseController(_expenseEstimator, _mockZillowClient.Object, _mockListingParser.Object, _mockPriceRentalParser.Object);
         }
 
         [Fact]
@@ -58,7 +60,14 @@ namespace Web.Tests
                 ListingPrice = 600000,
                 YearBuilt = 1950,
             };
+            var testPriceRentalDetail = new PriceRentalDetail()
+            {
+                ZEstimateLow = 1,
+                ZEstimateHigh = 10,
+                ZEstimate = 5
+            };
             _mockListingParser.Setup(listingParser => listingParser.Parse(It.IsAny<string>())).Returns(testListingDetail);
+            _mockPriceRentalParser.Setup(priceRentalParser => priceRentalParser.Parse(It.IsAny<string>())).Returns(testPriceRentalDetail);
             // act 
             var expenseDetail = _expenseController.EstimateExpenses(testAddress).Result;
             Assert.NotNull(expenseDetail);

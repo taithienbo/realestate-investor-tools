@@ -8,14 +8,14 @@ namespace reit_zillow_api.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class ZillowController : ControllerBase
+    public class ListingController : ControllerBase
     {
         private readonly IZillowClient _zillowClient;
 
-        private readonly ILogger<ZillowController> _logger;
+        private readonly ILogger<ListingController> _logger;
         private readonly IListingParser _listingParser;
 
-        public ZillowController(ILogger<ZillowController> logger,
+        public ListingController(ILogger<ListingController> logger,
             IZillowClient zillowClient,
             IListingParser listingParser)
         {
