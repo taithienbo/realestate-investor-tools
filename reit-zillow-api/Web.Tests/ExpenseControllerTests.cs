@@ -2,6 +2,7 @@
 using Core.Dto;
 using Core.Expense;
 using Core.Income;
+using Core.Interest;
 using Core.Listing;
 using Core.Zillow;
 using Infrastructure.Expense;
@@ -24,6 +25,8 @@ namespace Web.Tests
         private readonly Mock<IZillowClient> _mockZillowClient;
         private readonly Mock<IListingParser> _mockListingParser;
         private readonly Mock<IPriceRentalParser> _mockPriceRentalParser;
+        private readonly Mock<IMortgageInterestEstimator> _mockMortgageInterestEstimator;
+
         public ExpenseControllerTests()
         {
             // need to update to real expense estimator 
@@ -37,7 +40,10 @@ namespace Web.Tests
             _mockZillowClient = new Mock<IZillowClient>();
             _mockListingParser = new Mock<IListingParser>();
             _mockPriceRentalParser = new Mock<IPriceRentalParser>();
-            _expenseController = new ExpenseController(_expenseEstimator, _mockZillowClient.Object, _mockListingParser.Object, _mockPriceRentalParser.Object);
+            _mockMortgageInterestEstimator = new Mock<IMortgageInterestEstimator>();
+
+            _expenseController = new ExpenseController(_expenseEstimator, _mockZillowClient.Object, _mockListingParser.Object, _mockPriceRentalParser.Object,
+              _mockMortgageInterestEstimator.Object);
         }
 
         [Fact]
@@ -54,6 +60,8 @@ namespace Web.Tests
             // arrange 
             var testAddress = "1234 Heaven St, Anaheim, CA";
             var testHTML = "<html></html>";
+            var interestRate = 7.0;
+            _mockMortgageInterestEstimator.Setup(mortageInterestEstimator => mortageInterestEstimator.GetCurrentInterest(It.IsAny<double>(), It.IsAny<double>())).ReturnsAsync(interestRate);
             _mockZillowClient.Setup(zillowClient => zillowClient.GetListingHtmlPage(It.IsAny<string>())).ReturnsAsync(testHTML);
             var testListingDetail = new ListingDetail()
             {

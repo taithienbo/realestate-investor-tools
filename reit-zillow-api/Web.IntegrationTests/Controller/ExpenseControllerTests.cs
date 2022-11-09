@@ -63,7 +63,7 @@ namespace Web.IntegrationTests.Controller
         {
             // arrange 
             var client = _factory.CreateClient();
-            var address = "230 e susanne st, anaheim, ca 92805";
+            var address = "14062-Baker-St-Westminster-CA-92683";
             var uri = $"/expense/{address}";
             // act 
             var response = await client.GetAsync(uri);

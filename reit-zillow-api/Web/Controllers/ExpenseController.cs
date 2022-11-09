@@ -2,6 +2,7 @@
 using Core.Dto;
 using Core.Expense;
 using Core.Income;
+using Core.Interest;
 using Core.Listing;
 using Core.Zillow;
 using Microsoft.AspNetCore.Mvc;
@@ -18,16 +19,19 @@ namespace reit_zillow_api.Controllers
         private readonly IListingParser _listingParser;
         private readonly IZillowClient _zillowClient;
         private readonly IPriceRentalParser _priceRentalParser;
+        private readonly IMortgageInterestEstimator _mortgageInterestEstimator;
 
         public ExpenseController(IExpenseEstimator expenseEstimator,
             IZillowClient zillowClient,
             IListingParser listingParser,
-            IPriceRentalParser priceRentalParser)
+            IPriceRentalParser priceRentalParser,
+            IMortgageInterestEstimator mortgageInterestEstimator)
         {
             _expenseEstimator = expenseEstimator;
             _listingParser = listingParser;
             _zillowClient = zillowClient;
             _priceRentalParser = priceRentalParser;
+            _mortgageInterestEstimator = mortgageInterestEstimator;
         }
 
         [HttpGet]
@@ -48,12 +52,18 @@ namespace reit_zillow_api.Controllers
             var estimateExpenseRequest = new EstimateExpensesRequest()
             {
                 PropertyValue = listingDetail.ListingPrice,
-                InterestRate = 6.5,
+                InterestRate = await _mortgageInterestEstimator.GetCurrentInterest(DefaultLoanAmount(listingDetail.ListingPrice), listingDetail.ListingPrice),
                 PropertyAge = listingDetail.PropertyAge,
                 LoanProgram = LoanProgram.ThirtyYearFixed.ToString(),
                 RentAmount = priceRentalDetail.ZEstimate
             };
             return _expenseEstimator.EstimateExpenses(estimateExpenseRequest);
+        }
+
+        private double DefaultLoanAmount(double listingPrice)
+        {
+            // assume 25% down payment for investment property 
+            return listingPrice - .25 * listingPrice;
         }
 
         private async Task<ListingDetail> GetListingDetail(string address)

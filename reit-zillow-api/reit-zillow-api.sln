@@ -13,7 +13,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure", "Infrastru
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Web.Tests", "Web.Tests\Web.Tests.csproj", "{CF7A6C52-C7FE-497C-9EC2-0906337FBA77}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web.IntegrationTests", "Web.IntegrationTests\Web.IntegrationTests.csproj", "{243A8CB7-0442-4735-AA7F-C35CB4811B6E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Web.IntegrationTests", "Web.IntegrationTests\Web.IntegrationTests.csproj", "{243A8CB7-0442-4735-AA7F-C35CB4811B6E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HtmlDownloader", "HtmlDownloader\HtmlDownloader.csproj", "{89ECA22F-4BE7-4987-9A51-C4544C0D27F9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{243A8CB7-0442-4735-AA7F-C35CB4811B6E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{243A8CB7-0442-4735-AA7F-C35CB4811B6E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{243A8CB7-0442-4735-AA7F-C35CB4811B6E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{89ECA22F-4BE7-4987-9A51-C4544C0D27F9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{89ECA22F-4BE7-4987-9A51-C4544C0D27F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{89ECA22F-4BE7-4987-9A51-C4544C0D27F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{89ECA22F-4BE7-4987-9A51-C4544C0D27F9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

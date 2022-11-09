@@ -1,9 +1,13 @@
+using Core.ConsumerFinance;
 using Core.Expense;
 using Core.Income;
+using Core.Interest;
 using Core.Listing;
 using Core.Zillow;
+using Infrastructure.ConsumerFinance;
 using Infrastructure.Expense;
 using Infrastructure.Income;
+using Infrastructure.Interest;
 using Infrastructure.Listing;
 using Infrastructure.Zillow;
 using reit_zillow_api.JsonConverters;
@@ -32,6 +36,9 @@ builder.Services.AddSingleton<IRepairExpenseEstimator, RepairExpenseEstimator>()
 builder.Services.AddSingleton<IPropertyManagementExpenseEstimator, PropertyManagementExpenseEstimator>();
 builder.Services.AddSingleton<IMiscExpenseEstimator, MiscExpenseEstimator>();
 builder.Services.AddSingleton<IPriceRentalParser, PriceRentalParser>();
+builder.Services.AddSingleton<IMortgageInterestEstimator, MortgageInterestEstimator>();
+builder.Services.AddHttpClient<IRateCheckerApiClient>();
+builder.Services.AddSingleton<IRateCheckerApiClient, RateCheckerApiClient>();
 
 var app = builder.Build();
 
