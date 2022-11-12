@@ -42,9 +42,12 @@ namespace Web.IntegrationTests.Controller
             var response = await client.GetAsync(uri);
             // assert 
             response.EnsureSuccessStatusCode();
-            var expenses = await response.Content.ReadFromJsonAsync<ExpenseDetail>();
+            var expenses = await response.Content.ReadFromJsonAsync<IDictionary<string, double>>();
             Assert.NotNull(expenses);
-            Assert.True(expenses!.Total > 0);
+            foreach (var commonExpense in Enum.GetNames(typeof(CommonExpenseType)))
+            {
+                Assert.True(expenses!.ContainsKey(commonExpense));
+            }
         }
 
         [Fact]
@@ -69,9 +72,12 @@ namespace Web.IntegrationTests.Controller
             var response = await client.GetAsync(uri);
             // assert 
             response.EnsureSuccessStatusCode();
-            var expenses = await response.Content.ReadFromJsonAsync<ExpenseDetail>();
+            var expenses = await response.Content.ReadFromJsonAsync<IDictionary<string, double>>();
             Assert.NotNull(expenses);
-            Assert.True(expenses!.Total > 0);
+            foreach (var commonExpense in Enum.GetNames(typeof(CommonExpenseType)))
+            {
+                Assert.True(expenses!.ContainsKey(commonExpense));
+            }
         }
     }
 }

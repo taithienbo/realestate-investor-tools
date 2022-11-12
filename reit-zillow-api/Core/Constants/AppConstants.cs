@@ -21,4 +21,20 @@ namespace Core.Constants
     {
         ThirtyYearFixed
     }
+
+    public enum CommonExpenseType
+    {
+        Mortgage,
+        PropertyTax,
+        HomeOwnerInsurance,
+        CapitalExpenditures,
+        Repairs,
+        PropertyManagement,
+        Misc
+    }
+
+    public enum CommonIncomeType
+    {
+        Rental
+    }
 }

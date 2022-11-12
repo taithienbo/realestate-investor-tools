@@ -35,7 +35,7 @@ namespace reit_zillow_api.Controllers
         }
 
         [HttpGet]
-        public ExpenseDetail EstimateExpenses([FromQuery] EstimateExpensesRequest request)
+        public IDictionary<string, double> EstimateExpenses([FromQuery] EstimateExpensesRequest request)
         {
             if (request == null)
             {
@@ -45,7 +45,7 @@ namespace reit_zillow_api.Controllers
         }
 
         [HttpGet("{address}")]
-        public async Task<ExpenseDetail> EstimateExpenses(string address)
+        public async Task<IDictionary<string, double>> EstimateExpenses(string address)
         {
             var listingDetail = await GetListingDetail(address);
             var priceRentalDetail = await GetPriceRentalDetail(address);

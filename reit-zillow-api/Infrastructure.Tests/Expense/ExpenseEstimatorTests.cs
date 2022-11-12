@@ -42,30 +42,38 @@ namespace Infrastructure.Tests.Expense
             const double PropertyManagementCostAsPercentageOfRentAmount = 5.00;
             const double MiscMonthlyExpense = 100;
 
-            var expectedExpenseDetail = new ExpenseDetail()
+            var expectedExpenses = new Dictionary<string, double>()
             {
-                Mortgage = 3143,
-                PropertyTax = 7575 / 12,
-                HomeOwnerInsurance = estimateExpenseRequest.PropertyValue * HomeOwnerInsuranceCostAsPercentageOfPropertyValue / 100 / 12,
-                CapitalExpenditures = CapExCostAsPercentageOfPropertyValue / 100 * estimateExpenseRequest.PropertyValue / 12 + estimateExpenseRequest.PropertyAge, // (base amount, which is .20% of listing price) + property age 
-                Repairs = BaseMonthlyRepairCost + estimateExpenseRequest.PropertyAge,
-                PropertyManagement = PropertyManagementCostAsPercentageOfRentAmount / 100 * estimateExpenseRequest.RentAmount,
-                Misc = MiscMonthlyExpense
+                { nameof(CommonExpenseType.Mortgage), 3143 },
+                { nameof(CommonExpenseType.PropertyTax), 7575 / 12 },
+                { nameof(CommonExpenseType.HomeOwnerInsurance),
+                estimateExpenseRequest.PropertyValue * HomeOwnerInsuranceCostAsPercentageOfPropertyValue / 100 / 12
+                },
+                { nameof(CommonExpenseType.CapitalExpenditures),
+                CapExCostAsPercentageOfPropertyValue / 100 * estimateExpenseRequest.PropertyValue / 12 + estimateExpenseRequest.PropertyAge // (base amount, which is .20% of listing price) + property age ) }
+                },
+                { nameof(CommonExpenseType.Repairs), BaseMonthlyRepairCost + estimateExpenseRequest.PropertyAge
+                },
+                {
+                    nameof(CommonExpenseType.PropertyManagement),
+                    PropertyManagementCostAsPercentageOfRentAmount / 100 * estimateExpenseRequest.RentAmount
+                },
+                {
+                    nameof(CommonExpenseType.Misc),
+                    MiscMonthlyExpense
+                }
             };
+
+
             // act 
-            var actualExpenseDetail = _expenseEstimator.EstimateExpenses(estimateExpenseRequest);
+            var actualExpenses = _expenseEstimator.EstimateExpenses(estimateExpenseRequest);
             // assert
-            Assert.NotNull(actualExpenseDetail);
-            Assert.Equal(expectedExpenseDetail.Mortgage, actualExpenseDetail.Mortgage, 0);
-            Assert.Equal(expectedExpenseDetail.PropertyTax, actualExpenseDetail.PropertyTax, 0);
-            Assert.Equal(expectedExpenseDetail.HomeOwnerInsurance, actualExpenseDetail.HomeOwnerInsurance, 0);
-            Assert.Equal(expectedExpenseDetail.CapitalExpenditures, actualExpenseDetail.CapitalExpenditures, 0);
-            Assert.Equal(expectedExpenseDetail.Repairs, actualExpenseDetail.Repairs, 0);
-            Assert.Equal(expectedExpenseDetail.PropertyManagement, actualExpenseDetail.PropertyManagement, 0);
-            Assert.Equal(expectedExpenseDetail.Misc, actualExpenseDetail.Misc, 0);
-
-
-            Assert.Equal((int)expectedExpenseDetail.Total, (int)actualExpenseDetail.Total);
+            Assert.NotNull(actualExpenses);
+            foreach (var commonExpense in Enum.GetNames(typeof(CommonExpenseType)))
+            {
+                Assert.True(actualExpenses.ContainsKey(commonExpense));
+                Assert.Equal(expectedExpenses[commonExpense], actualExpenses[commonExpense], 0);
+            }
         }
 
     }

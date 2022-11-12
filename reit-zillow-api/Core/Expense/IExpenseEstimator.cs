@@ -9,6 +9,6 @@ namespace Core.Expense
 {
     public interface IExpenseEstimator
     {
-        public ExpenseDetail EstimateExpenses(EstimateExpensesRequest estimateExpensesRequest);
+        public IDictionary<string, double> EstimateExpenses(EstimateExpensesRequest estimateExpensesRequest);
     }
 }

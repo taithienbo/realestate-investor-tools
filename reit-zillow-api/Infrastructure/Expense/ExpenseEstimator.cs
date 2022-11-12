@@ -31,24 +31,33 @@ namespace Infrastructure.Expense
             _miscExpenseEstimator = miscExpenseEstimator;
         }
 
-        public ExpenseDetail EstimateExpenses(EstimateExpensesRequest estimateExpensesRequest)
+        public IDictionary<string, double> EstimateExpenses(EstimateExpensesRequest estimateExpensesRequest)
         {
             var mortgagePrincipal = estimateExpensesRequest.PropertyValue
                 - (estimateExpensesRequest.PropertyValue * estimateExpensesRequest.DownPaymentPercent / 100);
             LoanProgram loanProgram;
             Enum.TryParse(estimateExpensesRequest.LoanProgram, out loanProgram);
-            return new ExpenseDetail()
+
+            var mortgage = _mortgageExpenseEstimator.Calculate(mortgagePrincipal,
+                estimateExpensesRequest.InterestRate, loanProgram);
+            var propertyTax = _taxExpenseEstimator.Calculate(estimateExpensesRequest.PropertyValue);
+            var homeOwnerInsureance = _homeOwnerInsuranceExpenseEstimator.CalculateMonthlyAmount(estimateExpensesRequest.PropertyValue);
+            var capitalExpenditures = _capExExpenseEstimator.CalculateEstimatedMonthlyCapEx(estimateExpensesRequest.PropertyValue,
+                estimateExpensesRequest.PropertyAge);
+            var repairs = _repairExpenseEstimator.EstimateMonthlyAmount(estimateExpensesRequest.PropertyAge);
+            var propertyManagement = _propertyManagementExpenseEstimator.EstimateMonthlyAmount(estimateExpensesRequest.RentAmount);
+            var misc = _miscExpenseEstimator.EstimateMonthlyAmount();
+            return new Dictionary<string, double>()
             {
-                Mortgage = _mortgageExpenseEstimator.Calculate(mortgagePrincipal,
-                estimateExpensesRequest.InterestRate, loanProgram),
-                PropertyTax = _taxExpenseEstimator.Calculate(estimateExpensesRequest.PropertyValue),
-                HomeOwnerInsurance = _homeOwnerInsuranceExpenseEstimator.CalculateMonthlyAmount(estimateExpensesRequest.PropertyValue),
-                CapitalExpenditures = _capExExpenseEstimator.CalculateEstimatedMonthlyCapEx(estimateExpensesRequest.PropertyValue,
-                estimateExpensesRequest.PropertyAge),
-                Repairs = _repairExpenseEstimator.EstimateMonthlyAmount(estimateExpensesRequest.PropertyAge),
-                PropertyManagement = _propertyManagementExpenseEstimator.EstimateMonthlyAmount(estimateExpensesRequest.RentAmount),
-                Misc = _miscExpenseEstimator.EstimateMonthlyAmount()
+                { nameof(CommonExpenseType.Mortgage), mortgage },
+                { nameof(CommonExpenseType.PropertyTax), propertyTax },
+                { nameof(CommonExpenseType.HomeOwnerInsurance), homeOwnerInsureance },
+                { nameof(CommonExpenseType.CapitalExpenditures), capitalExpenditures },
+                { nameof(CommonExpenseType.Repairs), repairs },
+                { nameof(CommonExpenseType.PropertyManagement), propertyManagement },
+                { nameof(CommonExpenseType.Misc), misc }
             };
+
         }
     }
 }

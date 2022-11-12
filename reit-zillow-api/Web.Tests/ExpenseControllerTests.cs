@@ -79,7 +79,10 @@ namespace Web.Tests
             // act 
             var expenseDetail = _expenseController.EstimateExpenses(testAddress).Result;
             Assert.NotNull(expenseDetail);
-            Assert.True(expenseDetail.Total > 0);
+            foreach (var commonExpense in Enum.GetNames(typeof(CommonExpenseType)))
+            {
+                Assert.True(expenseDetail.ContainsKey(commonExpense));
+            }
 
         }
 
