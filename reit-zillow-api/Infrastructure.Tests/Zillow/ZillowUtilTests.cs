@@ -1,5 +1,4 @@
 ﻿using Core.Zillow;
-using Infrastructure.Zillow;
 
 namespace Infrastructure.Tests.Zillow
 {

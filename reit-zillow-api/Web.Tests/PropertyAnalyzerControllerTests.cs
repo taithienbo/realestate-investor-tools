@@ -7,11 +7,6 @@ using Core.Listing;
 using Core.Zillow;
 using Moq;
 using reit_zillow_api.Controllers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Web.Tests
 {
@@ -79,18 +74,22 @@ namespace Web.Tests
             // assert 
             Assert.NotNull(propertyAnalysisDetail);
             Assert.NotNull(propertyAnalysisDetail!.Incomes);
-            var expectedTotalIncome = mockPriceRentalDetail.ZEstimate; 
+
+            var expectedTotalIncome = mockPriceRentalDetail.ZEstimate;
             Assert.True(propertyAnalysisDetail.Incomes!.ContainsKey(nameof(CommonIncomeType.Rental)));
-            Assert.Equal(expectedTotalIncome, propertyAnalysisDetail.TotalIncome));
+            Assert.Equal(expectedTotalIncome, propertyAnalysisDetail.TotalIncome);
             Assert.NotNull(propertyAnalysisDetail.ListingDetail);
             Assert.Equal(interestRate, propertyAnalysisDetail.InterestRate, 0);
             Assert.NotNull(propertyAnalysisDetail.Expenses);
-            var expectedTotalExpense = expenses.Sum(keyVaulue => keyVaulue.Value);  
+
+            var expectedTotalExpense = expenses.Sum(keyVaulue => keyVaulue.Value);
             foreach (var commonExpense in Enum.GetNames(typeof(CommonExpenseType)))
             {
                 Assert.True(propertyAnalysisDetail.Expenses!.ContainsKey(commonExpense));
             }
-            Assert.Equal(expectedTotalExpense, propertyAnalysisDetail.TotalExpense);          
+            Assert.Equal(expectedTotalExpense, propertyAnalysisDetail.TotalExpense);
+
+            Assert.True(propertyAnalysisDetail.NetOperatingIncome != 0);
         }
     }
 }

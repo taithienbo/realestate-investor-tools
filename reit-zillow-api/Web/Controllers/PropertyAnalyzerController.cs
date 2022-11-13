@@ -1,4 +1,5 @@
-﻿using Core.Constants;
+﻿using Core;
+using Core.Constants;
 using Core.Dto;
 using Core.Expense;
 using Core.Income;
@@ -52,6 +53,8 @@ namespace reit_zillow_api.Controllers
 
             var expenses = GetExpenses(listingDetail, currentInterest, rentalIncome);
             analysisDetail.Expenses = expenses;
+
+            analysisDetail.NetOperatingIncome = Calculators.CalculateNetOperatingIncome(analysisDetail.Incomes!, analysisDetail.Expenses);
             return analysisDetail;
         }
 

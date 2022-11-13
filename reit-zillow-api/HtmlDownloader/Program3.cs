@@ -1,5 +1,4 @@
 ﻿// See https://aka.ms/new-console-template for more information
-using PuppeteerSharp;
 
 //await new BrowserFetcher().DownloadAsync(BrowserFetcher.DefaultChromiumRevision);
 //IBrowser browser = await Puppeteer.LaunchAsync(new LaunchOptions

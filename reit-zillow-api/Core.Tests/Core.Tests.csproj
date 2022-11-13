@@ -25,4 +25,19 @@
 		<ProjectReference Include="..\Core\Core.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <None Update="TestFiles\interest_rates_test1.html">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Update="TestFiles\price_my_rental_test1.html">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Update="TestFiles\zillow_listing_1.html">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Update="TestFiles\zillow_listing_2.html">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	</ItemGroup>
+
 </Project>

@@ -1,8 +1,6 @@
-﻿using Core.Expense;
-using Core.Constants;
+﻿using Core.Constants;
 using Core.Dto;
-using Infrastructure.Expense;
-using Microsoft.VisualStudio.TestPlatform.ObjectModel;
+using Core.Expense;
 
 namespace Infrastructure.Tests.Expense
 {

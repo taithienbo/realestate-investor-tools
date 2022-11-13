@@ -1,7 +1,5 @@
 ﻿using Core.ConsumerFinance;
-using Core.Dto;
 using Core.Interest;
-using Infrastructure.Interest;
 using Moq;
 
 namespace Infrastructure.Tests.Interest

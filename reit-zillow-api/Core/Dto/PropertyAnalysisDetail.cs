@@ -11,7 +11,7 @@
 
         public double TotalIncome
         {
-            get { return Incomes == null ? 0 : Incomes.Sum(keyValue => keyValue.Value);  }
+            get { return Incomes == null ? 0 : Incomes.Sum(keyValue => keyValue.Value); }
         }
 
         public double InterestRate { get; set; }
@@ -25,6 +25,8 @@
             }
             Incomes.Add(incomeType, incomeAmount);
         }
+
+        public double NetOperatingIncome { get; set; }
 
     }
 }

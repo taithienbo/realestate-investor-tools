@@ -1,7 +1,4 @@
-﻿using Core.Expense;
-
-
-namespace Infrastructure.Expense
+﻿namespace Core.Expense
 {
     public class CapExExpenseEstimator : ICapExExpenseEstimator
     {

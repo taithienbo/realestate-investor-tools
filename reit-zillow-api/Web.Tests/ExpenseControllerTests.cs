@@ -5,16 +5,8 @@ using Core.Income;
 using Core.Interest;
 using Core.Listing;
 using Core.Zillow;
-using Infrastructure.Expense;
-using Infrastructure.Listing;
 using Moq;
 using reit_zillow_api.Controllers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography.Xml;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Web.Tests
 {

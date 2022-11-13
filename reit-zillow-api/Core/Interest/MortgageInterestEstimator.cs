@@ -1,15 +1,8 @@
-﻿using Core;
-using Core.Constants;
+﻿
 using Core.ConsumerFinance;
-using Core.Interest;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Infrastructure.Interest
+
+namespace Core.Interest
 {
     public class MortgageInterestEstimator : IMortgageInterestEstimator
     {
@@ -38,7 +31,7 @@ namespace Infrastructure.Interest
 
         public Task<double> GetCurrentInterest(double propertyPrice)
         {
-            double loanAmount = LoanCalculatorUtil.CalculateLoanAmount(propertyPrice, DefaultDownPaymentPercent);
+            double loanAmount = Calculators.CalculateLoanAmount(propertyPrice, DefaultDownPaymentPercent);
             return GetCurrentInterest(loanAmount, propertyPrice);
         }
 

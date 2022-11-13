@@ -1,7 +1,6 @@
 using Core.Dto;
 using Core.Listing;
 using Core.Zillow;
-using HtmlAgilityPack;
 using Microsoft.AspNetCore.Mvc;
 
 namespace reit_zillow_api.Controllers

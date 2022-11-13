@@ -1,8 +1,7 @@
 ﻿using Core.Dto;
-using Core.Income;
 using System.Text.RegularExpressions;
 
-namespace Infrastructure.Income
+namespace Core.Income
 {
     public class PriceRentalParser : IPriceRentalParser
     {

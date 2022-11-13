@@ -1,11 +1,4 @@
-﻿using Core.Expense;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Infrastructure.Expense
+﻿namespace Core.Expense
 {
     public class PropertyTaxExpenseEstimator : IPropertyTaxExpenseEstimator
     {

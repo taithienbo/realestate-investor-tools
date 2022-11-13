@@ -1,6 +1,5 @@
-﻿using Core.Expense;
-using Core.Constants;
-using Infrastructure.Expense;
+﻿using Core.Constants;
+using Core.Expense;
 
 namespace Infrastructure.Tests.Expense
 {

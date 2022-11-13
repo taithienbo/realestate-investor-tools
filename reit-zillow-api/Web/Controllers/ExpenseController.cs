@@ -6,8 +6,6 @@ using Core.Interest;
 using Core.Listing;
 using Core.Zillow;
 using Microsoft.AspNetCore.Mvc;
-using System.ComponentModel.DataAnnotations;
-using System.Diagnostics.CodeAnalysis;
 
 namespace reit_zillow_api.Controllers
 {

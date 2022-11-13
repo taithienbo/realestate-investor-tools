@@ -1,8 +1,7 @@
-﻿using Core.Expense;
+﻿using Core.Constants;
 using Core.Dto;
-using Core.Constants;
 
-namespace Infrastructure.Expense
+namespace Core.Expense
 {
     public class ExpenseEstimator : IExpenseEstimator
     {

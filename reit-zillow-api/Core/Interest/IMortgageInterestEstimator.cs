@@ -1,11 +1,4 @@
-﻿using Core.Constants;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Core.Interest
+﻿namespace Core.Interest
 {
     public interface IMortgageInterestEstimator
     {

@@ -1,12 +1,7 @@
-﻿using Core.Listing;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Core.Dto;
+using Core.Listing;
 using HtmlAgilityPack;
 using System.Text.RegularExpressions;
-using Core.Dto;
 
 namespace Infrastructure.Listing
 {
