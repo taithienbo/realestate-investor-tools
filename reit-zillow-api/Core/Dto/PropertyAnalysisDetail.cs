@@ -27,6 +27,7 @@
         }
 
         public double NetOperatingIncome { get; set; }
+        public double CapRate { get; set; }
 
     }
 }

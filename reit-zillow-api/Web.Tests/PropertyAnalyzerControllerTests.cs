@@ -90,6 +90,7 @@ namespace Web.Tests
             Assert.Equal(expectedTotalExpense, propertyAnalysisDetail.TotalExpense);
 
             Assert.True(propertyAnalysisDetail.NetOperatingIncome != 0);
+            Assert.True(propertyAnalysisDetail.CapRate != 0);
         }
     }
 }

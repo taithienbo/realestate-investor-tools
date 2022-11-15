@@ -55,6 +55,9 @@ namespace reit_zillow_api.Controllers
             analysisDetail.Expenses = expenses;
 
             analysisDetail.NetOperatingIncome = Calculators.CalculateNetOperatingIncome(analysisDetail.Incomes!, analysisDetail.Expenses);
+
+            analysisDetail.CapRate = Calculators.CalculateCapRate(listingDetail.ListingPrice, analysisDetail.Incomes!);
+
             return analysisDetail;
         }
 

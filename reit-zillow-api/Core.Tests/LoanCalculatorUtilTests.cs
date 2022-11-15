@@ -36,7 +36,23 @@ namespace Core.Tests
             //NOI = The profit you’ve received in a year, excluding your mortgage payment. 
             var expectedNoi = (rentalIncome * 12) - (OtherExpenses * 12);
             Assert.Equal(expectedNoi, noi);
+        }
 
+        [Fact]
+        public void CalculateCapRate()
+        {
+            // arrange 
+            const double propertyPrice = 100000;
+            const double monthlyRentalIncome = 1000;
+            var monthlyIncomes = new Dictionary<string, double>()
+            {
+                { nameof(CommonIncomeType.Rental), monthlyRentalIncome }
+            };
+            // act 
+            var capRate = Calculators.CalculateCapRate(propertyPrice, monthlyIncomes);
+            // assert
+            double expectedCapRatePercentage = 12;
+            Assert.Equal(expectedCapRatePercentage, capRate, 0);
         }
     }
 }
