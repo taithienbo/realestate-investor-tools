@@ -28,6 +28,8 @@
 
         public double NetOperatingIncome { get; set; }
         public double CapRate { get; set; }
+        public double DebtServiceCoverageRatio { get; set; }
+        public double CashFlow { get; set; }
 
     }
 }

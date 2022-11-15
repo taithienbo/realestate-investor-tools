@@ -91,6 +91,8 @@ namespace Web.Tests
 
             Assert.True(propertyAnalysisDetail.NetOperatingIncome != 0);
             Assert.True(propertyAnalysisDetail.CapRate != 0);
+            Assert.True(propertyAnalysisDetail.DebtServiceCoverageRatio != 0);
+            Assert.True(propertyAnalysisDetail.CashFlow != 0);
         }
     }
 }

@@ -58,6 +58,10 @@ namespace reit_zillow_api.Controllers
 
             analysisDetail.CapRate = Calculators.CalculateCapRate(listingDetail.ListingPrice, analysisDetail.Incomes!);
 
+            analysisDetail.DebtServiceCoverageRatio = Calculators.CalculateDebtServiceCoverageRatio(analysisDetail.Incomes!, analysisDetail.Expenses);
+
+            analysisDetail.CashFlow = Calculators.CalculateCashFlow(analysisDetail.Incomes, analysisDetail.Expenses);
+
             return analysisDetail;
         }
 

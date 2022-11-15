@@ -39,5 +39,44 @@ namespace Core
             double totalYearlyIncome = monthlyIncomes.Sum(keyValuePair => keyValuePair.Value) * 12;
             return totalYearlyIncome / propertyPrice * 100;
         }
+
+        /// <summary>
+        /// Calcualte the Debt Service Coverage Ratio (DBCR) of an investment. 
+        /// 
+        /// DBCR: Total debt payment includes mortgage and interest. 
+        /// Banks want the DSCR to be at least 1.2. 
+        /// Ex: Property brings $1 MIL in income, expenses total 400,000.
+        /// Then, NOI = $600k. If total annual debt payment is $500k, then
+        /// DSCR = NOI / Annual debt payment = 600k / 500k = 1.2 
+
+        /// </summary>
+        /// <param name="monthlyIncomes"></param>
+        /// <param name="monthlyExpenses"></param>
+        /// <returns></returns>
+        public static double CalculateDebtServiceCoverageRatio(IDictionary<string, double> monthlyIncomes, IDictionary<string, double> monthlyExpenses)
+        {
+            double annualDebtPayment = monthlyExpenses.Where(keyValuePair => keyValuePair.Key == nameof(CommonExpenseType.Mortgage)).FirstOrDefault().Value * 12;
+
+            return CalculateNetOperatingIncome(monthlyIncomes, monthlyExpenses) / annualDebtPayment;
+        }
+
+        /// <summary>
+        /// Calculate the monthly amount of cash remaining after all expenses.
+        /// Income is the monthly income you receive every month. Typically, 
+        /// this will be rental income. But it can be also other incomes.For 
+        /// example, you may have laundry machines that operates by coin and 
+        /// receive income from it.
+        /// Expense includes cost of repair, maintenance, management fee, 
+        /// insurance, mortage etc...
+        /// Cash flow = Incomes - Expenses
+        /// </summary>
+        /// <param name="incomes"></param>
+        /// <param name="expenses"></param>
+        /// <returns></returns>
+        public static double CalculateCashFlow(IDictionary<string, double> incomes,
+            IDictionary<string, double> expenses)
+        {
+            return incomes.Sum(keyValue => keyValue.Value) - expenses.Sum(keyValue => keyValue.Value);
+        }
     }
 }
