@@ -1,4 +1,7 @@
 ﻿using Core.Constants;
+using Moq;
+using System.Buffers.Text;
+using System;
 
 namespace Core
 {
@@ -77,6 +80,35 @@ namespace Core
             IDictionary<string, double> expenses)
         {
             return incomes.Sum(keyValue => keyValue.Value) - expenses.Sum(keyValue => keyValue.Value);
+        }
+
+        /// <summary>
+        /// The cash-on-cash return on investment (often abbreviated as CoCROI)
+        /// is a simple metric that tells us what kind of yield our money is
+        /// making us based only on the cash flow(ignoring appreciation, tax
+        /// benefits, and the loan pay down). The CoCROI is nice because it 
+        /// allows us to compare this investment against other investments, 
+        /// like the stock market or mutual funds."
+        /// "CoCROI is simply the ratio between how much cash flow we received 
+        /// over a one-year period and how much money we invested."
+        /// Annual Cash Flow = Total income - Total expenses
+        /// Total investment is the total money you put out of pocket to 
+        /// purchase the deal. 
+
+        /// </summary>
+        /// <param name="monthlyIncomes"></param>
+        /// <param name="monthlyExpenses"></param>
+        /// <param name="totalInvestment"></param>
+        /// <returns></returns>
+        public static double CalculateCashOnCashReturn(
+            IDictionary<string, double> monthlyIncomes, IDictionary<string, double> monthlyExpenses, double totalInvestment)
+        {
+            return CalculateCashFlow(monthlyIncomes, monthlyExpenses) * 12 / totalInvestment * 100;
+        }
+
+        public static double CalculateDownPayment(double listingPrice, double downPaymentPercent)
+        {
+            return downPaymentPercent / 100 * listingPrice;
         }
     }
 }

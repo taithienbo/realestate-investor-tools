@@ -36,6 +36,7 @@ builder.Services.AddSingleton<IPriceRentalParser, PriceRentalParser>();
 builder.Services.AddSingleton<IMortgageInterestEstimator, MortgageInterestEstimator>();
 builder.Services.AddHttpClient<IRateCheckerApiClient>();
 builder.Services.AddSingleton<IRateCheckerApiClient, RateCheckerApiClient>();
+builder.Services.AddSingleton<ITotalInvestmentEstimator, TotalInvestmentEstimator>();
 
 var app = builder.Build();
 

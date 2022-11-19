@@ -19,6 +19,7 @@ namespace Web.Tests
         private Mock<IListingParser> _mockListingParser;
         private Mock<IMortgageInterestEstimator> _mockMortgageInterestEstimator;
         private Mock<IExpenseEstimator> _mockExpenseEstimator;
+        private readonly ITotalInvestmentEstimator _outOfPocketCostEstimator;
 
         public PropertyAnalyzerControllerTests()
         {
@@ -28,8 +29,11 @@ namespace Web.Tests
             _mockMortgageInterestEstimator = new Mock<IMortgageInterestEstimator>();
             _mockExpenseEstimator = new Mock<IExpenseEstimator>();
 
+            _outOfPocketCostEstimator = new TotalInvestmentEstimator();
+
             _propertyAnalyzerController = new PropertyAnalyzerController(_mockPriceRentalParser.Object, _mockZillowClient.Object, _mockListingParser.Object, _mockMortgageInterestEstimator.Object,
-              _mockExpenseEstimator.Object);
+              _mockExpenseEstimator.Object,
+              _outOfPocketCostEstimator);
         }
 
         [Fact]
@@ -93,6 +97,12 @@ namespace Web.Tests
             Assert.True(propertyAnalysisDetail.CapRate != 0);
             Assert.True(propertyAnalysisDetail.DebtServiceCoverageRatio != 0);
             Assert.True(propertyAnalysisDetail.CashFlow != 0);
+            Assert.True(propertyAnalysisDetail.CashOnCashReturn != 0);
+            Assert.True(propertyAnalysisDetail.CashOnCashReturn != 0);
+            Assert.Equal(OutOfPocketInvestmentCost.DefaultDownPaymentPercent, propertyAnalysisDetail.AssumedDownPaymentPercent, 0);
+            Assert.Equal(OutOfPocketInvestmentCost.DefaultClosingCostAmount, propertyAnalysisDetail.AssumedClosingCost, 0);
+
+            Assert.NotNull(propertyAnalysisDetail.AssumedOutOfPocketCosts);
         }
     }
 }

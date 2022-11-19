@@ -19,19 +19,27 @@ namespace reit_zillow_api.Controllers
         private readonly IExpenseEstimator _expenseEstimator;
         private readonly IListingParser _listingParser;
         private readonly IMortgageInterestEstimator _mortgageInterestEstimator;
-
+        private readonly ITotalInvestmentEstimator _outOfPocketCostEstimator;
 
         public PropertyAnalyzerController(IPriceRentalParser priceRentalParser,
             IZillowClient zillowClient,
             IListingParser listingParser,
             IMortgageInterestEstimator mortgageInterestEstimator,
-            IExpenseEstimator expenseEstimator)
+            IExpenseEstimator expenseEstimator,
+            ITotalInvestmentEstimator outOfPocketCostEstimator)
         {
             _priceRentalParser = priceRentalParser;
             _zillowClient = zillowClient;
             _listingParser = listingParser;
             _mortgageInterestEstimator = mortgageInterestEstimator;
             _expenseEstimator = expenseEstimator;
+            _outOfPocketCostEstimator = outOfPocketCostEstimator;
+        }
+
+        [HttpGet]
+        public string Status()
+        {
+            return "OK";
         }
 
         [HttpGet("{address}")]
@@ -60,7 +68,17 @@ namespace reit_zillow_api.Controllers
 
             analysisDetail.DebtServiceCoverageRatio = Calculators.CalculateDebtServiceCoverageRatio(analysisDetail.Incomes!, analysisDetail.Expenses);
 
-            analysisDetail.CashFlow = Calculators.CalculateCashFlow(analysisDetail.Incomes, analysisDetail.Expenses);
+            analysisDetail.CashFlow = Calculators.CalculateCashFlow(analysisDetail.Incomes!, analysisDetail.Expenses);
+
+            analysisDetail.AssumedOutOfPocketCosts = new Dictionary<string, double>
+            {
+                { nameof(CommonOutOfPocketCost.DownPayment),
+                Calculators.CalculateDownPayment(listingDetail.ListingPrice, OutOfPocketInvestmentCost.DefaultDownPaymentPercent)},
+                { nameof (CommonOutOfPocketCost.ClosingCost),
+                OutOfPocketInvestmentCost.DefaultClosingCostAmount}
+            };
+
+            analysisDetail.CashOnCashReturn = Calculators.CalculateCashOnCashReturn(analysisDetail.Incomes!, analysisDetail.Expenses, _outOfPocketCostEstimator.EstimateTotalInvestment(listingDetail.ListingPrice));
 
             return analysisDetail;
         }

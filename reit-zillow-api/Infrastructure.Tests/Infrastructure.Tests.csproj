@@ -40,6 +40,9 @@
 		<None Update="TestFiles\zillow_listing_2.html">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
+		<None Update="TestFiles\zillow_listing_condo.html">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
 	</ItemGroup>
 
 </Project>

@@ -30,20 +30,43 @@ namespace Infrastructure.Listing
                 element => element.InnerText.Contains("Bathrooms: "));
                 listingDetail.NumOfStories = ExtractNumFromFirstNode(spanElementsUnderFactsAndFeatures,
                     (element => element.InnerText.Contains("Stories: ")));
+                listingDetail.NumOfLevels = Find(spanElementsUnderFactsAndFeatures, "Levels");
                 listingDetail.NumOfParkingSpaces = ExtractNumFromFirstNode(spanElementsUnderFactsAndFeatures,
                     element => element.InnerText.Contains("Total spaces: "));
-                listingDetail.LotSizeInSqrtFt = ExtractNumFromFirstNode(spanElementsUnderFactsAndFeatures,
-                    element => element.InnerText.Contains("Lot size: "));
+                listingDetail.LotSize = Find(spanElementsUnderFactsAndFeatures, "Lot size");
                 listingDetail.NumOfGarageSpaces = ExtractNumFromFirstNode(spanElementsUnderFactsAndFeatures,
                     element => element.InnerText.Contains("Garage spaces: "));
-                listingDetail.HomeType = ExtractHomeTypeFromText(ExtractTextFromFirstNode(spanElementsUnderFactsAndFeatures,
-                    element => element.InnerText.Contains("Home type: ")));
-                listingDetail.PropertyCondition = ExtractPropertyConditionFromText(ExtractTextFromFirstNode(spanElementsUnderFactsAndFeatures,
-                    element => element.InnerText.Contains("Property condition: ")));
+                listingDetail.HomeType = Find(spanElementsUnderFactsAndFeatures, "Home type");
+                listingDetail.PropertyCondition = ExtractPropertyConditionFromText(Find(spanElementsUnderFactsAndFeatures,
+                    "Property condition"));
                 listingDetail.YearBuilt = ExtractNumFromFirstNode(spanElementsUnderFactsAndFeatures,
                     element => element.InnerText.Contains("Year built: "));
                 listingDetail.HasHOA = ParseHasHOA(spanElementsUnderFactsAndFeatures);
             }
+        }
+
+        private HtmlNode? FindFirst(HtmlNodeCollection nodeCollection, Func<HtmlNode, bool> predicate)
+        {
+            return nodeCollection.Where(predicate).FirstOrDefault();
+        }
+
+        private string? ExtractValue(HtmlNode node, string keyword)
+        {
+            if (node.InnerHtml != null)
+            {
+                return Regex.Replace(node.InnerHtml!, @"[^\w\s\.@,]", "",
+                                RegexOptions.None, TimeSpan.FromSeconds(1.5)).Replace(keyword, "").Trim();
+            }
+
+            return null;
+        }
+
+        private string? Find(HtmlNodeCollection spanElementsUnderFactsAndFeatures, string keyword)
+        {
+            var htmlNode = FindFirst(spanElementsUnderFactsAndFeatures, element => element.InnerHtml.Contains(keyword));
+            if (htmlNode != null)
+                return ExtractValue(htmlNode, keyword);
+            return null;
         }
 
         private string? ExtractPropertyConditionFromText(string? text)
@@ -63,35 +86,11 @@ namespace Infrastructure.Listing
             return null;
         }
 
-        private string? ExtractHomeTypeFromText(string? text)
-        {
-            if (text == null)
-            {
-                return null;
-            }
-            if (text.Contains("SingleFamily"))
-            {
-                return "SingleFamily";
-            }
-            return null;
-        }
 
         private bool ParseHasHOA(HtmlNodeCollection spanElementsUnderFactsAndFeatures)
         {
-            bool hasHOA;
-            bool.TryParse(ExtractTextFromFirstNode(spanElementsUnderFactsAndFeatures,
-                    element => element.InnerHtml.Contains("Has HOA: "))?.Replace("Has HOA: ", ""), out hasHOA);
-            return hasHOA;
-        }
-
-        private string? ExtractTextFromFirstNode(HtmlNodeCollection nodeCollection, Func<HtmlNode, bool> predicate)
-        {
-            var filteredNodes = nodeCollection.Where(predicate);
-            if (filteredNodes == null || filteredNodes.Count() == 0)
-            {
-                return null;
-            }
-            return filteredNodes.First().InnerHtml;
+            var hoaInfo = Find(spanElementsUnderFactsAndFeatures, "Has HOA");
+            return hoaInfo != null && hoaInfo.Equals("Yes");
         }
 
         private int ExtractNumFromFirstNode(HtmlNodeCollection nodeCollection, Func<HtmlNode, bool> predicate)

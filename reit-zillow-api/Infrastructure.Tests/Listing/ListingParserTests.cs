@@ -1,3 +1,4 @@
+using Core.Constants;
 using Core.Dto;
 using Core.Listing;
 using Infrastructure.Listing;
@@ -22,8 +23,9 @@ namespace Infrastructure.Tests.Listing
                 NumOfBedrooms = 4,
                 NumOfBathrooms = 2,
                 NumOfStories = 1,
+                NumOfLevels = "One",
                 NumOfParkingSpaces = 2,
-                LotSizeInSqrtFt = 8849,
+                LotSize = "8,849 sqft",
                 NumOfGarageSpaces = 2,
                 HomeType = "SingleFamily",
                 PropertyCondition = "Fixer",
@@ -48,8 +50,9 @@ namespace Infrastructure.Tests.Listing
                 NumOfBathrooms = 2,
                 NumOfStories = 1,
                 NumOfParkingSpaces = 4,
-                LotSizeInSqrtFt = 4796,
+                LotSize = "4,796 sqft",
                 NumOfGarageSpaces = 2,
+                NumOfLevels = "One",
                 HomeType = "SingleFamily",
                 PropertyCondition = "Turnkey",
                 YearBuilt = 1971,
@@ -63,6 +66,27 @@ namespace Infrastructure.Tests.Listing
             AssertCorrectListingDetail(expectedListingDetail, listingDetail);
         }
 
+        [Fact]
+        public void GetListingDetail_Test3_Condo()
+        {
+            // arrange 
+            string html = File.ReadAllText("TestFiles" + Path.DirectorySeparatorChar + "zillow_listing_condo.html");
+            // act 
+            var listingDetail = _listingParser.Parse(html);
+            var expectedListingDetail = new ListingDetail()
+            {
+                ListingPrice = 380000,
+                HomeType = HomeType.Condo,
+                NumOfBathrooms = 1,
+                NumOfBedrooms = 1,
+                NumOfLevels = "One",
+                LotSize = "7 Acres",
+                YearBuilt = 1965,
+                HasHOA = true
+            };
+            AssertCorrectListingDetail(expectedListingDetail, listingDetail);
+        }
+
 
         private void AssertCorrectListingDetail(ListingDetail expectedListingDetail, ListingDetail actualListingDetail)
         {
@@ -72,8 +96,9 @@ namespace Infrastructure.Tests.Listing
             Assert.Equal(expectedListingDetail.NumOfBedrooms, actualListingDetail.NumOfBedrooms);
             Assert.Equal(expectedListingDetail.NumOfBathrooms, actualListingDetail.NumOfBathrooms);
             Assert.Equal(expectedListingDetail.NumOfStories, actualListingDetail.NumOfStories);
+            Assert.Equal(expectedListingDetail.NumOfLevels, actualListingDetail.NumOfLevels);
             Assert.Equal(expectedListingDetail.NumOfParkingSpaces, actualListingDetail.NumOfParkingSpaces);
-            Assert.Equal(expectedListingDetail.LotSizeInSqrtFt, actualListingDetail.LotSizeInSqrtFt);
+            Assert.Equal(expectedListingDetail.LotSize, actualListingDetail.LotSize);
             Assert.Equal(expectedListingDetail.NumOfGarageSpaces, actualListingDetail.NumOfGarageSpaces);
             Assert.Equal(expectedListingDetail.HomeType, actualListingDetail.HomeType);
             Assert.Equal(expectedListingDetail.PropertyCondition, actualListingDetail.PropertyCondition);

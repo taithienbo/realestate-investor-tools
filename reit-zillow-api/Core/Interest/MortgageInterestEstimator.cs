@@ -1,4 +1,5 @@
 ﻿
+using Core.Constants;
 using Core.ConsumerFinance;
 
 
@@ -7,7 +8,6 @@ namespace Core.Interest
     public class MortgageInterestEstimator : IMortgageInterestEstimator
     {
         private readonly IRateCheckerApiClient _rateCheckerApiClient;
-        private const double DefaultDownPaymentPercent = 25;
 
         public MortgageInterestEstimator(IRateCheckerApiClient rateCheckerApiClient)
         {
@@ -31,7 +31,7 @@ namespace Core.Interest
 
         public Task<double> GetCurrentInterest(double propertyPrice)
         {
-            double loanAmount = Calculators.CalculateLoanAmount(propertyPrice, DefaultDownPaymentPercent);
+            double loanAmount = Calculators.CalculateLoanAmount(propertyPrice, OutOfPocketInvestmentCost.DefaultDownPaymentPercent);
             return GetCurrentInterest(loanAmount, propertyPrice);
         }
 
