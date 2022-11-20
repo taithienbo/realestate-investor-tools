@@ -69,7 +69,8 @@ namespace Web.Tests
                 { nameof(CommonExpenseType.Misc), 100 },
                 { nameof(CommonExpenseType.Mortgage), 100 },
                 { nameof(CommonExpenseType.Repairs), 100 },
-            };
+                { nameof(CommonExpenseType.HoaFee), 200 }
+    };
 
             _mockExpenseEstimator.Setup(expenseEstimator => expenseEstimator.EstimateExpenses(It.IsAny<EstimateExpensesRequest>())).Returns(expenses);
 
@@ -99,6 +100,7 @@ namespace Web.Tests
             Assert.True(propertyAnalysisDetail.CashFlow != 0);
             Assert.True(propertyAnalysisDetail.CashOnCashReturn != 0);
             Assert.True(propertyAnalysisDetail.CashOnCashReturn != 0);
+
             Assert.Equal(OutOfPocketInvestmentCost.DefaultDownPaymentPercent, propertyAnalysisDetail.AssumedDownPaymentPercent, 0);
             Assert.Equal(OutOfPocketInvestmentCost.DefaultClosingCostAmount, propertyAnalysisDetail.AssumedClosingCost, 0);
 

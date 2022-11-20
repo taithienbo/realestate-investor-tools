@@ -82,7 +82,8 @@ namespace Infrastructure.Tests.Listing
                 NumOfLevels = "One",
                 LotSize = "7 Acres",
                 YearBuilt = 1965,
-                HasHOA = true
+                HasHOA = true,
+                HoaFee = 252
             };
             AssertCorrectListingDetail(expectedListingDetail, listingDetail);
         }
@@ -104,6 +105,7 @@ namespace Infrastructure.Tests.Listing
             Assert.Equal(expectedListingDetail.PropertyCondition, actualListingDetail.PropertyCondition);
             Assert.Equal(expectedListingDetail.YearBuilt, actualListingDetail.YearBuilt);
             Assert.Equal(expectedListingDetail.HasHOA, actualListingDetail.HasHOA);
+            Assert.Equal(expectedListingDetail.HoaFee, actualListingDetail.HoaFee, 0);
         }
     }
 }

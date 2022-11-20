@@ -42,6 +42,7 @@ namespace Infrastructure.Listing
                 listingDetail.YearBuilt = ExtractNumFromFirstNode(spanElementsUnderFactsAndFeatures,
                     element => element.InnerText.Contains("Year built: "));
                 listingDetail.HasHOA = ParseHasHOA(spanElementsUnderFactsAndFeatures);
+                listingDetail.HoaFee = ExtractNumFromFirstNode(spanElementsUnderFactsAndFeatures, element => element.InnerText.Contains("HOA fee: "));
             }
         }
 

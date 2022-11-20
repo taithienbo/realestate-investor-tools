@@ -53,7 +53,8 @@ namespace reit_zillow_api.Controllers
                 InterestRate = await _mortgageInterestEstimator.GetCurrentInterest(DefaultLoanAmount(listingDetail.ListingPrice), listingDetail.ListingPrice),
                 PropertyAge = listingDetail.PropertyAge,
                 LoanProgram = LoanProgram.ThirtyYearFixed.ToString(),
-                RentAmount = priceRentalDetail.ZEstimate
+                RentAmount = priceRentalDetail.ZEstimate,
+                HoaFee = listingDetail.HoaFee
             };
             return _expenseEstimator.EstimateExpenses(estimateExpenseRequest);
         }

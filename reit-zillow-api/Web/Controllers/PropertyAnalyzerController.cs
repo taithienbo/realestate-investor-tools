@@ -100,7 +100,8 @@ namespace reit_zillow_api.Controllers
                 PropertyAge = listingDetail.PropertyAge,
                 PropertyValue = listingDetail.ListingPrice,
                 InterestRate = interestRate,
-                RentAmount = rentAmount
+                RentAmount = rentAmount,
+                HoaFee = listingDetail.HoaFee
             });
         }
 

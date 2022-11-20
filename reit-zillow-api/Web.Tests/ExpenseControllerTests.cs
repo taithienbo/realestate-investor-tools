@@ -59,6 +59,7 @@ namespace Web.Tests
             {
                 ListingPrice = 600000,
                 YearBuilt = 1950,
+                HoaFee = 200
             };
             var testPriceRentalDetail = new PriceRentalDetail()
             {

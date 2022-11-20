@@ -27,7 +27,8 @@ namespace Web.IntegrationTests.Controller
                 ["DownPaymentPercent"] = "25",
                 ["InterestRate"] = "7.0",
                 ["RentAmount"] = "3000",
-                ["LoanProgram"] = LoanProgram.ThirtyYearFixed.ToString()
+                ["LoanProgram"] = LoanProgram.ThirtyYearFixed.ToString(),
+                ["HoaFee"] = "200"
             };
             var uri = QueryHelpers.AddQueryString("/expense", queryParameters);
             // act 

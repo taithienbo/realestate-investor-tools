@@ -31,7 +31,8 @@ namespace Infrastructure.Tests.Expense
                 DownPaymentPercent = 20,
                 InterestRate = 6.746,
                 LoanProgram = LoanProgram.ThirtyYearFixed.ToString(),
-                RentAmount = 2700
+                RentAmount = 2700,
+                HoaFee = 200
             };
 
             const int BaseMonthlyRepairCost = 110;
@@ -55,6 +56,9 @@ namespace Infrastructure.Tests.Expense
                 {
                     nameof(CommonExpenseType.PropertyManagement),
                     PropertyManagementCostAsPercentageOfRentAmount / 100 * estimateExpenseRequest.RentAmount
+                },
+                {
+                    nameof(CommonExpenseType.HoaFee),       estimateExpenseRequest.HoaFee
                 },
                 {
                     nameof(CommonExpenseType.Misc),

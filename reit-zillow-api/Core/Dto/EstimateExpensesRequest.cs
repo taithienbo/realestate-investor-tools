@@ -15,7 +15,7 @@ namespace Core.Dto
         public string LoanProgram { get; set; } = "ThirtyYearFixed";
         [Range(1, double.MaxValue)]
         public double RentAmount { get; set; }
-
+        public double HoaFee { get; set; }
 
     }
 }

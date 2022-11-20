@@ -14,6 +14,7 @@
         public string? PropertyCondition { get; set; }
         public int YearBuilt { get; set; }
         public bool HasHOA { get; set; }
+        public double HoaFee { get; set; }
         public int PropertyAge
         {
             get

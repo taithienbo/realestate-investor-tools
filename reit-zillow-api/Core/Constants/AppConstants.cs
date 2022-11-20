@@ -26,6 +26,7 @@
         CapitalExpenditures,
         Repairs,
         PropertyManagement,
+        HoaFee,
         Misc
     }
 

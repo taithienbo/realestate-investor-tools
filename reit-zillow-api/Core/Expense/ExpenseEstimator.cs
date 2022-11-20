@@ -46,7 +46,7 @@ namespace Core.Expense
             var repairs = _repairExpenseEstimator.EstimateMonthlyAmount(estimateExpensesRequest.PropertyAge);
             var propertyManagement = _propertyManagementExpenseEstimator.EstimateMonthlyAmount(estimateExpensesRequest.RentAmount);
             var misc = _miscExpenseEstimator.EstimateMonthlyAmount();
-            return new Dictionary<string, double>()
+            var expenses = new Dictionary<string, double>()
             {
                 { nameof(CommonExpenseType.Mortgage), mortgage },
                 { nameof(CommonExpenseType.PropertyTax), propertyTax },
@@ -56,7 +56,11 @@ namespace Core.Expense
                 { nameof(CommonExpenseType.PropertyManagement), propertyManagement },
                 { nameof(CommonExpenseType.Misc), misc }
             };
-
+            if (estimateExpensesRequest.HoaFee > 0)
+            {
+                expenses.Add(nameof(CommonExpenseType.HoaFee), estimateExpensesRequest.HoaFee);
+            }
+            return expenses;
         }
     }
 }
