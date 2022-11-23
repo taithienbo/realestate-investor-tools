@@ -43,6 +43,9 @@
 		<None Update="TestFiles\zillow_listing_condo.html">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
+		<None Update="TestFiles\zillow_search_house_by_zip.html">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
 	</ItemGroup>
 
 </Project>
