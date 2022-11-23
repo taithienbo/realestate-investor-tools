@@ -1,3 +1,4 @@
+using Core.Analyzer;
 using Core.ConsumerFinance;
 using Core.Expense;
 using Core.Income;
@@ -37,6 +38,7 @@ builder.Services.AddSingleton<IMortgageInterestEstimator, MortgageInterestEstima
 builder.Services.AddHttpClient<IRateCheckerApiClient>();
 builder.Services.AddSingleton<IRateCheckerApiClient, RateCheckerApiClient>();
 builder.Services.AddSingleton<ITotalInvestmentEstimator, TotalInvestmentEstimator>();
+builder.Services.AddSingleton<IPropertyAnalyzer, PropertyAnalyzer>();
 
 var app = builder.Build();
 

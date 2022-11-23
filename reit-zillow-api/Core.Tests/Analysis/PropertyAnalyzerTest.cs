@@ -7,24 +7,21 @@ using Core.Interest;
 using Core.Listing;
 using Core.Zillow;
 using Moq;
-using reit_zillow_api.Controllers;
 
-namespace Web.Tests
+
+namespace Core.Tests.Analysis
 {
-    public class PropertyAnalyzerControllerTests
+    public class PropertyAnalyzerTest
     {
-        private readonly PropertyAnalyzerController _propertyAnalyzerController;
-
         private Mock<IZillowClient> _mockZillowClient;
         private Mock<IPriceRentalParser> _mockPriceRentalParser;
         private Mock<IListingParser> _mockListingParser;
         private Mock<IMortgageInterestEstimator> _mockMortgageInterestEstimator;
         private Mock<IExpenseEstimator> _mockExpenseEstimator;
         private readonly ITotalInvestmentEstimator _outOfPocketCostEstimator;
-
         private readonly IPropertyAnalyzer _propertyAnalyzer;
 
-        public PropertyAnalyzerControllerTests()
+        public PropertyAnalyzerTest()
         {
             _mockZillowClient = new Mock<IZillowClient>();
             _mockPriceRentalParser = new Mock<IPriceRentalParser>();
@@ -37,8 +34,6 @@ namespace Web.Tests
             _propertyAnalyzer = new PropertyAnalyzer(_mockPriceRentalParser.Object, _mockZillowClient.Object, _mockListingParser.Object, _mockMortgageInterestEstimator.Object,
               _mockExpenseEstimator.Object,
               _outOfPocketCostEstimator);
-
-            _propertyAnalyzerController = new PropertyAnalyzerController(_propertyAnalyzer);
         }
 
         [Fact]
@@ -80,11 +75,35 @@ namespace Web.Tests
             _mockExpenseEstimator.Setup(expenseEstimator => expenseEstimator.EstimateExpenses(It.IsAny<EstimateExpensesRequest>())).Returns(expenses);
 
             // act 
-            var propertyAnalysisDetail = _propertyAnalyzerController.Analyze(address).Result;
+            var propertyAnalysisDetail = _propertyAnalyzer.AnalyzeProperty(address).Result;
             // assert 
             Assert.NotNull(propertyAnalysisDetail);
             Assert.NotNull(propertyAnalysisDetail!.Incomes);
+
+            var expectedTotalIncome = mockPriceRentalDetail.ZEstimate;
+            Assert.True(propertyAnalysisDetail.Incomes!.ContainsKey(nameof(CommonIncomeType.Rental)));
+            Assert.Equal(expectedTotalIncome, propertyAnalysisDetail.TotalIncome);
+            Assert.NotNull(propertyAnalysisDetail.ListingDetail);
+            Assert.Equal(interestRate, propertyAnalysisDetail.InterestRate, 0);
             Assert.NotNull(propertyAnalysisDetail.Expenses);
+
+            var expectedTotalExpense = expenses.Sum(keyVaulue => keyVaulue.Value);
+            foreach (var commonExpense in Enum.GetNames(typeof(CommonExpenseType)))
+            {
+                Assert.True(propertyAnalysisDetail.Expenses!.ContainsKey(commonExpense));
+            }
+            Assert.Equal(expectedTotalExpense, propertyAnalysisDetail.TotalExpense);
+
+            Assert.True(propertyAnalysisDetail.NetOperatingIncome != 0);
+            Assert.True(propertyAnalysisDetail.CapRate != 0);
+            Assert.True(propertyAnalysisDetail.DebtServiceCoverageRatio != 0);
+            Assert.True(propertyAnalysisDetail.CashFlow != 0);
+            Assert.True(propertyAnalysisDetail.CashOnCashReturn != 0);
+            Assert.True(propertyAnalysisDetail.CashOnCashReturn != 0);
+
+            Assert.Equal(OutOfPocketInvestmentCost.DefaultDownPaymentPercent, propertyAnalysisDetail.AssumedDownPaymentPercent, 0);
+            Assert.Equal(OutOfPocketInvestmentCost.DefaultClosingCostAmount, propertyAnalysisDetail.AssumedClosingCost, 0);
+
             Assert.NotNull(propertyAnalysisDetail.AssumedOutOfPocketCosts);
         }
     }
