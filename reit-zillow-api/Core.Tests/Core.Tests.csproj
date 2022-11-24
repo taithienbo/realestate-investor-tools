@@ -38,6 +38,9 @@
 	  <None Update="TestFiles\zillow_listing_2.html">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </None>
+	  <None Update="TestFiles\zillow_search_house_by_zip.html">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
 	</ItemGroup>
 
 </Project>

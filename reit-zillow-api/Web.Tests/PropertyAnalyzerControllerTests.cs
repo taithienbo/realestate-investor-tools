@@ -15,77 +15,27 @@ namespace Web.Tests
     {
         private readonly PropertyAnalyzerController _propertyAnalyzerController;
 
-        private Mock<IZillowClient> _mockZillowClient;
-        private Mock<IPriceRentalParser> _mockPriceRentalParser;
-        private Mock<IListingParser> _mockListingParser;
-        private Mock<IMortgageInterestEstimator> _mockMortgageInterestEstimator;
-        private Mock<IExpenseEstimator> _mockExpenseEstimator;
-        private readonly ITotalInvestmentEstimator _outOfPocketCostEstimator;
-
-        private readonly IPropertyAnalyzer _propertyAnalyzer;
+        private Mock<IPropertyAnalyzer> _propertyAnalyzerMock;
 
         public PropertyAnalyzerControllerTests()
         {
-            _mockZillowClient = new Mock<IZillowClient>();
-            _mockPriceRentalParser = new Mock<IPriceRentalParser>();
-            _mockListingParser = new Mock<IListingParser>();
-            _mockMortgageInterestEstimator = new Mock<IMortgageInterestEstimator>();
-            _mockExpenseEstimator = new Mock<IExpenseEstimator>();
-
-            _outOfPocketCostEstimator = new TotalInvestmentEstimator();
-
-            _propertyAnalyzer = new PropertyAnalyzer(_mockPriceRentalParser.Object, _mockZillowClient.Object, _mockListingParser.Object, _mockMortgageInterestEstimator.Object,
-              _mockExpenseEstimator.Object,
-              _outOfPocketCostEstimator);
-
-            _propertyAnalyzerController = new PropertyAnalyzerController(_propertyAnalyzer);
+            _propertyAnalyzerMock = new Mock<IPropertyAnalyzer>();
+            _propertyAnalyzerController = new PropertyAnalyzerController(_propertyAnalyzerMock.Object);
         }
 
         [Fact]
         public void AnalyzeProperty()
         {
             // arrange. 
-            var address = "123 Heaven St, Happiness City, Awesome State";
-            var mockHtml = "<html></html>";
-            _mockZillowClient.Setup(mockZillowClient => mockZillowClient.GetPriceMyRentalHtmlPage(It.Is<string>(value => value == address))).ReturnsAsync(mockHtml);
-
-            var mockPriceRentalDetail = new PriceRentalDetail()
-            {
-                ZEstimate = 3000,
-                ZEstimateLow = 2000,
-                ZEstimateHigh = 4000
-            };
-            _mockPriceRentalParser.Setup(parser => parser.Parse(It.Is<string>(value => value == mockHtml))).Returns(mockPriceRentalDetail);
-
-            _mockZillowClient.Setup(mockZillowClient => mockZillowClient.GetListingHtmlPage(It.Is<string>(value => value == address))).ReturnsAsync(mockHtml);
-            var listingDetail = new ListingDetail();
-            listingDetail.ListingPrice = 123456;
-            _mockListingParser.Setup(parser => parser.Parse(It.Is<string>(value => value == mockHtml))).Returns(listingDetail);
-
-            var interestRate = 7.0;
-            _mockMortgageInterestEstimator.Setup(interestEstimator => interestEstimator.GetCurrentInterest(listingDetail.ListingPrice)).ReturnsAsync(interestRate);
-
-            var expenses = new Dictionary<string, double>()
-            {
-                { nameof(CommonExpenseType.PropertyManagement), 100 },
-                { nameof(CommonExpenseType.PropertyTax), 100 },
-                { nameof(CommonExpenseType.CapitalExpenditures), 100 },
-                { nameof(CommonExpenseType.HomeOwnerInsurance), 100 },
-                { nameof(CommonExpenseType.Misc), 100 },
-                { nameof(CommonExpenseType.Mortgage), 100 },
-                { nameof(CommonExpenseType.Repairs), 100 },
-                { nameof(CommonExpenseType.HoaFee), 200 }
-    };
-
-            _mockExpenseEstimator.Setup(expenseEstimator => expenseEstimator.EstimateExpenses(It.IsAny<EstimateExpensesRequest>())).Returns(expenses);
+            var expectedAnalysisDetail = new PropertyAnalysisDetail();
+            string address = "123";
+            _propertyAnalyzerMock.Setup(analyzer => analyzer.AnalyzeProperty(It.Is<string>(value => value.Equals(address)))).ReturnsAsync(expectedAnalysisDetail);
 
             // act 
             var propertyAnalysisDetail = _propertyAnalyzerController.Analyze(address).Result;
             // assert 
             Assert.NotNull(propertyAnalysisDetail);
-            Assert.NotNull(propertyAnalysisDetail!.Incomes);
-            Assert.NotNull(propertyAnalysisDetail.Expenses);
-            Assert.NotNull(propertyAnalysisDetail.AssumedOutOfPocketCosts);
+            Assert.Equal(expectedAnalysisDetail, propertyAnalysisDetail);
         }
     }
 }

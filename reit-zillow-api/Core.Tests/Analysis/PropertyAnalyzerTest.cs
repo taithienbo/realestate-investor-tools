@@ -7,7 +7,7 @@ using Core.Interest;
 using Core.Listing;
 using Core.Zillow;
 using Moq;
-
+using System.Net.Sockets;
 
 namespace Core.Tests.Analysis
 {

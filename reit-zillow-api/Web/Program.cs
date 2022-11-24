@@ -39,6 +39,8 @@ builder.Services.AddHttpClient<IRateCheckerApiClient>();
 builder.Services.AddSingleton<IRateCheckerApiClient, RateCheckerApiClient>();
 builder.Services.AddSingleton<ITotalInvestmentEstimator, TotalInvestmentEstimator>();
 builder.Services.AddSingleton<IPropertyAnalyzer, PropertyAnalyzer>();
+builder.Services.AddSingleton<IMultiplePropertyAnalyzer, MultiplePropertyAnalyzer>();
+builder.Services.AddSingleton<IHouseSearchParser, HouseSearchParser>();
 
 var app = builder.Build();
 

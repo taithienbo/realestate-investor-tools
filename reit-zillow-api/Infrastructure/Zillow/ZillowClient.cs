@@ -20,5 +20,10 @@ namespace Infrastructure.Zillow
         {
             return _httpClient.GetStringAsync(ZillowUtil.BuildPriceMyRentalUrl(address));
         }
+
+        public Task<string> SearchListingsByZipCode(int zipCode)
+        {
+            return _httpClient.GetStringAsync(ZillowUtil.BuildSearchListingsUrl(zipCode));
+        }
     }
 }
