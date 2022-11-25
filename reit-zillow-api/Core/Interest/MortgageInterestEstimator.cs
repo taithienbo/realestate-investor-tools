@@ -21,7 +21,7 @@ namespace Core.Interest
                 LoanAmount = loanAmount,
                 Price = propertyPrice
             });
-            if (rateCheckerResponse == null || rateCheckerResponse.Data == null)
+            if (rateCheckerResponse == null || rateCheckerResponse.Data == null || rateCheckerResponse.Data.Count == 0)
             {
                 return 0;
             }
