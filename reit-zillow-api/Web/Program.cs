@@ -9,6 +9,7 @@ using Infrastructure.ConsumerFinance;
 using Infrastructure.Listing;
 using Infrastructure.Zillow;
 using reit_zillow_api.JsonConverters;
+using System.Net.Http.Headers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,7 +23,12 @@ builder.Services.AddControllers().AddJsonOptions(options =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddHttpClient<IZillowClient>();
+builder.Services.AddHttpClient("Zillow", client =>
+{
+    client.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("Mozilla", "5.0"));
+
+}).ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler() { UseCookies = false });
+
 builder.Services.AddSingleton<IZillowClient, ZillowClient>();
 builder.Services.AddSingleton<IListingParser, ListingParser>();
 builder.Services.AddSingleton<IExpenseEstimator, ExpenseEstimator>();

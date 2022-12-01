@@ -17,7 +17,7 @@ namespace Infrastructure.Tests.Zillow
         {
             // arrange 
             int zipCode = 92805;
-            string expectedUrl = @"https://www.zillow.com/anaheim-ca-92805/?searchQueryState={""usersSearchTerm"":""92805"",""isMapVisible"":false,""filterState"":{""sort"":{""value"":""globalrelevanceex""},""ah"":{""value"":true},""land"":{""value"":false},""apa"":{""value"":false},""apco"":{""value"":false},""con"":{""value"":false},""manu"":{""value"":false},""tow"":{""value"":false}},""isListVisible"":true,""mapZoom"":14}";
+            string expectedUrl = @"https://www.zillow.com/homes/92805?searchQueryState={""usersSearchTerm"":""92805"",""isMapVisible"":false,""filterState"":{""sort"":{""value"":""globalrelevanceex""},""ah"":{""value"":true},""land"":{""value"":false},""apa"":{""value"":false},""apco"":{""value"":false},""con"":{""value"":false},""manu"":{""value"":false},""tow"":{""value"":false}},""isListVisible"":true,""mapZoom"":14}";
             // act 
             string url = ZillowUtil.BuildSearchListingsUrl(zipCode);
             // assert 

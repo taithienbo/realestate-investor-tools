@@ -1,18 +1,22 @@
 ﻿using Core.Zillow;
+using System.Net.Http;
 
 namespace Infrastructure.Zillow
 {
     public class ZillowClient : IZillowClient
     {
-        private HttpClient _httpClient;
-
-        public ZillowClient(HttpClient httpClient)
+        private readonly HttpClient _httpClient;
+        public ZillowClient(IHttpClientFactory httpClientFactory)
         {
-            _httpClient = httpClient;
+            _httpClient = httpClientFactory.CreateClient("Zillow");
         }
 
         public Task<string> GetListingHtmlPage(string address)
         {
+            var handler = new HttpClientHandler
+            {
+                UseCookies = false
+            };
             return _httpClient.GetStringAsync(ZillowUtil.BuildListingUrl(address));
         }
 
