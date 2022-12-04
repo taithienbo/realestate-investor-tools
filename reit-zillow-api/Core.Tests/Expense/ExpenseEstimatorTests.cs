@@ -1,6 +1,7 @@
 ﻿using Core.Constants;
 using Core.Dto;
 using Core.Expense;
+using Core.Loan;
 
 namespace Infrastructure.Tests.Expense
 {

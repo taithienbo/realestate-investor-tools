@@ -31,6 +31,7 @@ namespace Core.Analyzer
             IList<string> addresses = _houseSearchParser.ParseListingAddresses(addressesHtml);
             foreach (var address in addresses)
             {
+                Thread.Sleep(100); // avoid sending too many requests in a short time and getting blocked. 
                 var analysisResult = await _propertyAnalyzer.AnalyzeProperty(address);
                 if (analysisResult != null)
                 {

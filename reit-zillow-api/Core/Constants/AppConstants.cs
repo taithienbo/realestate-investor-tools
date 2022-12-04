@@ -13,10 +13,7 @@
         public const string Condo = nameof(Condo);
     }
 
-    public enum LoanProgram
-    {
-        ThirtyYearFixed
-    }
+
 
     public enum CommonExpenseType
     {

@@ -1,4 +1,5 @@
 ﻿using Core.Constants;
+using Core.Loan;
 
 namespace Core.Expense
 {

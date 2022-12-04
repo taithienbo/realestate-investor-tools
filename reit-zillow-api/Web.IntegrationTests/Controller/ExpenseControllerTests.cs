@@ -1,4 +1,5 @@
 ﻿using Core.Constants;
+using Core.Loan;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.WebUtilities;
 using System.Net.Http.Json;
