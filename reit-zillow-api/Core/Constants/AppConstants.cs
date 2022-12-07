@@ -36,11 +36,6 @@
     {
         DownPayment,
         ClosingCost
-    }
 
-    public class OutOfPocketInvestmentCost
-    {
-        public const double DefaultDownPaymentPercent = 25;
-        public const double DefaultClosingCostAmount = 15000;
     }
 }

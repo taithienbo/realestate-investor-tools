@@ -1,12 +1,19 @@
-﻿namespace Core.Expense
+﻿using Core.Options;
+
+namespace Core.Expense
 {
     public class PropertyManagementExpenseEstimator : IPropertyManagementExpenseEstimator
     {
-        private const double BaseMonthlyPropertyMangementCostAsPercentageOfRentAmount = 5.00;
+        private readonly AppOptions _appOptions;
+
+        public PropertyManagementExpenseEstimator(AppOptions appOptions)
+        {
+            _appOptions = appOptions;
+        }
 
         public double EstimateMonthlyAmount(double rentAmount)
         {
-            return BaseMonthlyPropertyMangementCostAsPercentageOfRentAmount / 100 * rentAmount;
+            return _appOptions.BasePropertyManagementCostAsPercentageOfMonthlyRent / 100 * rentAmount;
         }
     }
 }

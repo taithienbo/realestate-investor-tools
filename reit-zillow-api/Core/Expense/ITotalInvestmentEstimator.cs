@@ -9,6 +9,6 @@ namespace Core.Expense
 {
     public interface ITotalInvestmentEstimator
     {
-        public double EstimateTotalInvestment(double purchasePrice, double downPaymentPercent = OutOfPocketInvestmentCost.DefaultDownPaymentPercent, double closingCost = OutOfPocketInvestmentCost.DefaultDownPaymentPercent);
+        public double EstimateTotalInvestment(double purchasePrice, double downPaymentPercent, double closingCost);
     }
 }

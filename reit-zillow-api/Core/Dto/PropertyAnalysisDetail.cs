@@ -33,8 +33,8 @@ namespace Core.Dto
         public double DebtServiceCoverageRatio { get; set; }
         public double CashOnCashReturn { get; set; }
         public double CashFlow { get; set; }
-        public double AssumedDownPaymentPercent { get; set; } = OutOfPocketInvestmentCost.DefaultDownPaymentPercent;
-        public double AssumedClosingCost { get; set; } = OutOfPocketInvestmentCost.DefaultClosingCostAmount;
+        public double AssumedDownPaymentPercent { get; set; }
+        public double AssumedClosingCost { get; set; }
         public IDictionary<string, double> AssumedOutOfPocketCosts { get; set; } = new Dictionary<string, double>();
 
     }

@@ -1,12 +1,20 @@
-﻿namespace Core.Expense
+﻿using Core.Options;
+
+namespace Core.Expense
 {
     public class CapExExpenseEstimator : ICapExExpenseEstimator
     {
-        private const double BaseCapExPercentOfPropertyValue = .20;
+
+        private readonly AppOptions _appOptions;
+
+        public CapExExpenseEstimator(AppOptions appOptions)
+        {
+            _appOptions = appOptions;
+        }
 
         public double CalculateEstimatedMonthlyCapEx(double propertyValue, int propertyAge)
         {
-            var monthlyBaseAmount = BaseCapExPercentOfPropertyValue / 100 * propertyValue / 12;
+            var monthlyBaseAmount = _appOptions.BaseCapExPercentOfPropertyValue / 100 * propertyValue / 12;
             double monthlyAdditionalAmountBasedOnAge = propertyAge;
             var estimatedMonthlyAmount = monthlyBaseAmount + monthlyAdditionalAmountBasedOnAge;
             return estimatedMonthlyAmount;

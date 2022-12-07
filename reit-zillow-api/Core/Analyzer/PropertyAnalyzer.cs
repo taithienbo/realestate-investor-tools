@@ -4,7 +4,9 @@ using Core.Expense;
 using Core.Income;
 using Core.Interest;
 using Core.Listing;
+using Core.Options;
 using Core.Zillow;
+using Microsoft.VisualBasic.FileIO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,13 +23,15 @@ namespace Core.Analyzer
         private readonly IListingParser _listingParser;
         private readonly IMortgageInterestEstimator _mortgageInterestEstimator;
         private readonly ITotalInvestmentEstimator _outOfPocketCostEstimator;
+        private readonly AppOptions _appOptions;
 
         public PropertyAnalyzer(IPriceRentalParser priceRentalParser,
             IZillowClient zillowClient,
             IListingParser listingParser,
             IMortgageInterestEstimator mortgageInterestEstimator,
             IExpenseEstimator expenseEstimator,
-            ITotalInvestmentEstimator outOfPocketCostEstimator)
+            ITotalInvestmentEstimator outOfPocketCostEstimator,
+            AppOptions appOptions)
         {
             _priceRentalParser = priceRentalParser;
             _zillowClient = zillowClient;
@@ -35,6 +39,7 @@ namespace Core.Analyzer
             _mortgageInterestEstimator = mortgageInterestEstimator;
             _expenseEstimator = expenseEstimator;
             _outOfPocketCostEstimator = outOfPocketCostEstimator;
+            _appOptions = appOptions;
         }
 
         public async Task<PropertyAnalysisDetail?> AnalyzeProperty(string address)
@@ -44,7 +49,12 @@ namespace Core.Analyzer
             {
                 return null;
             }
-            var analysisDetail = new PropertyAnalysisDetail();
+            var analysisDetail = new PropertyAnalysisDetail()
+            {
+                AssumedDownPaymentPercent = _appOptions.DefaultDownPaymentPercent,
+                AssumedClosingCost = _appOptions.DefaultClosingCostOnBuy
+            };
+
             analysisDetail.ListingDetail = listingDetail;
 
             double rentalIncome = await GetRentalIncome(address);
@@ -67,12 +77,12 @@ namespace Core.Analyzer
             analysisDetail.AssumedOutOfPocketCosts = new Dictionary<string, double>
             {
                 { nameof(CommonOutOfPocketCost.DownPayment),
-                Calculators.CalculateDownPayment(listingDetail.ListingPrice, OutOfPocketInvestmentCost.DefaultDownPaymentPercent)},
+                Calculators.CalculateDownPayment(listingDetail.ListingPrice, _appOptions.DefaultDownPaymentPercent)},
                 { nameof (CommonOutOfPocketCost.ClosingCost),
-                OutOfPocketInvestmentCost.DefaultClosingCostAmount}
+                _appOptions.DefaultClosingCostOnBuy}
             };
 
-            analysisDetail.CashOnCashReturn = Calculators.CalculateCashOnCashReturn(analysisDetail.Incomes!, analysisDetail.Expenses, _outOfPocketCostEstimator.EstimateTotalInvestment(listingDetail.ListingPrice));
+            analysisDetail.CashOnCashReturn = Calculators.CalculateCashOnCashReturn(analysisDetail.Incomes!, analysisDetail.Expenses, _outOfPocketCostEstimator.EstimateTotalInvestment(listingDetail.ListingPrice, _appOptions.DefaultDownPaymentPercent, _appOptions.DefaultClosingCostOnBuy));
 
             return analysisDetail;
         }

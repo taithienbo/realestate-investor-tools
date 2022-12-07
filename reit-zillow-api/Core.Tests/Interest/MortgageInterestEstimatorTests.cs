@@ -1,5 +1,6 @@
 ﻿using Core.ConsumerFinance;
 using Core.Interest;
+using Core.Options;
 using Moq;
 
 namespace Infrastructure.Tests.Interest
@@ -8,11 +9,16 @@ namespace Infrastructure.Tests.Interest
     {
         private IMortgageInterestEstimator _mortgageInterestEstimator;
         private Mock<IRateCheckerApiClient> _mockRateCheckerApiClient;
+        private readonly AppOptions _appOptions;
 
         public MortgageInterestEstimatorTests()
         {
+            _appOptions = new AppOptions()
+            {
+                DefaultDownPaymentPercent = 25
+            };
             _mockRateCheckerApiClient = new Mock<IRateCheckerApiClient>();
-            _mortgageInterestEstimator = new MortgageInterestEstimator(_mockRateCheckerApiClient.Object);
+            _mortgageInterestEstimator = new MortgageInterestEstimator(_mockRateCheckerApiClient.Object, _appOptions);
         }
 
         [Fact]

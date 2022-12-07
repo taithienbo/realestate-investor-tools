@@ -1,17 +1,18 @@
 ﻿
 using Core.Constants;
 using Core.ConsumerFinance;
-
+using Core.Options;
 
 namespace Core.Interest
 {
     public class MortgageInterestEstimator : IMortgageInterestEstimator
     {
         private readonly IRateCheckerApiClient _rateCheckerApiClient;
-
-        public MortgageInterestEstimator(IRateCheckerApiClient rateCheckerApiClient)
+        private readonly AppOptions _appOptions;
+        public MortgageInterestEstimator(IRateCheckerApiClient rateCheckerApiClient, AppOptions appOptions)
         {
             _rateCheckerApiClient = rateCheckerApiClient;
+            _appOptions = appOptions;
         }
 
         public async Task<double> GetCurrentInterest(double loanAmount, double propertyPrice)
@@ -31,7 +32,7 @@ namespace Core.Interest
 
         public Task<double> GetCurrentInterest(double propertyPrice)
         {
-            double loanAmount = Calculators.CalculateLoanAmount(propertyPrice, OutOfPocketInvestmentCost.DefaultDownPaymentPercent);
+            double loanAmount = Calculators.CalculateLoanAmount(propertyPrice, _appOptions.DefaultDownPaymentPercent);
             return GetCurrentInterest(loanAmount, propertyPrice);
         }
 

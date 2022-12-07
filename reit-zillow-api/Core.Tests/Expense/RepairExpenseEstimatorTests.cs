@@ -1,14 +1,21 @@
 ﻿using Core.Expense;
+using Core.Options;
 
 namespace Infrastructure.Tests.Expense
 {
     public class RepairExpenseEstimatorTests
     {
         private IRepairExpenseEstimator _estimator;
+        private readonly AppOptions _appOptions;
 
         public RepairExpenseEstimatorTests()
         {
-            _estimator = new RepairExpenseEstimator();
+            _appOptions = new AppOptions()
+            {
+                BaseRepairMonthlyAmount = 110
+            };
+
+            _estimator = new RepairExpenseEstimator(_appOptions);
         }
 
         [Fact]
@@ -19,8 +26,8 @@ namespace Infrastructure.Tests.Expense
             // act 
             var actualMonthlyAmount = _estimator.EstimateMonthlyAmount(propertyAge);
             // assert
-            const int ExpectedMonthlyBaseAmount = 110;
-            var expectedMonthlyAmount = ExpectedMonthlyBaseAmount + propertyAge;
+            double expectedMonthlyBaseAmount = _appOptions.BaseRepairMonthlyAmount;
+            var expectedMonthlyAmount = expectedMonthlyBaseAmount + propertyAge;
             Assert.Equal(expectedMonthlyAmount, actualMonthlyAmount, 0);
 
         }

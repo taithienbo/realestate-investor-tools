@@ -4,6 +4,7 @@ using Core.Expense;
 using Core.Income;
 using Core.Interest;
 using Core.Listing;
+using Core.Options;
 using Core.Zillow;
 using Moq;
 using reit_zillow_api.Controllers;
@@ -18,17 +19,27 @@ namespace Web.Tests
         private readonly Mock<IListingParser> _mockListingParser;
         private readonly Mock<IPriceRentalParser> _mockPriceRentalParser;
         private readonly Mock<IMortgageInterestEstimator> _mockMortgageInterestEstimator;
+        private readonly AppOptions _appOptions;
 
         public ExpenseControllerTests()
         {
-            // need to update to real expense estimator 
+            _appOptions = new AppOptions()
+            {
+                BaseCapExPercentOfPropertyValue = .20,
+                BaseMiscExpenseMonthlyAmount = 100,
+                BaseRepairMonthlyAmount = 110,
+                BaseHomeOwnerInsurancePercentageOfPropertyValue = 0.25,
+                BasePropertyManagementCostAsPercentageOfMonthlyRent = 5.00
+            };
+
             _expenseEstimator = new ExpenseEstimator(new MortgageExpenseEstimator(),
                 new PropertyTaxExpenseEstimator(),
-                new HomeOwnerInsuranceExpenseEstimator(),
-                new CapExExpenseEstimator(),
-                new RepairExpenseEstimator(),
-                new PropertyManagementExpenseEstimator(),
-                new MiscExpenseEstimator());
+                new HomeOwnerInsuranceExpenseEstimator(_appOptions),
+                new CapExExpenseEstimator(_appOptions),
+                new RepairExpenseEstimator(_appOptions),
+                new PropertyManagementExpenseEstimator(_appOptions),
+                new MiscExpenseEstimator(_appOptions));
+
             _mockZillowClient = new Mock<IZillowClient>();
             _mockListingParser = new Mock<IListingParser>();
             _mockPriceRentalParser = new Mock<IPriceRentalParser>();

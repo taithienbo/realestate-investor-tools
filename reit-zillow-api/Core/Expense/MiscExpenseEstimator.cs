@@ -1,12 +1,19 @@
-﻿namespace Core.Expense
+﻿using Core.Options;
+
+namespace Core.Expense
 {
     public class MiscExpenseEstimator : IMiscExpenseEstimator
     {
-        private const double BaseMiscExpenseEstimatedMonthlyAmount = 100;
+        private readonly AppOptions _appOptions;
+
+        public MiscExpenseEstimator(AppOptions appOptions)
+        {
+            _appOptions = appOptions;
+        }
 
         public double EstimateMonthlyAmount()
         {
-            return BaseMiscExpenseEstimatedMonthlyAmount;
+            return _appOptions.BaseMiscExpenseMonthlyAmount;
         }
     }
 }

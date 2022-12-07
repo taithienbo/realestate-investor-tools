@@ -4,6 +4,7 @@ using Core.Expense;
 using Core.Income;
 using Core.Interest;
 using Core.Listing;
+using Core.Options;
 using Core.Zillow;
 using Infrastructure.ConsumerFinance;
 using Infrastructure.Listing;
@@ -28,6 +29,11 @@ builder.Services.AddHttpClient("Zillow", client =>
     client.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("Mozilla", "5.0"));
 
 }).ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler() { UseCookies = false });
+
+builder.Services.Configure<AppOptions>(builder.Configuration.GetSection(AppOptions.App));
+
+
+builder.Services.AddSingleton(builder.Configuration.GetSection(AppOptions.App).Get<AppOptions>());
 
 builder.Services.AddSingleton<IZillowClient, ZillowClient>();
 builder.Services.AddSingleton<IListingParser, ListingParser>();

@@ -2,23 +2,32 @@
 using Core.Dto;
 using Core.Expense;
 using Core.Loan;
+using Core.Options;
 
 namespace Infrastructure.Tests.Expense
 {
     public class ExpenseEstimatorTests
     {
         private IExpenseEstimator _expenseEstimator;
-
+        private readonly AppOptions _appOptions;
 
         public ExpenseEstimatorTests()
         {
+            _appOptions = new AppOptions()
+            {
+                BaseCapExPercentOfPropertyValue = .20,
+                BaseMiscExpenseMonthlyAmount = 100,
+                BaseRepairMonthlyAmount = 110,
+                BaseHomeOwnerInsurancePercentageOfPropertyValue = .25,
+                BasePropertyManagementCostAsPercentageOfMonthlyRent = 5.00
+            };
             _expenseEstimator = new ExpenseEstimator(new MortgageExpenseEstimator(),
                 new PropertyTaxExpenseEstimator(),
-                new HomeOwnerInsuranceExpenseEstimator(),
-                new CapExExpenseEstimator(),
-                new RepairExpenseEstimator(),
-                new PropertyManagementExpenseEstimator(),
-                new MiscExpenseEstimator());
+                new HomeOwnerInsuranceExpenseEstimator(_appOptions),
+                new CapExExpenseEstimator(_appOptions),
+                new RepairExpenseEstimator(_appOptions),
+                new PropertyManagementExpenseEstimator(_appOptions),
+                new MiscExpenseEstimator(_appOptions));
         }
 
         [Fact]
@@ -36,34 +45,34 @@ namespace Infrastructure.Tests.Expense
                 HoaFee = 200
             };
 
-            const int BaseMonthlyRepairCost = 110;
-            const double HomeOwnerInsuranceCostAsPercentageOfPropertyValue = .25;
-            const double CapExCostAsPercentageOfPropertyValue = .20;
-            const double PropertyManagementCostAsPercentageOfRentAmount = 5.00;
-            const double MiscMonthlyExpense = 100;
+            double baseMonthlyRepairCost = _appOptions.BaseRepairMonthlyAmount;
+            double homeOwnerInsuranceCostAsPercentageOfPropertyValue = _appOptions.BaseHomeOwnerInsurancePercentageOfPropertyValue;
+            double capExCostAsPercentageOfPropertyValue = _appOptions.BaseCapExPercentOfPropertyValue;
+            double propertyManagementCostAsPercentageOfRentAmount = _appOptions.BasePropertyManagementCostAsPercentageOfMonthlyRent;
+            double miscMonthlyExpense = _appOptions.BaseMiscExpenseMonthlyAmount;
 
             var expectedExpenses = new Dictionary<string, double>()
             {
                 { nameof(CommonExpenseType.Mortgage), 3143 },
                 { nameof(CommonExpenseType.PropertyTax), 7575 / 12 },
                 { nameof(CommonExpenseType.HomeOwnerInsurance),
-                estimateExpenseRequest.PropertyValue * HomeOwnerInsuranceCostAsPercentageOfPropertyValue / 100 / 12
+                estimateExpenseRequest.PropertyValue * homeOwnerInsuranceCostAsPercentageOfPropertyValue / 100 / 12
                 },
                 { nameof(CommonExpenseType.CapitalExpenditures),
-                CapExCostAsPercentageOfPropertyValue / 100 * estimateExpenseRequest.PropertyValue / 12 + estimateExpenseRequest.PropertyAge // (base amount, which is .20% of listing price) + property age ) }
+                capExCostAsPercentageOfPropertyValue / 100 * estimateExpenseRequest.PropertyValue / 12 + estimateExpenseRequest.PropertyAge // (base amount, which is .20% of listing price) + property age ) }
                 },
-                { nameof(CommonExpenseType.Repairs), BaseMonthlyRepairCost + estimateExpenseRequest.PropertyAge
+                { nameof(CommonExpenseType.Repairs), baseMonthlyRepairCost + estimateExpenseRequest.PropertyAge
                 },
                 {
                     nameof(CommonExpenseType.PropertyManagement),
-                    PropertyManagementCostAsPercentageOfRentAmount / 100 * estimateExpenseRequest.RentAmount
+                    propertyManagementCostAsPercentageOfRentAmount / 100 * estimateExpenseRequest.RentAmount
                 },
                 {
                     nameof(CommonExpenseType.HoaFee),       estimateExpenseRequest.HoaFee
                 },
                 {
                     nameof(CommonExpenseType.Misc),
-                    MiscMonthlyExpense
+                    miscMonthlyExpense
                 }
             };
 

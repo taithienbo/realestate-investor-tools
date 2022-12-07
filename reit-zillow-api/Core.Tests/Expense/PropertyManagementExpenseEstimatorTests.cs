@@ -1,14 +1,21 @@
 ﻿using Core.Expense;
+using Core.Options;
 
 namespace Infrastructure.Tests.Expense
 {
     public class PropertyManagementExpenseEstimatorTests
     {
         private IPropertyManagementExpenseEstimator _estimator;
+        private readonly AppOptions _appOptions;
 
         public PropertyManagementExpenseEstimatorTests()
         {
-            _estimator = new PropertyManagementExpenseEstimator();
+            _appOptions = new AppOptions()
+            {
+                BasePropertyManagementCostAsPercentageOfMonthlyRent = 5.00
+            };
+
+            _estimator = new PropertyManagementExpenseEstimator(_appOptions);
         }
 
         [Fact]
@@ -16,11 +23,11 @@ namespace Infrastructure.Tests.Expense
         {
             // arrange 
             var rentAmount = 2700;
-            const double PropertyManagementCostAsPercentageOfPropertyValue = 5.00;
+            double propertyManagementCostAsPercentageOfPropertyValue = _appOptions.BasePropertyManagementCostAsPercentageOfMonthlyRent;
             // act
             double propertyMangementMonthlyCost = _estimator.EstimateMonthlyAmount(rentAmount);
             // assert
-            double expectedPropertyManagementMonthlyCost = PropertyManagementCostAsPercentageOfPropertyValue / 100 * rentAmount;
+            double expectedPropertyManagementMonthlyCost = propertyManagementCostAsPercentageOfPropertyValue / 100 * rentAmount;
             Assert.Equal(expectedPropertyManagementMonthlyCost, propertyMangementMonthlyCost);
         }
     }

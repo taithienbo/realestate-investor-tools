@@ -1,14 +1,21 @@
 ﻿using Core.Expense;
+using Core.Options;
 
 namespace Infrastructure.Tests.Expense
 {
     public class CapExpenseEstimatorTests
     {
         private ICapExExpenseEstimator _calculator;
+        private readonly AppOptions _appOptions;
 
         public CapExpenseEstimatorTests()
         {
-            _calculator = new CapExExpenseEstimator();
+            _appOptions = new AppOptions()
+            {
+                BaseCapExPercentOfPropertyValue = .20
+            };
+
+            _calculator = new CapExExpenseEstimator(_appOptions);
         }
 
         [Fact]

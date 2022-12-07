@@ -5,6 +5,7 @@ using Core.Expense;
 using Core.Income;
 using Core.Interest;
 using Core.Listing;
+using Core.Options;
 using Core.Zillow;
 using Moq;
 using System.Net.Sockets;
@@ -20,6 +21,7 @@ namespace Core.Tests.Analysis
         private Mock<IExpenseEstimator> _mockExpenseEstimator;
         private readonly ITotalInvestmentEstimator _outOfPocketCostEstimator;
         private readonly IPropertyAnalyzer _propertyAnalyzer;
+        private readonly AppOptions _appOptions;
 
         public PropertyAnalyzerTest()
         {
@@ -31,9 +33,16 @@ namespace Core.Tests.Analysis
 
             _outOfPocketCostEstimator = new TotalInvestmentEstimator();
 
+            _appOptions = new AppOptions()
+            {
+                DefaultDownPaymentPercent = 25,
+                DefaultClosingCostOnBuy = 15000
+            };
+
             _propertyAnalyzer = new PropertyAnalyzer(_mockPriceRentalParser.Object, _mockZillowClient.Object, _mockListingParser.Object, _mockMortgageInterestEstimator.Object,
               _mockExpenseEstimator.Object,
-              _outOfPocketCostEstimator);
+              _outOfPocketCostEstimator,
+              _appOptions);
         }
 
         [Fact]
@@ -101,8 +110,8 @@ namespace Core.Tests.Analysis
             Assert.True(propertyAnalysisDetail.CashOnCashReturn != 0);
             Assert.True(propertyAnalysisDetail.CashOnCashReturn != 0);
 
-            Assert.Equal(OutOfPocketInvestmentCost.DefaultDownPaymentPercent, propertyAnalysisDetail.AssumedDownPaymentPercent, 0);
-            Assert.Equal(OutOfPocketInvestmentCost.DefaultClosingCostAmount, propertyAnalysisDetail.AssumedClosingCost, 0);
+            Assert.Equal(_appOptions.DefaultDownPaymentPercent, propertyAnalysisDetail.AssumedDownPaymentPercent, 0);
+            Assert.Equal(_appOptions.DefaultClosingCostOnBuy, propertyAnalysisDetail.AssumedClosingCost, 0);
 
             Assert.NotNull(propertyAnalysisDetail.AssumedOutOfPocketCosts);
         }

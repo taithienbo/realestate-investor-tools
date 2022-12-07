@@ -1,12 +1,20 @@
-﻿namespace Core.Expense
+﻿using Core.Options;
+
+namespace Core.Expense
 {
     public class RepairExpenseEstimator : IRepairExpenseEstimator
     {
-        private const double BaseMonthlyAmount = 110;
+
+        private readonly AppOptions _appOptions;
+
+        public RepairExpenseEstimator(AppOptions appOptions)
+        {
+            _appOptions = appOptions;
+        }
 
         public double EstimateMonthlyAmount(int propertyAge)
         {
-            return BaseMonthlyAmount + propertyAge;
+            return _appOptions.BaseRepairMonthlyAmount + propertyAge;
         }
     }
 }
