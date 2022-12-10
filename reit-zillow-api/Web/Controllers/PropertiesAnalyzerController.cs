@@ -22,11 +22,14 @@ namespace reit_zillow_api.Controllers
         }
 
         [HttpGet("{zipCode}")]
-        public async Task<IDictionary<string, PropertyAnalysisDetail>> AnalyzeProperties(int zipCode)
+        public async Task<IDictionary<string, PropertyAnalysisDetail>> Analyze(int zipCode)
         {
             return await _propertiesAnalyzer.AnalyzeProperties(zipCode);
         }
 
-
+        public async Task<PropertyAnalysisDetail> Analyze(string address)
+        {
+            return await _propertiesAnalyzer.Analyze(address);
+        }
     }
 }

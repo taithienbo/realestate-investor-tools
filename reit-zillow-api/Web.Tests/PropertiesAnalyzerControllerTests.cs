@@ -22,7 +22,7 @@ namespace Web.Tests
         }
 
         [Fact]
-        public void AnalyzeProperties()
+        public void AnalyzePropertiesByZipCode()
         {
             // arrange 
             int zipCode = 12345;
@@ -31,10 +31,26 @@ namespace Web.Tests
             expectedResult.Add(address, new PropertyAnalysisDetail());
             _propertiesAnalyzerMock.Setup(analyzer => analyzer.AnalyzeProperties(zipCode)).ReturnsAsync(expectedResult);
             // act 
-            var actualResult = _controller.AnalyzeProperties(zipCode).Result;
+            var actualResult = _controller.Analyze(zipCode).Result;
             // assert 
             Assert.NotNull(actualResult);
             Assert.Equal(expectedResult, actualResult);
+
+        }
+
+        [Fact]
+        public void AnalyzePropertyByAddress()
+        {
+            // arrange. 
+            var expectedAnalysisDetail = new PropertyAnalysisDetail();
+            string address = "123";
+            _propertiesAnalyzerMock.Setup(analyzer => analyzer.Analyze(It.Is<string>(value => value.Equals(address)))).ReturnsAsync(expectedAnalysisDetail);
+
+            // act 
+            var propertyAnalysisDetail = _controller.Analyze(address).Result;
+            // assert 
+            Assert.NotNull(propertyAnalysisDetail);
+            Assert.Equal(expectedAnalysisDetail, propertyAnalysisDetail);
 
         }
     }
