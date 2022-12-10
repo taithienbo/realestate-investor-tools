@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace Core.Analyzer
 {
-    public class MultiplePropertyAnalyzer : IMultiplePropertyAnalyzer
+    public class PropertiesAnalyzer : IPropertiesAnalyzer
     {
         private readonly IZillowClient _zillowClient;
         private readonly IHouseSearchParser _houseSearchParser;
@@ -25,7 +25,7 @@ namespace Core.Analyzer
         private readonly ITotalInvestmentEstimator _outOfPocketCostEstimator;
         private readonly IExpenseEstimator _expenseEstimator;
 
-        public MultiplePropertyAnalyzer(IZillowClient zillowClient,
+        public PropertiesAnalyzer(IZillowClient zillowClient,
            IHouseSearchParser houseSearchParser,
            IListingParser listingParser,
            IPriceRentalParser priceRentalParser,

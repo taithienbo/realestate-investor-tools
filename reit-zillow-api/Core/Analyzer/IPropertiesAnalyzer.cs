@@ -3,7 +3,7 @@
 
 namespace Core.Analyzer
 {
-    public interface IMultiplePropertyAnalyzer
+    public interface IPropertiesAnalyzer
     {
         public Task<IDictionary<string, PropertyAnalysisDetail>> AnalyzeProperties(int zipCode);
 

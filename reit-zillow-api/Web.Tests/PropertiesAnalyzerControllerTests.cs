@@ -13,11 +13,11 @@ namespace Web.Tests
     public class PropertiesAnalyzerControllerTests
     {
         private PropertiesAnalyzerController _controller;
-        private Mock<IMultiplePropertyAnalyzer> _propertiesAnalyzerMock;
+        private Mock<IPropertiesAnalyzer> _propertiesAnalyzerMock;
 
         public PropertiesAnalyzerControllerTests()
         {
-            _propertiesAnalyzerMock = new Mock<IMultiplePropertyAnalyzer>();
+            _propertiesAnalyzerMock = new Mock<IPropertiesAnalyzer>();
             _controller = new PropertiesAnalyzerController(_propertiesAnalyzerMock.Object);
         }
 

@@ -13,7 +13,7 @@ namespace Core.Tests.Analysis
 {
     public class MultiplePropertyAnalyzerTest
     {
-        private readonly IMultiplePropertyAnalyzer _multiplePropertyAnalyzer;
+        private readonly IPropertiesAnalyzer _multiplePropertyAnalyzer;
         private readonly Mock<IZillowClient> _mockZillowClient;
         private readonly Mock<IHouseSearchParser> _mockHouseSearchParser;
         private readonly Mock<IPriceRentalParser> _mockPriceRentalParser;
@@ -38,7 +38,7 @@ namespace Core.Tests.Analysis
             _mockZillowClient = new Mock<IZillowClient>();
             _mockHouseSearchParser = new Mock<IHouseSearchParser>();
             _mockOutOfPocketCostEstimator = new Mock<ITotalInvestmentEstimator>();
-            _multiplePropertyAnalyzer = new MultiplePropertyAnalyzer(_mockZillowClient.Object, _mockHouseSearchParser.Object,
+            _multiplePropertyAnalyzer = new PropertiesAnalyzer(_mockZillowClient.Object, _mockHouseSearchParser.Object,
                 _mockListingParser.Object, _mockPriceRentalParser.Object,
                 _mockMortgageInterestEstimator.Object, _mockOutOfPocketCostEstimator.Object,
                 _mockExpenseEstimator.Object, _appOptions);

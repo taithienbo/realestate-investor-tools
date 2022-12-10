@@ -19,7 +19,7 @@ namespace Web.IntegrationTests.Controller
             // arrange 
             var client = _factory.CreateClient();
             // act 
-            var response = await client.GetAsync("/propertiesanalyzer");
+            var response = await client.GetAsync("/propertiesanalyzer/status");
             // assert 
             response.EnsureSuccessStatusCode();
         }

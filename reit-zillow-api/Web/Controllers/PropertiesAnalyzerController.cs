@@ -8,26 +8,30 @@ namespace reit_zillow_api.Controllers
     [ApiController]
     public class PropertiesAnalyzerController : ControllerBase
     {
-        private readonly IMultiplePropertyAnalyzer _propertiesAnalyzer;
+        private readonly IPropertiesAnalyzer _propertiesAnalyzer;
 
-        public PropertiesAnalyzerController(IMultiplePropertyAnalyzer propertiesAnalyzer)
+        public PropertiesAnalyzerController(IPropertiesAnalyzer propertiesAnalyzer)
         {
             this._propertiesAnalyzer = propertiesAnalyzer;
         }
 
         [HttpGet]
+        [Route("status")]
         public string Status()
         {
             return "OK";
         }
 
-        [HttpGet("{zipCode}")]
-        public async Task<IDictionary<string, PropertyAnalysisDetail>> Analyze(int zipCode)
+        [HttpGet]
+        [Route("zip")]
+        public async Task<IDictionary<string, PropertyAnalysisDetail>> Analyze([FromQuery] int zipCode)
         {
             return await _propertiesAnalyzer.AnalyzeProperties(zipCode);
         }
 
-        public async Task<PropertyAnalysisDetail> Analyze(string address)
+        [HttpGet]
+        [Route("address")]
+        public async Task<PropertyAnalysisDetail?> Analyze([FromQuery] string address)
         {
             return await _propertiesAnalyzer.Analyze(address);
         }
