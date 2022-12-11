@@ -37,6 +37,9 @@ namespace Web.IntegrationTests.Controller
             Assert.True(options!.BaseRepairMonthlyAmount > 0);
             Assert.True(options!.BaseCapExPercentOfPropertyValue > 0);
             Assert.True(options!.BaseHomeOwnerInsurancePercentageOfPropertyValue > 0);
+            Assert.True(options!.DefaultAgentFeesPercentageOfSellingPrice > 0);
+            Assert.True(options!.DefaultTaxPercentageOnSell > 0);
+            Assert.True(options!.DefaultYearlyPercentageIncreaseInPropertyValue > 0);
 
         }
     }

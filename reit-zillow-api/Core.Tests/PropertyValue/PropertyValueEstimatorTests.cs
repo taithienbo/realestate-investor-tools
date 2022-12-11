@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Core.Options;
 using Core.PropertyValue;
 
 namespace Core.Tests.PropertyValue
@@ -15,8 +16,14 @@ namespace Core.Tests.PropertyValue
             // arrange
             const double CurrentPropertyValue = 565000;
             const double ExpectedYearlyPercentageIncrease = 4.00;
+
+            AppOptions appOptions = new AppOptions()
+            {
+                DefaultYearlyPercentageIncreaseInPropertyValue = ExpectedYearlyPercentageIncrease
+            };
+
             // act 
-            var propertyValueEstimator = new PropertyValueEstimator(ExpectedYearlyPercentageIncrease);
+            var propertyValueEstimator = new PropertyValueEstimator(appOptions);
             // assert
             // year 1 => 587,600
             Assert.Equal(587600, propertyValueEstimator.EvaluatePropertyValue(CurrentPropertyValue, 1), 0);

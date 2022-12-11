@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Core.Options;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,11 +9,11 @@ namespace Core.PropertyValue
 {
     public class PropertyValueEstimator : IPropertyValueEstimator
     {
-        private readonly double _expectedYearlyPercentageIncrease;
+        private readonly AppOptions _appOptions;
 
-        public PropertyValueEstimator(double expectedYearlyPercentageIncrease)
+        public PropertyValueEstimator(AppOptions appOptions)
         {
-            _expectedYearlyPercentageIncrease = expectedYearlyPercentageIncrease;
+            _appOptions = appOptions;
         }
 
         public double EvaluatePropertyValue(double currentValue, int years)
@@ -20,7 +21,7 @@ namespace Core.PropertyValue
             double value = currentValue;
             for (int i = 0; i < years; i++)
             {
-                value += value * _expectedYearlyPercentageIncrease / 100;
+                value += value * _appOptions.DefaultYearlyPercentageIncreaseInPropertyValue / 100;
             }
             return value;
         }

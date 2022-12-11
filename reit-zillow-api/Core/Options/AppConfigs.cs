@@ -14,11 +14,16 @@ namespace Core.Options
         public double DefaultDownPaymentPercent { get; set; }
         public double DefaultClosingCostOnBuy { get; set; }
         public double DefaultClosingCostOnSell { get; set; }
+        public double DefaultRepairCostOnSell { get; set; }
+        public double DefaultTaxPercentageOnSell { get; set; }
+        public double DefaultYearlyPercentageIncreaseInPropertyValue { get; set; }
         public double BaseMiscExpenseMonthlyAmount { get; set; }
 
         public double BaseRepairMonthlyAmount { get; set; }
         public double BaseCapExPercentOfPropertyValue { get; set; }
         public double BaseHomeOwnerInsurancePercentageOfPropertyValue { get; set; }
         public double BasePropertyManagementCostAsPercentageOfMonthlyRent { get; set; }
+
+        public double DefaultAgentFeesPercentageOfSellingPrice { get; set; }
     }
 }
