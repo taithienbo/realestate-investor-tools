@@ -28,9 +28,9 @@ namespace Core.Tests.Selling
             // assert 
             // double expectedAgentFees = 42000;   // CurrentValue * AgentFeesPercentage/100; 
             // 
-            //  double expectedCapitalGainTax = 20250;  (CurrentValue - PurchasedValue) * CapitalGainTaxPercentage/100;
+            //  double expectedCapitalGainTax = 10950;  (CurrentValue - PurchasedValue - DefaultClosingCostOnSell - DefaultRepairCostOnSell - AgentFees) * CapitalGainTaxPercentage/100;
 
-            double expectedTotalSellingCost = 82250; // expectedAgentFees + expectedCapitalGainTax + DefaultClosingCostOnSell + DefaultRepairCostOnSell
+            double expectedTotalSellingCost = 72950; // expectedAgentFees + expectedCapitalGainTax + DefaultClosingCostOnSell + DefaultRepairCostOnSell
             Assert.Equal(expectedTotalSellingCost, totalSellingCost, 0);
 
         }

@@ -20,7 +20,8 @@ namespace Core.Selling
         public double EstimateSellingCost(double purchasedValue, double currentValue)
         {
             double agentFees = currentValue * _appOptions.DefaultAgentFeesPercentageOfSellingPrice / 100;
-            double capitalGainTax = (currentValue - purchasedValue) * _appOptions.DefaultTaxPercentageOnSell / 100;
+            double profitOnSell = currentValue - purchasedValue - _appOptions.DefaultClosingCostOnSell - _appOptions.DefaultRepairCostOnSell - agentFees;
+            double capitalGainTax = profitOnSell * _appOptions.DefaultTaxPercentageOnSell / 100;
             return _appOptions.DefaultClosingCostOnSell + agentFees + capitalGainTax + _appOptions.DefaultRepairCostOnSell;
         }
     }

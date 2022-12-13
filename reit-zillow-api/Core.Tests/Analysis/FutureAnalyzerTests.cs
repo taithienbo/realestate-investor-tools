@@ -5,6 +5,7 @@ using Core.Expense;
 using Core.Loan;
 using Core.Options;
 using Core.PropertyValue;
+using Core.Selling;
 using Moq;
 using System;
 using System.Collections.Generic;
@@ -18,11 +19,13 @@ namespace Core.Tests.Analysis
     {
         private readonly Mock<IPropertyValueEstimator> _mockPropertyValueEstimator;
         private readonly Mock<IAmortizationScheduleCalculator> _mockAmortizationScheduler;
+        private readonly Mock<ISellingCostEstimator> _mockSellingCostEstimator; 
 
         public FutureAnalyzerTests()
         {
             _mockPropertyValueEstimator = new Mock<IPropertyValueEstimator>();
             _mockAmortizationScheduler = new Mock<IAmortizationScheduleCalculator>();
+            _mockSellingCostEstimator = new Mock<ISellingCostEstimator>();
         }
 
         [Fact]
@@ -43,17 +46,18 @@ namespace Core.Tests.Analysis
             const double OriginalLoanAmount = 432200;
             const double InterestRate = 2.75;
             const double RemainingLoanAmount = 382479.27;
-            const double PrincipalPaidDown = 49720.73;  // OriginalLoanAmount - RemainingLoanAmount
-
             const double OriginalPurchaseAmount = 570000;
             const double PropertyValueAtSell = 687408;  // assumed 4% appreciation per year. 
             const double AgentFeesAtSell = 41244.48;  // 6% of property value 
             double closingCostAtSell = appOptions.DefaultClosingCostOnSell;
             double RepairsCost = appOptions.DefaultRepairCostOnSell;
-            const double ProfitOnSell = 56163.52;    //  PropertyValueAtSell - OriginalPurchaseAmount - AgentFefesWhenSell - ClosingCostOnSell - RepairsCost 
+            
             const double TaxOnSell = 8424.53;  // 15% of ProfitOnSell
-            const double ProfitAfterExpensesAndTaxes = 47738.99;    // ProfitOnSell - TaxOnSellProfit
-            const double NetProfit = 37459.72;    // PrincipalPaidDown + ProfitAferExpenseAndTax - DownPayment 
+
+            const double SellingCosts = 69669.08; // DefaultClosingCostOnSell + Agent fees + TaxOnSell + DefaultRepaitCostOnSell
+
+            const double NetProfit = 175259.72; // PropertyValueAtSell - SellingCosts
+            
             const LoanProgram LoanProgram = LoanProgram.ThirtyYearFixed;
 
             _mockPropertyValueEstimator.Setup(estimator => estimator.EvaluatePropertyValue(OriginalPurchaseAmount, HoldingPeriodInYears)).Returns(PropertyValueAtSell);
@@ -66,7 +70,10 @@ namespace Core.Tests.Analysis
 
             _mockAmortizationScheduler.Setup(calculator => calculator.Calculate(It.IsAny<double>(), It.IsAny<double>(), It.IsAny<DateTime>(), LoanProgram)).Returns(amortizationEntries);
 
-            IFutureAnalyzer analyzer = new FutureAnalyzer(_mockAmortizationScheduler.Object, _mockPropertyValueEstimator.Object, appOptions);
+            _mockSellingCostEstimator.Setup(estimator => estimator.EstimateSellingCost(It.IsAny<double>(), It.IsAny<double>())).Returns(SellingCosts);
+
+            IFutureAnalyzer analyzer = new FutureAnalyzer(_mockAmortizationScheduler.Object, _mockPropertyValueEstimator.Object,
+                _mockSellingCostEstimator.Object, appOptions);
 
 
             // act 

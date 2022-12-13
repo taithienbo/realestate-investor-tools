@@ -2,6 +2,7 @@
 using Core.Dto;
 using Core.Options;
 using Core.PropertyValue;
+using Core.Selling;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,17 +14,20 @@ namespace Core.Analyzer
     public class FutureAnalyzer : IFutureAnalyzer
     {
         private readonly IAmortizationScheduleCalculator _amortizationScheduleCalculator;
+        private readonly ISellingCostEstimator _sellingCostEstimator;
         private readonly AppOptions _appOptions;
         private readonly IPropertyValueEstimator _propertyValueEstimator;
 
 
         public FutureAnalyzer(IAmortizationScheduleCalculator amortizationScheduleCalculator,
             IPropertyValueEstimator propertyValueEstimator,
+            ISellingCostEstimator sellingCostEstimator,
             AppOptions appOptions)
         {
             _amortizationScheduleCalculator = amortizationScheduleCalculator;
             _propertyValueEstimator = propertyValueEstimator;
             _propertyValueEstimator = propertyValueEstimator;
+            _sellingCostEstimator = sellingCostEstimator;
             _appOptions = appOptions;
         }
 
@@ -34,13 +38,17 @@ namespace Core.Analyzer
             int holdingPeriodInMonths = parameters.HoldingPeriodInYears * 12;
 
             double remainingBalanceAfterHold = amortizationSchedule[holdingPeriodInMonths - 1].RemainingBalance;
+
             double principalPaidDown = parameters.OriginalLoanAmount - remainingBalanceAfterHold;
-            double propertyValueAfterHold = _propertyValueEstimator.EvaluatePropertyValue(parameters.OriginalPurchaseAmount, parameters.HoldingPeriodInYears);
-            double agentFeesOnSell = _appOptions.DefaultAgentFeesPercentageOfSellingPrice / 100 * propertyValueAfterHold;
-            double profitOnSell = propertyValueAfterHold - parameters.OriginalPurchaseAmount - agentFeesOnSell - _appOptions.DefaultClosingCostOnSell - _appOptions.DefaultRepairCostOnSell;
-            double taxPaidOnSell = _appOptions.DefaultTaxPercentageOnSell / 100 * profitOnSell;
-            double remainingAfterExpensesAndTaxes = profitOnSell - taxPaidOnSell;
-            double netProfit = principalPaidDown + remainingAfterExpensesAndTaxes - parameters.DownPaymentAmount;
+
+            double totalSell = _propertyValueEstimator.EvaluatePropertyValue(parameters.OriginalPurchaseAmount, parameters.HoldingPeriodInYears);
+
+            double sellingCosts = _sellingCostEstimator.EstimateSellingCost(parameters.OriginalPurchaseAmount, totalSell);
+
+            double totalCosts = parameters.DownPaymentAmount + sellingCosts + remainingBalanceAfterHold;
+
+
+            double netProfit = totalSell - totalCosts;
 
             return netProfit;
         }
