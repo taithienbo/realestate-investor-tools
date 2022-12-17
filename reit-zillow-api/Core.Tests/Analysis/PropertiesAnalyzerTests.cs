@@ -17,7 +17,7 @@ namespace Core.Tests.Analysis
         private readonly Mock<IZillowClient> _mockZillowClient;
         private readonly Mock<IHouseSearchParser> _mockHouseSearchParser;
         private readonly Mock<IPriceRentalParser> _mockPriceRentalParser;
-        private readonly Mock<IListingParser> _mockListingParser;
+        private readonly Mock<IZillowListingParser> _mockListingParser;
         private readonly Mock<IMortgageInterestEstimator> _mockMortgageInterestEstimator;
         private readonly Mock<IExpenseEstimator> _mockExpenseEstimator;
         private readonly Mock<ITotalInvestmentEstimator> _mockOutOfPocketCostEstimator;
@@ -32,7 +32,7 @@ namespace Core.Tests.Analysis
             };
 
             _mockPriceRentalParser = new Mock<IPriceRentalParser>();
-            _mockListingParser = new Mock<IListingParser>();
+            _mockListingParser = new Mock<IZillowListingParser>();
             _mockMortgageInterestEstimator = new Mock<IMortgageInterestEstimator>();
             _mockExpenseEstimator = new Mock<IExpenseEstimator>();
             _mockZillowClient = new Mock<IZillowClient>();

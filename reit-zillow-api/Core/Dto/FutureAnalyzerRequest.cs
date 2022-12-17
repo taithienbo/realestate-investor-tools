@@ -3,7 +3,7 @@
 
 namespace Core.Dto
 {
-    public record InvestmentOnSellAnalyzerParams
+    public record FutureAnalyzerRequest
     {
         public double DownPaymentAmount { get; set; }
         public double OriginalLoanAmount { get; set; }

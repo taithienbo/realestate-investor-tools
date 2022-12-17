@@ -10,7 +10,7 @@ namespace Web.Tests
     public class ListingControllerTest
     {
         private readonly ILogger<ListingController> _mockLogger;
-        private readonly IListingParser _listingParser;
+        private readonly IZillowListingParser _listingParser;
         private readonly string _testFile;
         private readonly string _testHtml;
         private readonly Mock<IZillowClient> _mockZillowClient;
@@ -19,7 +19,7 @@ namespace Web.Tests
         public ListingControllerTest()
         {
             _mockLogger = Mock.Of<ILogger<ListingController>>();
-            _listingParser = new ListingParser();
+            _listingParser = new ZillowListingParser();
             _testFile = "TestFiles" + Path.DirectorySeparatorChar + "zillow_listing_1.html";
             _testHtml = File.ReadAllText(_testFile);
             _mockZillowClient = new Mock<IZillowClient>();

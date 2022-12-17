@@ -15,14 +15,14 @@ namespace reit_zillow_api.Controllers
     public class ExpenseController : ControllerBase
     {
         private readonly IExpenseEstimator _expenseEstimator;
-        private readonly IListingParser _listingParser;
+        private readonly IZillowListingParser _listingParser;
         private readonly IZillowClient _zillowClient;
         private readonly IPriceRentalParser _priceRentalParser;
         private readonly IMortgageInterestEstimator _mortgageInterestEstimator;
 
         public ExpenseController(IExpenseEstimator expenseEstimator,
             IZillowClient zillowClient,
-            IListingParser listingParser,
+            IZillowListingParser listingParser,
             IPriceRentalParser priceRentalParser,
             IMortgageInterestEstimator mortgageInterestEstimator)
         {

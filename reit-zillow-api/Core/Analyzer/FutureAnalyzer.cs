@@ -31,15 +31,13 @@ namespace Core.Analyzer
             _appOptions = appOptions;
         }
 
-        public double CalculateNetProfitsOnSell(InvestmentOnSellAnalyzerParams parameters)
+        public double CalculateNetProfitsOnSell(FutureAnalyzerRequest parameters)
         {
             AmortizationScheduleEntry[] amortizationSchedule = _amortizationScheduleCalculator.Calculate(parameters.OriginalLoanAmount, parameters.InterestRate, DateTime.Now.Date, parameters.LoanProgram);
 
             int holdingPeriodInMonths = parameters.HoldingPeriodInYears * 12;
 
             double remainingBalanceAfterHold = amortizationSchedule[holdingPeriodInMonths - 1].RemainingBalance;
-
-            double principalPaidDown = parameters.OriginalLoanAmount - remainingBalanceAfterHold;
 
             double totalSell = _propertyValueEstimator.EvaluatePropertyValue(parameters.OriginalPurchaseAmount, parameters.HoldingPeriodInYears);
 

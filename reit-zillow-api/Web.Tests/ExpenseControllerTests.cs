@@ -16,7 +16,7 @@ namespace Web.Tests
         private readonly ExpenseController _expenseController;
         private readonly IExpenseEstimator _expenseEstimator;
         private readonly Mock<IZillowClient> _mockZillowClient;
-        private readonly Mock<IListingParser> _mockListingParser;
+        private readonly Mock<IZillowListingParser> _mockListingParser;
         private readonly Mock<IPriceRentalParser> _mockPriceRentalParser;
         private readonly Mock<IMortgageInterestEstimator> _mockMortgageInterestEstimator;
         private readonly AppOptions _appOptions;
@@ -41,7 +41,7 @@ namespace Web.Tests
                 new MiscExpenseEstimator(_appOptions));
 
             _mockZillowClient = new Mock<IZillowClient>();
-            _mockListingParser = new Mock<IListingParser>();
+            _mockListingParser = new Mock<IZillowListingParser>();
             _mockPriceRentalParser = new Mock<IPriceRentalParser>();
             _mockMortgageInterestEstimator = new Mock<IMortgageInterestEstimator>();
 

@@ -5,10 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Core.Analyzer
+namespace Core.Listing
 {
-    public interface IFutureAnalyzer
+    public interface IZillowListingService
     {
-        public double CalculateNetProfitsOnSell(FutureAnalyzerRequest parameters);
+        public Task<ListingDetail> GetListingDetail(string address);
     }
 }

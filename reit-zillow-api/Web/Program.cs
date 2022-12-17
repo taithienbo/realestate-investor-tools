@@ -1,3 +1,4 @@
+using Core.Amortization;
 using Core.Analyzer;
 using Core.ConsumerFinance;
 using Core.Expense;
@@ -5,6 +6,8 @@ using Core.Income;
 using Core.Interest;
 using Core.Listing;
 using Core.Options;
+using Core.PropertyValue;
+using Core.Selling;
 using Core.Zillow;
 using Infrastructure.ConsumerFinance;
 using Infrastructure.Listing;
@@ -36,7 +39,7 @@ builder.Services.Configure<AppOptions>(builder.Configuration.GetSection(AppOptio
 builder.Services.AddSingleton(builder.Configuration.GetSection(AppOptions.App).Get<AppOptions>());
 
 builder.Services.AddSingleton<IZillowClient, ZillowClient>();
-builder.Services.AddSingleton<IListingParser, ListingParser>();
+builder.Services.AddSingleton<IZillowListingParser, ZillowListingParser>();
 builder.Services.AddSingleton<IExpenseEstimator, ExpenseEstimator>();
 builder.Services.AddSingleton<IMortgageExpenseEstimator, MortgageExpenseEstimator>();
 builder.Services.AddSingleton<IPropertyTaxExpenseEstimator, PropertyTaxExpenseEstimator>();
@@ -52,7 +55,10 @@ builder.Services.AddSingleton<IRateCheckerApiClient, RateCheckerApiClient>();
 builder.Services.AddSingleton<ITotalInvestmentEstimator, TotalInvestmentEstimator>();
 builder.Services.AddSingleton<IPropertiesAnalyzer, PropertiesAnalyzer>();
 builder.Services.AddSingleton<IHouseSearchParser, HouseSearchParser>();
-
+builder.Services.AddSingleton<IFutureAnalyzer, FutureAnalyzer>();
+builder.Services.AddSingleton<IPropertyValueEstimator, PropertyValueEstimator>();
+builder.Services.AddSingleton<IAmortizationScheduleCalculator, AmortizationScheduleCalculator>();
+builder.Services.AddSingleton<ISellingCostEstimator, SellingCostEstimator>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

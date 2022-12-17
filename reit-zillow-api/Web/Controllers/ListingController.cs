@@ -12,11 +12,11 @@ namespace reit_zillow_api.Controllers
         private readonly IZillowClient _zillowClient;
 
         private readonly ILogger<ListingController> _logger;
-        private readonly IListingParser _listingParser;
+        private readonly IZillowListingParser _listingParser;
 
         public ListingController(ILogger<ListingController> logger,
             IZillowClient zillowClient,
-            IListingParser listingParser)
+            IZillowListingParser listingParser)
         {
             _logger = logger;
             _zillowClient = zillowClient;

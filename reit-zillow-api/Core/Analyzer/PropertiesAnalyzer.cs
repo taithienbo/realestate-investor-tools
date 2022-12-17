@@ -18,7 +18,7 @@ namespace Core.Analyzer
     {
         private readonly IZillowClient _zillowClient;
         private readonly IHouseSearchParser _houseSearchParser;
-        private readonly IListingParser _listingParser;
+        private readonly IZillowListingParser _listingParser;
         private readonly AppOptions _appOptions;
         private readonly IPriceRentalParser _priceRentalParser;
         private readonly IMortgageInterestEstimator _mortgageInterestEstimator;
@@ -27,7 +27,7 @@ namespace Core.Analyzer
 
         public PropertiesAnalyzer(IZillowClient zillowClient,
            IHouseSearchParser houseSearchParser,
-           IListingParser listingParser,
+           IZillowListingParser listingParser,
            IPriceRentalParser priceRentalParser,
            IMortgageInterestEstimator mortgageInterestEstimator,
            ITotalInvestmentEstimator outOfPocketCostEstimator,

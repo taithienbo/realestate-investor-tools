@@ -1,11 +1,12 @@
 ﻿using Core.Dto;
 using Core.Listing;
+using Core.Zillow;
 using HtmlAgilityPack;
 using System.Text.RegularExpressions;
 
 namespace Infrastructure.Listing
 {
-    public class ListingParser : IListingParser
+    public class ZillowListingParser : IZillowListingParser
     {
         public ListingDetail Parse(string html)
         {
@@ -120,6 +121,11 @@ namespace Infrastructure.Listing
                 return double.Parse(listingPriceText.Replace("$", ""));
             }
             return 0;
+        }
+
+        public ListingDetail Get(string address)
+        {
+            throw new NotImplementedException();
         }
     }
 }

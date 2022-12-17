@@ -19,7 +19,7 @@ namespace Core.Tests.Analysis
     {
         private readonly Mock<IPropertyValueEstimator> _mockPropertyValueEstimator;
         private readonly Mock<IAmortizationScheduleCalculator> _mockAmortizationScheduler;
-        private readonly Mock<ISellingCostEstimator> _mockSellingCostEstimator; 
+        private readonly Mock<ISellingCostEstimator> _mockSellingCostEstimator;
 
         public FutureAnalyzerTests()
         {
@@ -47,17 +47,17 @@ namespace Core.Tests.Analysis
             const double InterestRate = 2.75;
             const double RemainingLoanAmount = 382479.27;
             const double OriginalPurchaseAmount = 570000;
-            const double PropertyValueAtSell = 687408;  // assumed 4% appreciation per year. 
+            const double PropertyValueAtSell = 692408;  // assumed 4% appreciation per year. 
             const double AgentFeesAtSell = 41244.48;  // 6% of property value 
             double closingCostAtSell = appOptions.DefaultClosingCostOnSell;
             double RepairsCost = appOptions.DefaultRepairCostOnSell;
-            
+
             const double TaxOnSell = 8424.53;  // 15% of ProfitOnSell
 
             const double SellingCosts = 69669.08; // DefaultClosingCostOnSell + Agent fees + TaxOnSell + DefaultRepaitCostOnSell
 
-            const double NetProfit = 175259.72; // PropertyValueAtSell - SellingCosts
-            
+            const double NetProfit = 180259.72; // PropertyValueAtSell - SellingCosts
+
             const LoanProgram LoanProgram = LoanProgram.ThirtyYearFixed;
 
             _mockPropertyValueEstimator.Setup(estimator => estimator.EvaluatePropertyValue(OriginalPurchaseAmount, HoldingPeriodInYears)).Returns(PropertyValueAtSell);
@@ -78,7 +78,7 @@ namespace Core.Tests.Analysis
 
             // act 
 
-            double actualNetProfit = analyzer.CalculateNetProfitsOnSell(new InvestmentOnSellAnalyzerParams()
+            double actualNetProfit = analyzer.CalculateNetProfitsOnSell(new FutureAnalyzerRequest()
             {
                 DownPaymentAmount = DownPaymentAmount,
                 OriginalLoanAmount = OriginalLoanAmount,

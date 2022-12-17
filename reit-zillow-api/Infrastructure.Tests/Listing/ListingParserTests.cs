@@ -7,11 +7,11 @@ namespace Infrastructure.Tests.Listing
 {
     public class ListingParserTests
     {
-        private readonly IListingParser _listingParser;
+        private readonly IZillowListingParser _listingParser;
 
         public ListingParserTests()
         {
-            _listingParser = new ListingParser();
+            _listingParser = new ZillowListingParser();
         }
 
         [Fact]
