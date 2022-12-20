@@ -35,10 +35,12 @@ namespace reit_zillow_api.Controllers
         public FutureAnalyzerResponse AnalyzeInvestmentAfterHoldingPeriod([FromQuery] FutureAnalyzerRequest investmentOnSellAnalyzerParams)
         {
             double moneyMadeOrLoseAfterHold = _futureAnalyzer.CalculateNetProfitsOnSell(investmentOnSellAnalyzerParams);
+
             return new FutureAnalyzerResponse()
             {
-                TotalMoneyMadeAfterHold = moneyMadeOrLoseAfterHold,
-                Inputs = investmentOnSellAnalyzerParams
+                TotalMoneyAfterHoldWithoutMonthlyCashflow = moneyMadeOrLoseAfterHold,
+                AnalyzerInputs = investmentOnSellAnalyzerParams,
+                AnalyzerConfigs = DefaultConfigs()
             };
         }
 
@@ -51,6 +53,7 @@ namespace reit_zillow_api.Controllers
             Calculators.CalculateLoanAmount(listingDetail.ListingPrice, _appOptions.DefaultDownPaymentPercent);
             double interestRate = await _mortgageInterestEstimator.GetCurrentInterest(loanAmount, listingDetail.ListingPrice);
 
+
             var inputs = new FutureAnalyzerRequest()
             {
                 DownPaymentAmount = Calculators.CalculateDownPayment(listingDetail.ListingPrice, _appOptions.DefaultDownPaymentPercent),
@@ -62,6 +65,18 @@ namespace reit_zillow_api.Controllers
             };
 
             return AnalyzeInvestmentAfterHoldingPeriod(inputs);
+        }
+
+        private FutureAnalyzerConfigs DefaultConfigs()
+        {
+            return new FutureAnalyzerConfigs()
+            {
+                DownPaymentPercentage = _appOptions.DefaultDownPaymentPercent,
+                EstimatedAgentFeesPercentageOfSellingPrice = _appOptions.DefaultAgentFeesPercentageOfSellingPrice,
+                EstimatedClosingCostOnSell = _appOptions.DefaultClosingCostOnSell,
+                EstimatedRepairCostOnSell = _appOptions.DefaultRepairCostOnSell,
+                EstimatedYearlyIncreaseInPropertyValue = _appOptions.DefaultYearlyPercentageIncreaseInPropertyValue
+            };
         }
     }
 }

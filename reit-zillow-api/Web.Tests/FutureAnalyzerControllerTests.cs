@@ -59,9 +59,10 @@ namespace Web.Tests
             // act 
             FutureAnalyzerResponse futureAnalyzerResponse = _controller.AnalyzeInvestmentAfterHoldingPeriod(analyzeMethodParams);
             Assert.NotNull(futureAnalyzerResponse);
-            Assert.Equal(ExpectedAmount, futureAnalyzerResponse.TotalMoneyMadeAfterHold, 0);
+            Assert.Equal(ExpectedAmount, futureAnalyzerResponse.TotalMoneyAfterHoldWithoutMonthlyCashflow, 0);
             Assert.Equal(ExpectedAmountPerMonth, futureAnalyzerResponse.MoneyMadePerMonth, 0);
-            Assert.NotNull(futureAnalyzerResponse.Inputs);
+            Assert.NotNull(futureAnalyzerResponse.AnalyzerInputs);
+            Assert.NotNull(futureAnalyzerResponse?.AnalyzerConfigs);
         }
 
         [Fact]
@@ -81,7 +82,6 @@ namespace Web.Tests
             };
 
             _mockZillowListingService.Setup(zillowListingService => zillowListingService.GetListingDetail(It.Is<string>(addr => addr == Address))).ReturnsAsync(listingDetail);
-
 
             _mockMortgageInterestEstimator.Setup(interestEstimator => interestEstimator.GetCurrentInterest(It.Is<double>(price => price == ListingPrice))).ReturnsAsync(InterestRate);
 
@@ -103,13 +103,14 @@ namespace Web.Tests
             FutureAnalyzerResponse futureAnalyzerResponse = _controller.AnalyzeInvestmentAfterHoldingPeriod(Address, NumOfYearsHold).Result;
             // assert 
             Assert.NotNull(futureAnalyzerResponse);
-            Assert.NotNull(futureAnalyzerResponse.Inputs);
-            Assert.Equal(expectedFutureAnalyzerRequest.DownPaymentAmount, futureAnalyzerResponse?.Inputs?.DownPaymentAmount);
-            Assert.Equal(expectedFutureAnalyzerRequest.OriginalLoanAmount, futureAnalyzerResponse?.Inputs?.OriginalLoanAmount);
-            Assert.Equal(expectedFutureAnalyzerRequest.HoldingPeriodInYears, futureAnalyzerResponse?.Inputs?.HoldingPeriodInYears);
-            Assert.Equal(expectedFutureAnalyzerRequest.InterestRate, futureAnalyzerResponse?.Inputs?.InterestRate);
-            Assert.Equal(ExpectedTotalMoneyMadeAfterHold, futureAnalyzerResponse?.TotalMoneyMadeAfterHold);
+            Assert.NotNull(futureAnalyzerResponse.AnalyzerInputs);
+            Assert.Equal(expectedFutureAnalyzerRequest.DownPaymentAmount, futureAnalyzerResponse?.AnalyzerInputs?.DownPaymentAmount);
+            Assert.Equal(expectedFutureAnalyzerRequest.OriginalLoanAmount, futureAnalyzerResponse?.AnalyzerInputs?.OriginalLoanAmount);
+            Assert.Equal(expectedFutureAnalyzerRequest.HoldingPeriodInYears, futureAnalyzerResponse?.AnalyzerInputs?.HoldingPeriodInYears);
+            Assert.Equal(expectedFutureAnalyzerRequest.InterestRate, futureAnalyzerResponse?.AnalyzerInputs?.InterestRate);
+            Assert.Equal(ExpectedTotalMoneyMadeAfterHold, futureAnalyzerResponse?.TotalMoneyAfterHoldWithoutMonthlyCashflow);
             Assert.True(futureAnalyzerResponse?.MoneyMadePerMonth > 0);
+            Assert.NotNull(futureAnalyzerResponse?.AnalyzerConfigs);
         }
     }
 }

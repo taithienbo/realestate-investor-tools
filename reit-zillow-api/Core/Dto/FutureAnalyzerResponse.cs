@@ -8,14 +8,24 @@ namespace Core.Dto
 {
     public record FutureAnalyzerResponse
     {
-        public double TotalMoneyMadeAfterHold { get; set; }
-        public FutureAnalyzerRequest? Inputs { get; set; }
+        public double TotalMoneyAfterHoldWithoutMonthlyCashflow { get; set; }
+        public FutureAnalyzerRequest? AnalyzerInputs { get; set; }
+        public FutureAnalyzerConfigs? AnalyzerConfigs { get; set; }
         public double MoneyMadePerMonth
         {
             get
             {
-                return Inputs == null || Inputs.HoldingPeriodInYears == 0 ? 0 : TotalMoneyMadeAfterHold / (Inputs.HoldingPeriodInYears * 12);
+                return AnalyzerInputs == null || AnalyzerInputs.HoldingPeriodInYears == 0 ? 0 : TotalMoneyAfterHoldWithoutMonthlyCashflow / (AnalyzerInputs.HoldingPeriodInYears * 12);
             }
         }
+    }
+
+    public record FutureAnalyzerConfigs
+    {
+        public double EstimatedClosingCostOnSell { get; set; }
+        public double EstimatedRepairCostOnSell { get; set; }
+        public double EstimatedAgentFeesPercentageOfSellingPrice { get; set; }
+        public double DownPaymentPercentage { get; set; }
+        public double EstimatedYearlyIncreaseInPropertyValue { get; set; }
     }
 }
