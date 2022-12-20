@@ -38,7 +38,7 @@ namespace Web.IntegrationTests.Controller
                 ["HoldingPeriodInYears"] = HoldingPeriodInYears.ToString(),
                 ["LoanProgram"] = LoanProgram.ThirtyYearFixed.ToString()
             };
-            var uri = QueryHelpers.AddQueryString("/futurepropertyanalyzer", queryParameters);
+            var uri = QueryHelpers.AddQueryString("/futurepropertyanalyzer/form", queryParameters);
             // act 
             var response = await client.GetAsync(uri);
             // assert 

@@ -31,6 +31,7 @@ namespace reit_zillow_api.Controllers
         }
 
         [HttpGet]
+        [Route("form")]
         public FutureAnalyzerResponse AnalyzeInvestmentAfterHoldingPeriod([FromQuery] FutureAnalyzerRequest investmentOnSellAnalyzerParams)
         {
             double moneyMadeOrLoseAfterHold = _futureAnalyzer.CalculateNetProfitsOnSell(investmentOnSellAnalyzerParams);

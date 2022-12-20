@@ -15,9 +15,12 @@ using Infrastructure.Zillow;
 using reit_zillow_api.JsonConverters;
 using System.Net.Http.Headers;
 using Serilog;
+using reit_zillow_api.Configurations;
 
+
+#if !DEBUG
 Log.Logger = new LoggerConfiguration().WriteTo.Console().CreateBootstrapLogger();
-
+#endif
 try
 {
 
@@ -46,30 +49,7 @@ try
 
     builder.Services.Configure<AppOptions>(builder.Configuration.GetSection(AppOptions.App));
 
-
-    builder.Services.AddSingleton(builder.Configuration.GetSection(AppOptions.App).Get<AppOptions>());
-
-    builder.Services.AddSingleton<IZillowClient, ZillowClient>();
-    builder.Services.AddSingleton<IZillowListingParser, ZillowListingParser>();
-    builder.Services.AddSingleton<IExpenseEstimator, ExpenseEstimator>();
-    builder.Services.AddSingleton<IMortgageExpenseEstimator, MortgageExpenseEstimator>();
-    builder.Services.AddSingleton<IPropertyTaxExpenseEstimator, PropertyTaxExpenseEstimator>();
-    builder.Services.AddSingleton<IHomeOwnerInsuranceExpenseEstimator, HomeOwnerInsuranceExpenseEstimator>();
-    builder.Services.AddSingleton<ICapExExpenseEstimator, CapExExpenseEstimator>();
-    builder.Services.AddSingleton<IRepairExpenseEstimator, RepairExpenseEstimator>();
-    builder.Services.AddSingleton<IPropertyManagementExpenseEstimator, PropertyManagementExpenseEstimator>();
-    builder.Services.AddSingleton<IMiscExpenseEstimator, MiscExpenseEstimator>();
-    builder.Services.AddSingleton<IPriceRentalParser, PriceRentalParser>();
-    builder.Services.AddSingleton<IMortgageInterestEstimator, MortgageInterestEstimator>();
-    builder.Services.AddHttpClient<IRateCheckerApiClient>();
-    builder.Services.AddSingleton<IRateCheckerApiClient, RateCheckerApiClient>();
-    builder.Services.AddSingleton<ITotalInvestmentEstimator, TotalInvestmentEstimator>();
-    builder.Services.AddSingleton<IPropertiesAnalyzer, PropertiesAnalyzer>();
-    builder.Services.AddSingleton<IHouseSearchParser, HouseSearchParser>();
-    builder.Services.AddSingleton<IFutureAnalyzer, FutureAnalyzer>();
-    builder.Services.AddSingleton<IPropertyValueEstimator, PropertyValueEstimator>();
-    builder.Services.AddSingleton<IAmortizationScheduleCalculator, AmortizationScheduleCalculator>();
-    builder.Services.AddSingleton<ISellingCostEstimator, SellingCostEstimator>();
+    builder.AddServices();
 
 
     var app = builder.Build();
