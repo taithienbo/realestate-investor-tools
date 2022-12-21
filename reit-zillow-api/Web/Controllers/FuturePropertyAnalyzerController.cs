@@ -38,7 +38,8 @@ namespace reit_zillow_api.Controllers
 
             return new FutureAnalyzerResponse()
             {
-                TotalMoneyAfterHoldWithoutMonthlyCashflow = moneyMadeOrLoseAfterHold,
+                EstimatedMonthlyCashflow = investmentOnSellAnalyzerParams.EstimatedMonthlyCashflow,
+                TotalAmountAfterHoldWithoutCashFlow = moneyMadeOrLoseAfterHold,
                 AnalyzerInputs = investmentOnSellAnalyzerParams,
                 AnalyzerConfigs = DefaultConfigs()
             };
@@ -51,8 +52,8 @@ namespace reit_zillow_api.Controllers
 
             double loanAmount =
             Calculators.CalculateLoanAmount(listingDetail.ListingPrice, _appOptions.DefaultDownPaymentPercent);
-            double interestRate = await _mortgageInterestEstimator.GetCurrentInterest(loanAmount, listingDetail.ListingPrice);
 
+            double interestRate = await _mortgageInterestEstimator.GetCurrentInterest(loanAmount, listingDetail.ListingPrice);
 
             var inputs = new FutureAnalyzerRequest()
             {
@@ -61,10 +62,16 @@ namespace reit_zillow_api.Controllers
                 OriginalPurchaseAmount = listingDetail.ListingPrice,
                 HoldingPeriodInYears = numOfYearsHold,
                 InterestRate = interestRate,
-                LoanProgram = LoanProgram.ThirtyYearFixed
+                LoanProgram = LoanProgram.ThirtyYearFixed,
+                EstimatedMonthlyCashflow = CalculateMonthlyCashFlow(numOfYearsHold, listingDetail, interestRate)
             };
 
             return AnalyzeInvestmentAfterHoldingPeriod(inputs);
+        }
+
+        private double CalculateMonthlyCashFlow(int numOfYearsHold, ListingDetail listingDetail, double interestRate)
+        {
+            return 100;
         }
 
         private FutureAnalyzerConfigs DefaultConfigs()

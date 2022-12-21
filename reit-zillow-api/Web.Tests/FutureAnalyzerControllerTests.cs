@@ -49,20 +49,32 @@ namespace Web.Tests
                 OriginalLoanAmount = 432200,
                 HoldingPeriodInYears = 5,
                 InterestRate = 2.75,
-                LoanProgram = LoanProgram.ThirtyYearFixed
+                LoanProgram = LoanProgram.ThirtyYearFixed,
+                EstimatedMonthlyCashflow = 100
             };
 
-            const double ExpectedAmount = 180259.72;
-            const double ExpectedAmountPerMonth = 3004.328;
-            _futureAnalyzerMock.Setup(analyzer => analyzer.CalculateNetProfitsOnSell(It.Is<FutureAnalyzerRequest>(parameters => parameters == analyzeMethodParams))).Returns(ExpectedAmount);
+            double ExpectedTotalCashflow = analyzeMethodParams.EstimatedMonthlyCashflow * analyzeMethodParams.HoldingPeriodInYears * 12;
+            double expectedMonthlyCashFlow = ExpectedTotalCashflow / (analyzeMethodParams.HoldingPeriodInYears * 12);
+
+            const double ExpectedAmountAfterHoldWithoutCashFlow = 180259.72;
+            const double ExpectedAmountPerMonthAfterHoldWithoutCashFlow = 3004.328;
+            double expectedAmountAfterHoldWithCashFlow = ExpectedTotalCashflow + ExpectedAmountAfterHoldWithoutCashFlow;
+            double expectedAmountPerMonthAfterHoldWithCashFlow = ExpectedAmountPerMonthAfterHoldWithoutCashFlow + expectedMonthlyCashFlow;
+
+            _futureAnalyzerMock.Setup(analyzer => analyzer.CalculateNetProfitsOnSell(It.Is<FutureAnalyzerRequest>(parameters => parameters == analyzeMethodParams))).Returns(ExpectedAmountAfterHoldWithoutCashFlow);
 
             // act 
             FutureAnalyzerResponse futureAnalyzerResponse = _controller.AnalyzeInvestmentAfterHoldingPeriod(analyzeMethodParams);
+            // assert 
             Assert.NotNull(futureAnalyzerResponse);
-            Assert.Equal(ExpectedAmount, futureAnalyzerResponse.TotalMoneyAfterHoldWithoutMonthlyCashflow, 0);
-            Assert.Equal(ExpectedAmountPerMonth, futureAnalyzerResponse.MoneyMadePerMonth, 0);
+            Assert.Equal(ExpectedAmountAfterHoldWithoutCashFlow, futureAnalyzerResponse.TotalAmountAfterHoldWithoutCashFlow, 0);
+            Assert.Equal(ExpectedAmountPerMonthAfterHoldWithoutCashFlow, futureAnalyzerResponse.AmountPerMonthWithoutCashFlow, 0);
             Assert.NotNull(futureAnalyzerResponse.AnalyzerInputs);
             Assert.NotNull(futureAnalyzerResponse?.AnalyzerConfigs);
+            Assert.Equal(analyzeMethodParams.EstimatedMonthlyCashflow, futureAnalyzerResponse?.EstimatedMonthlyCashflow);
+            Assert.Equal(expectedAmountAfterHoldWithCashFlow, futureAnalyzerResponse?.TotalAmountAfterHoldWithCashFlow);
+            Assert.Equal(expectedAmountPerMonthAfterHoldWithCashFlow,
+                futureAnalyzerResponse!.AmountPerMonthWithCashFlow, 0);
         }
 
         [Fact]
@@ -108,9 +120,11 @@ namespace Web.Tests
             Assert.Equal(expectedFutureAnalyzerRequest.OriginalLoanAmount, futureAnalyzerResponse?.AnalyzerInputs?.OriginalLoanAmount);
             Assert.Equal(expectedFutureAnalyzerRequest.HoldingPeriodInYears, futureAnalyzerResponse?.AnalyzerInputs?.HoldingPeriodInYears);
             Assert.Equal(expectedFutureAnalyzerRequest.InterestRate, futureAnalyzerResponse?.AnalyzerInputs?.InterestRate);
-            Assert.Equal(ExpectedTotalMoneyMadeAfterHold, futureAnalyzerResponse?.TotalMoneyAfterHoldWithoutMonthlyCashflow);
-            Assert.True(futureAnalyzerResponse?.MoneyMadePerMonth > 0);
+            Assert.Equal(ExpectedTotalMoneyMadeAfterHold, futureAnalyzerResponse?.TotalAmountAfterHoldWithoutCashFlow);
+            Assert.True(futureAnalyzerResponse?.AmountPerMonthWithoutCashFlow > 0);
+            Assert.True(futureAnalyzerResponse!.EstimatedMonthlyCashflow > 0);
             Assert.NotNull(futureAnalyzerResponse?.AnalyzerConfigs);
+
         }
     }
 }

@@ -2,11 +2,11 @@
 
 namespace Infrastructure.Tests.Income
 {
-    public class PriceMyRentalParserTest
+    public class PriceRentalParserTests
     {
         private IPriceRentalParser _parser;
 
-        public PriceMyRentalParserTest()
+        public PriceRentalParserTests()
         {
             _parser = new PriceRentalParser();
         }

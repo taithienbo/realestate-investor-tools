@@ -8,14 +8,29 @@ namespace Core.Dto
 {
     public record FutureAnalyzerResponse
     {
-        public double TotalMoneyAfterHoldWithoutMonthlyCashflow { get; set; }
-        public FutureAnalyzerRequest? AnalyzerInputs { get; set; }
-        public FutureAnalyzerConfigs? AnalyzerConfigs { get; set; }
-        public double MoneyMadePerMonth
+        public double TotalAmountAfterHoldWithoutCashFlow { get; set; }
+        public double TotalAmountAfterHoldWithCashFlow
         {
             get
             {
-                return AnalyzerInputs == null || AnalyzerInputs.HoldingPeriodInYears == 0 ? 0 : TotalMoneyAfterHoldWithoutMonthlyCashflow / (AnalyzerInputs.HoldingPeriodInYears * 12);
+                return (EstimatedMonthlyCashflow * (AnalyzerInputs?.HoldingPeriodInYears ?? 0) * 12) + TotalAmountAfterHoldWithoutCashFlow;
+            }
+        }
+        public double EstimatedMonthlyCashflow { get; set; }
+        public FutureAnalyzerRequest? AnalyzerInputs { get; set; }
+        public FutureAnalyzerConfigs? AnalyzerConfigs { get; set; }
+        public double AmountPerMonthWithoutCashFlow
+        {
+            get
+            {
+                return AnalyzerInputs == null || AnalyzerInputs.HoldingPeriodInYears == 0 ? 0 : TotalAmountAfterHoldWithoutCashFlow / (AnalyzerInputs.HoldingPeriodInYears * 12);
+            }
+        }
+        public double AmountPerMonthWithCashFlow
+        {
+            get
+            {
+                return AmountPerMonthWithoutCashFlow + EstimatedMonthlyCashflow;
             }
         }
     }
