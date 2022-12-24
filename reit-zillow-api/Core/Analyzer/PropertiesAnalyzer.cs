@@ -6,11 +6,7 @@ using Core.Interest;
 using Core.Listing;
 using Core.Options;
 using Core.Zillow;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace Core.Analyzer
 {
@@ -18,35 +14,35 @@ namespace Core.Analyzer
     {
         private readonly IZillowClient _zillowClient;
         private readonly IHouseSearchParser _houseSearchParser;
-        private readonly IZillowListingParser _listingParser;
         private readonly AppOptions _appOptions;
-        private readonly IPriceRentalParser _priceRentalParser;
         private readonly IMortgageInterestEstimator _mortgageInterestEstimator;
         private readonly ITotalInvestmentEstimator _outOfPocketCostEstimator;
         private readonly IExpenseEstimator _expenseEstimator;
+        private readonly IListingService _listingService;
+        private readonly IIncomesEstimator _incomesEstimator;
 
         public PropertiesAnalyzer(IZillowClient zillowClient,
            IHouseSearchParser houseSearchParser,
-           IZillowListingParser listingParser,
-           IPriceRentalParser priceRentalParser,
            IMortgageInterestEstimator mortgageInterestEstimator,
            ITotalInvestmentEstimator outOfPocketCostEstimator,
            IExpenseEstimator expenseEstimator,
+           IIncomesEstimator incomesEstimator,
+           IListingService listingService,
         AppOptions appOptions)
         {
             _zillowClient = zillowClient;
             _houseSearchParser = houseSearchParser;
-            _listingParser = listingParser;
-            _priceRentalParser = priceRentalParser;
             _mortgageInterestEstimator = mortgageInterestEstimator;
             _outOfPocketCostEstimator = outOfPocketCostEstimator;
             _expenseEstimator = expenseEstimator;
+            _listingService = listingService;
+            _incomesEstimator = incomesEstimator;
             _appOptions = appOptions;
         }
 
         public async Task<PropertyAnalysisDetail?> Analyze(string address)
         {
-            var listingDetail = await GetListingDetail(address);
+            var listingDetail = await _listingService.GetListingDetail(address);
             if (listingDetail == null)
             {
                 return null;
@@ -59,13 +55,12 @@ namespace Core.Analyzer
 
             analysisDetail.ListingDetail = listingDetail;
 
-            double rentalIncome = await GetRentalIncome(address);
-            analysisDetail.AddIncome(nameof(CommonIncomeType.Rental), rentalIncome);
+            analysisDetail.Incomes = await _incomesEstimator.EstimateIncomes(address);
 
             double currentInterest = await _mortgageInterestEstimator.GetCurrentInterest(listingDetail.ListingPrice);
             analysisDetail.InterestRate = currentInterest;
 
-            var expenses = GetExpenses(listingDetail, currentInterest, rentalIncome);
+            var expenses = GetExpenses(listingDetail, currentInterest, analysisDetail.Incomes[nameof(CommonIncomeType.Rental)]);
             analysisDetail.Expenses = expenses;
 
             analysisDetail.NetOperatingIncome = Calculators.CalculateNetOperatingIncome(analysisDetail.Incomes!, analysisDetail.Expenses);
@@ -103,27 +98,6 @@ namespace Core.Analyzer
                 }
             }
             return await Task.FromResult(propertiesAnalysis);
-        }
-
-        private async Task<ListingDetail?> GetListingDetail(string address)
-        {
-            var listingDetailHtml = await _zillowClient.GetListingHtmlPage(address);
-            if (listingDetailHtml == null)
-            {
-                return null;
-            }
-            return _listingParser.Parse(listingDetailHtml);
-        }
-
-        private async Task<double> GetRentalIncome(string address)
-        {
-            var priceMyRentalHtmlPage = await _zillowClient.GetPriceMyRentalHtmlPage(address);
-            var priceMyRentalDetail = _priceRentalParser.Parse(priceMyRentalHtmlPage);
-            if (priceMyRentalDetail == null)
-            {
-                return 0;
-            }
-            return priceMyRentalDetail.ZEstimate;
         }
 
         private IDictionary<string, double> GetExpenses(ListingDetail listingDetail, double interestRate, double rentAmount)

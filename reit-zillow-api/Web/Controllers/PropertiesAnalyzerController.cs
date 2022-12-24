@@ -12,7 +12,7 @@ namespace reit_zillow_api.Controllers
 
         public PropertiesAnalyzerController(IPropertiesAnalyzer propertiesAnalyzer)
         {
-            this._propertiesAnalyzer = propertiesAnalyzer;
+            _propertiesAnalyzer = propertiesAnalyzer;
         }
 
         [HttpGet]
