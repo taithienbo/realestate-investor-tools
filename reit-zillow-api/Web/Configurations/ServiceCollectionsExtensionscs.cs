@@ -1,5 +1,6 @@
 ﻿using Core.Amortization;
 using Core.Analyzer;
+using Core.CashFlow;
 using Core.ConsumerFinance;
 using Core.Expense;
 using Core.Income;
@@ -41,8 +42,11 @@ namespace reit_zillow_api.Configurations
             builder.Services.AddSingleton<IPropertyValueEstimator, PropertyValueEstimator>();
             builder.Services.AddSingleton<IAmortizationScheduleCalculator, AmortizationScheduleCalculator>();
             builder.Services.AddSingleton<ISellingCostEstimator, SellingCostEstimator>();
-            builder.Services.AddSingleton<IZillowListingService, ZillowListingService>();
-
+            builder.Services.AddSingleton<IListingService, ZillowListingService>();
+            builder.Services.AddSingleton<IPriceRentalService, PriceRentalService>();
+            builder.Services.AddSingleton<ICashFlowCalculator, CashFlowCalculator>();
+            builder.Services.AddSingleton<IIncomesEstimator, IncomesEstimator>();
+            builder.Services.AddSingleton<IExpenseService, ExpenseService>(); 
             return builder;
         }
     }

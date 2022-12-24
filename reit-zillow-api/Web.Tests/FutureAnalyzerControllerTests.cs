@@ -1,5 +1,7 @@
 ﻿using Core.Analyzer;
+using Core.CashFlow;
 using Core.Dto;
+using Core.Income;
 using Core.Interest;
 using Core.Listing;
 using Core.Loan;
@@ -21,22 +23,27 @@ namespace Web.Tests
         private readonly FuturePropertyAnalyzerController _controller;
         private readonly Mock<IFutureAnalyzer> _futureAnalyzerMock;
         private readonly Mock<IMortgageInterestEstimator> _mockMortgageInterestEstimator;
-        private readonly Mock<IZillowListingService> _mockZillowListingService;
+        private readonly Mock<IListingService> _mockZillowListingService;
+        private readonly Mock<ICashFlowCalculator> _mockCashFlowCalculator;
         private readonly AppOptions _appOptions;
 
         public FutureAnalyzerControllerTests()
         {
             _futureAnalyzerMock = new Mock<IFutureAnalyzer>();
             _mockMortgageInterestEstimator = new Mock<IMortgageInterestEstimator>();
-            _mockZillowListingService = new Mock<IZillowListingService>();
+            _mockZillowListingService = new Mock<IListingService>();
+            _mockCashFlowCalculator = new Mock<ICashFlowCalculator>();
 
             _appOptions = new AppOptions()
             {
                 DefaultDownPaymentPercent = 25
             };
 
-            _controller = new FuturePropertyAnalyzerController(_futureAnalyzerMock.Object, _mockZillowListingService.Object, _mockMortgageInterestEstimator.Object,
-                _appOptions);
+            _controller = new FuturePropertyAnalyzerController(_futureAnalyzerMock.Object,
+                _mockZillowListingService.Object, _mockMortgageInterestEstimator.Object,
+                _mockCashFlowCalculator.Object,
+                 _appOptions);
+
         }
 
         [Fact]
@@ -84,20 +91,20 @@ namespace Web.Tests
             const string Address = "1234 Test Ave, Awesome State, CA";
             const int NumOfYearsHold = 5;
 
-            const double InterestRate = 7.0;
             const double ListingPrice = 700000;
             const double DownPaymentAmount = 175000; // 25% of 700000 
             const double OriginalLoanAmount = 525000;   // 700000 - 175000
+            
             var listingDetail = new ListingDetail()
             {
                 ListingPrice = ListingPrice
             };
-
             _mockZillowListingService.Setup(zillowListingService => zillowListingService.GetListingDetail(It.Is<string>(addr => addr == Address))).ReturnsAsync(listingDetail);
 
-            _mockMortgageInterestEstimator.Setup(interestEstimator => interestEstimator.GetCurrentInterest(It.Is<double>(price => price == ListingPrice))).ReturnsAsync(InterestRate);
+            const double InterestRate = 7.0;
+            _mockMortgageInterestEstimator.Setup(interestEstimator => interestEstimator.GetCurrentInterest(It.IsAny<double>())).ReturnsAsync(InterestRate);
 
-            _mockMortgageInterestEstimator.Setup(interestEstimator => interestEstimator.GetCurrentInterest(It.IsAny<double>(), It.IsAny<double>())).ReturnsAsync(InterestRate);
+            _mockCashFlowCalculator.Setup(cashFlowCalculator => cashFlowCalculator.CalculateCashFlow(Address)).ReturnsAsync(new Random().NextDouble());
 
             var expectedFutureAnalyzerRequest = new FutureAnalyzerRequest()
             {

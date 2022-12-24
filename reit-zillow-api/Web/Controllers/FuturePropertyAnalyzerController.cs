@@ -1,6 +1,8 @@
 ﻿using Core;
 using Core.Analyzer;
+using Core.CashFlow;
 using Core.Dto;
+using Core.Income;
 using Core.Interest;
 using Core.Listing;
 using Core.Loan;
@@ -15,18 +17,22 @@ namespace reit_zillow_api.Controllers
     public class FuturePropertyAnalyzerController : ControllerBase
     {
         private readonly IFutureAnalyzer _futureAnalyzer;
-        private readonly IZillowListingService _zillowListingService;
+        private readonly IListingService _zillowListingService;
         private readonly IMortgageInterestEstimator _mortgageInterestEstimator;
+        private readonly ICashFlowCalculator _cashFlowCalculator;
         private readonly AppOptions _appOptions;
 
-        public FuturePropertyAnalyzerController(IFutureAnalyzer futureAnalyzer,
-            IZillowListingService zillowListingService,
+        public FuturePropertyAnalyzerController(
+            IFutureAnalyzer futureAnalyzer,
+            IListingService zillowListingService,
             IMortgageInterestEstimator interestEstimator,
+            ICashFlowCalculator cashFlowCalculator,
             AppOptions appOptions)
         {
             _futureAnalyzer = futureAnalyzer;
             _zillowListingService = zillowListingService;
             _mortgageInterestEstimator = interestEstimator;
+            _cashFlowCalculator = cashFlowCalculator;
             _appOptions = appOptions;
         }
 
@@ -53,7 +59,7 @@ namespace reit_zillow_api.Controllers
             double loanAmount =
             Calculators.CalculateLoanAmount(listingDetail.ListingPrice, _appOptions.DefaultDownPaymentPercent);
 
-            double interestRate = await _mortgageInterestEstimator.GetCurrentInterest(loanAmount, listingDetail.ListingPrice);
+            double interestRate = await _mortgageInterestEstimator.GetCurrentInterest(listingDetail.ListingPrice);
 
             var inputs = new FutureAnalyzerRequest()
             {
@@ -63,16 +69,12 @@ namespace reit_zillow_api.Controllers
                 HoldingPeriodInYears = numOfYearsHold,
                 InterestRate = interestRate,
                 LoanProgram = LoanProgram.ThirtyYearFixed,
-                EstimatedMonthlyCashflow = CalculateMonthlyCashFlow(numOfYearsHold, listingDetail, interestRate)
+                EstimatedMonthlyCashflow = await _cashFlowCalculator.CalculateCashFlow(address)
             };
 
             return AnalyzeInvestmentAfterHoldingPeriod(inputs);
         }
 
-        private double CalculateMonthlyCashFlow(int numOfYearsHold, ListingDetail listingDetail, double interestRate)
-        {
-            return 100;
-        }
 
         private FutureAnalyzerConfigs DefaultConfigs()
         {

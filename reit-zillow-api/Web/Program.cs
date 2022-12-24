@@ -21,6 +21,7 @@ using reit_zillow_api.Configurations;
 #if !DEBUG
 Log.Logger = new LoggerConfiguration().WriteTo.Console().CreateBootstrapLogger();
 #endif
+
 try
 {
 

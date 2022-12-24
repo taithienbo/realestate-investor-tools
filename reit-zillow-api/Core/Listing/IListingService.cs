@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Core.Listing
 {
-    public interface IZillowListingService
+    public interface IListingService
     {
         public Task<ListingDetail> GetListingDetail(string address);
     }

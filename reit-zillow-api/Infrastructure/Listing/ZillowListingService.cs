@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Listing
 {
-    public class ZillowListingService : IZillowListingService
+    public class ZillowListingService : IListingService
     {
         private readonly IZillowClient _zillowClient;
         private readonly IZillowListingParser _zillowListingParser;

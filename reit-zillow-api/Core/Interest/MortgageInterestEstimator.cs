@@ -35,7 +35,5 @@ namespace Core.Interest
             double loanAmount = Calculators.CalculateLoanAmount(propertyPrice, _appOptions.DefaultDownPaymentPercent);
             return GetCurrentInterest(loanAmount, propertyPrice);
         }
-
-
     }
 }
