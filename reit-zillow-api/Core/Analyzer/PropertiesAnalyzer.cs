@@ -12,31 +12,29 @@ namespace Core.Analyzer
 {
     public class PropertiesAnalyzer : IPropertiesAnalyzer
     {
-        private readonly IZillowClient _zillowClient;
-        private readonly IHouseSearchParser _houseSearchParser;
         private readonly AppOptions _appOptions;
         private readonly IMortgageInterestEstimator _mortgageInterestEstimator;
         private readonly ITotalInvestmentEstimator _outOfPocketCostEstimator;
-        private readonly IExpenseEstimator _expenseEstimator;
+        private readonly IExpenseService _expenseService;
         private readonly IListingService _listingService;
-        private readonly IIncomesEstimator _incomesEstimator;
+        private readonly IIncomesService _incomesService;
+        private readonly IHouseSearchService _houseSearchService;
 
-        public PropertiesAnalyzer(IZillowClient zillowClient,
-           IHouseSearchParser houseSearchParser,
+        public PropertiesAnalyzer(
            IMortgageInterestEstimator mortgageInterestEstimator,
            ITotalInvestmentEstimator outOfPocketCostEstimator,
-           IExpenseEstimator expenseEstimator,
-           IIncomesEstimator incomesEstimator,
+           IExpenseService expenseService,
+           IIncomesService incomesService,
            IListingService listingService,
+           IHouseSearchService houseSearchService,
         AppOptions appOptions)
         {
-            _zillowClient = zillowClient;
-            _houseSearchParser = houseSearchParser;
             _mortgageInterestEstimator = mortgageInterestEstimator;
             _outOfPocketCostEstimator = outOfPocketCostEstimator;
-            _expenseEstimator = expenseEstimator;
+            _expenseService = expenseService;
             _listingService = listingService;
-            _incomesEstimator = incomesEstimator;
+            _incomesService = incomesService;
+            _houseSearchService = houseSearchService;
             _appOptions = appOptions;
         }
 
@@ -55,13 +53,11 @@ namespace Core.Analyzer
 
             analysisDetail.ListingDetail = listingDetail;
 
-            analysisDetail.Incomes = await _incomesEstimator.EstimateIncomes(address);
+            analysisDetail.Incomes = await _incomesService.EstimateIncomes(address);
 
-            double currentInterest = await _mortgageInterestEstimator.GetCurrentInterest(listingDetail.ListingPrice);
-            analysisDetail.InterestRate = currentInterest;
+            analysisDetail.InterestRate = await _mortgageInterestEstimator.GetCurrentInterest(listingDetail.ListingPrice);
 
-            var expenses = GetExpenses(listingDetail, currentInterest, analysisDetail.Incomes[nameof(CommonIncomeType.Rental)]);
-            analysisDetail.Expenses = expenses;
+            analysisDetail.Expenses = await _expenseService.CalculateExpenses(address);
 
             analysisDetail.NetOperatingIncome = Calculators.CalculateNetOperatingIncome(analysisDetail.Incomes!, analysisDetail.Expenses);
 
@@ -86,8 +82,7 @@ namespace Core.Analyzer
         {
             IDictionary<string, PropertyAnalysisDetail> propertiesAnalysis = new Dictionary<string, PropertyAnalysisDetail>();
 
-            var addressesHtml = await _zillowClient.SearchListingsByZipCode(zipCode);
-            IList<string> addresses = _houseSearchParser.ParseListingAddresses(addressesHtml);
+            IList<string> addresses = await _houseSearchService.SearchListings(zipCode);
             foreach (var address in addresses)
             {
                 Thread.Sleep(100); // avoid sending too many requests in a short time and getting blocked. 
@@ -99,20 +94,5 @@ namespace Core.Analyzer
             }
             return await Task.FromResult(propertiesAnalysis);
         }
-
-        private IDictionary<string, double> GetExpenses(ListingDetail listingDetail, double interestRate, double rentAmount)
-        {
-            return _expenseEstimator.EstimateExpenses(new EstimateExpensesRequest()
-            {
-                PropertyAge = listingDetail.PropertyAge,
-                PropertyValue = listingDetail.ListingPrice,
-                InterestRate = interestRate,
-                RentAmount = rentAmount,
-                HoaFee = listingDetail.HoaFee
-            });
-        }
-
     }
-
-
 }

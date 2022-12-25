@@ -19,14 +19,14 @@ namespace reit_zillow_api.Controllers
         private readonly IFutureAnalyzer _futureAnalyzer;
         private readonly IListingService _zillowListingService;
         private readonly IMortgageInterestEstimator _mortgageInterestEstimator;
-        private readonly ICashFlowCalculator _cashFlowCalculator;
+        private readonly ICashFlowService _cashFlowCalculator;
         private readonly AppOptions _appOptions;
 
         public FuturePropertyAnalyzerController(
             IFutureAnalyzer futureAnalyzer,
             IListingService zillowListingService,
             IMortgageInterestEstimator interestEstimator,
-            ICashFlowCalculator cashFlowCalculator,
+            ICashFlowService cashFlowCalculator,
             AppOptions appOptions)
         {
             _futureAnalyzer = futureAnalyzer;

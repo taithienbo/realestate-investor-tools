@@ -15,20 +15,17 @@ namespace Core.Analyzer
     {
         private readonly IAmortizationScheduleCalculator _amortizationScheduleCalculator;
         private readonly ISellingCostEstimator _sellingCostEstimator;
-        private readonly AppOptions _appOptions;
         private readonly IPropertyValueEstimator _propertyValueEstimator;
 
 
         public FutureAnalyzer(IAmortizationScheduleCalculator amortizationScheduleCalculator,
             IPropertyValueEstimator propertyValueEstimator,
-            ISellingCostEstimator sellingCostEstimator,
-            AppOptions appOptions)
+            ISellingCostEstimator sellingCostEstimator)
         {
             _amortizationScheduleCalculator = amortizationScheduleCalculator;
             _propertyValueEstimator = propertyValueEstimator;
             _propertyValueEstimator = propertyValueEstimator;
             _sellingCostEstimator = sellingCostEstimator;
-            _appOptions = appOptions;
         }
 
         public double CalculateNetProfitsOnSell(FutureAnalyzerRequest parameters)

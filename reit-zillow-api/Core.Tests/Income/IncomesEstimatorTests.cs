@@ -11,7 +11,7 @@ namespace Core.Tests.Income
 {
     public class IncomesEstimatorTests
     {
-        private readonly IIncomesEstimator _incomesEstimator;
+        private readonly IIncomesService _incomesEstimator;
         private readonly Mock<IPriceRentalService> _priceRentalService;
 
         public IncomesEstimatorTests()

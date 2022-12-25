@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Core.CashFlow
 {
-    public interface ICashFlowCalculator
+    public interface ICashFlowService
     {
         public Task<double> CalculateCashFlow(string address);
     }

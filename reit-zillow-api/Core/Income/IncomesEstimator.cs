@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Core.Income
 {
-    public class IncomesEstimator : IIncomesEstimator
+    public class IncomesEstimator : IIncomesService
     {
         private readonly IPriceRentalService _priceRentalService;
 

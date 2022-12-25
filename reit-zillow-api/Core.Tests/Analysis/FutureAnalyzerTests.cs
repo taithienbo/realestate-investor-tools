@@ -32,14 +32,7 @@ namespace Core.Tests.Analysis
         public void AnalyzeInvestment()
         {
             // arrange 
-            AppOptions appOptions = new AppOptions()
-            {
-                DefaultAgentFeesPercentageOfSellingPrice = 6,
-                DefaultTaxPercentageOnSell = 15,
-                DefaultClosingCostOnSell = 15000,
-                DefaultRepairCostOnSell = 5000,
-                DefaultYearlyPercentageIncreaseInPropertyValue = 4
-            };
+
 
             const int HoldingPeriodInYears = 5;
             const double DownPaymentAmount = 60000;
@@ -49,8 +42,8 @@ namespace Core.Tests.Analysis
             const double OriginalPurchaseAmount = 570000;
             const double PropertyValueAtSell = 692408;  // assumed 4% appreciation per year. 
             const double AgentFeesAtSell = 41244.48;  // 6% of property value 
-            double closingCostAtSell = appOptions.DefaultClosingCostOnSell;
-            double RepairsCost = appOptions.DefaultRepairCostOnSell;
+            double closingCostAtSell = 15000;
+            double RepairsCost = 5000;
 
             const double TaxOnSell = 8424.53;  // 15% of ProfitOnSell
 
@@ -73,7 +66,7 @@ namespace Core.Tests.Analysis
             _mockSellingCostEstimator.Setup(estimator => estimator.EstimateSellingCost(It.IsAny<double>(), It.IsAny<double>())).Returns(SellingCosts);
 
             IFutureAnalyzer analyzer = new FutureAnalyzer(_mockAmortizationScheduler.Object, _mockPropertyValueEstimator.Object,
-                _mockSellingCostEstimator.Object, appOptions);
+                _mockSellingCostEstimator.Object);
 
 
             // act 

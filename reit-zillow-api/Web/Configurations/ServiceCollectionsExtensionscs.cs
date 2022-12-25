@@ -44,9 +44,10 @@ namespace reit_zillow_api.Configurations
             builder.Services.AddSingleton<ISellingCostEstimator, SellingCostEstimator>();
             builder.Services.AddSingleton<IListingService, ZillowListingService>();
             builder.Services.AddSingleton<IPriceRentalService, PriceRentalService>();
-            builder.Services.AddSingleton<ICashFlowCalculator, CashFlowCalculator>();
-            builder.Services.AddSingleton<IIncomesEstimator, IncomesEstimator>();
+            builder.Services.AddSingleton<ICashFlowService, CashFlowService>();
+            builder.Services.AddSingleton<IIncomesService, IncomesEstimator>();
             builder.Services.AddSingleton<IExpenseService, ExpenseService>(); 
+            builder.Services.AddSingleton<IHouseSearchService, HouseSearchService>();
             return builder;
         }
     }

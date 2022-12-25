@@ -14,16 +14,16 @@ namespace Core.Tests.CashFlow
 {
     public class CashFlowCalculatorTests
     {
-        private readonly ICashFlowCalculator _cashFlowCalculator;
-        private readonly Mock<IIncomesEstimator> _mockIncomeEstimator;
+        private readonly ICashFlowService _cashFlowCalculator;
+        private readonly Mock<IIncomesService> _mockIncomeEstimator;
         private readonly Mock<IExpenseService> _mockExpenseService;
 
         public CashFlowCalculatorTests()
         {
-            _mockIncomeEstimator = new Mock<IIncomesEstimator>();
+            _mockIncomeEstimator = new Mock<IIncomesService>();
             _mockExpenseService = new Mock<IExpenseService>();
 
-            _cashFlowCalculator = new CashFlowCalculator(_mockIncomeEstimator.Object, _mockExpenseService.Object);
+            _cashFlowCalculator = new CashFlowService(_mockIncomeEstimator.Object, _mockExpenseService.Object);
         }
 
         [Fact]

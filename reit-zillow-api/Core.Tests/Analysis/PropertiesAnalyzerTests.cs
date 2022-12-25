@@ -11,19 +11,19 @@ using Moq;
 
 namespace Core.Tests.Analysis
 {
-    public class MultiplePropertyAnalyzerTest
+    public class PropertiesAnalyzerTests
     {
         private readonly IPropertiesAnalyzer _propertiesAnalyzer;
-        private readonly Mock<IZillowClient> _mockZillowClient;
-        private readonly Mock<IHouseSearchParser> _mockHouseSearchParser;
         private readonly Mock<IMortgageInterestEstimator> _mockMortgageInterestEstimator;
-        private readonly Mock<IExpenseEstimator> _mockExpenseEstimator;
+        private readonly Mock<IExpenseService> _mockExpenseService;
         private readonly Mock<ITotalInvestmentEstimator> _mockOutOfPocketCostEstimator;
         private readonly Mock<IListingService> _mockListingService;
-        private readonly Mock<IIncomesEstimator> _mockIncomeEstimator;
+        private readonly Mock<IIncomesService> _mockIncomeEstimator;
+        private readonly Mock<IHouseSearchService> _mockHouseSearchService;
+
         private readonly AppOptions _appOptions;
 
-        public MultiplePropertyAnalyzerTest()
+        public PropertiesAnalyzerTests()
         {
             _appOptions = new AppOptions()
             {
@@ -32,23 +32,21 @@ namespace Core.Tests.Analysis
             };
 
             _mockMortgageInterestEstimator = new Mock<IMortgageInterestEstimator>();
-            _mockExpenseEstimator = new Mock<IExpenseEstimator>();
-            _mockZillowClient = new Mock<IZillowClient>();
-            _mockHouseSearchParser = new Mock<IHouseSearchParser>();
+            _mockExpenseService = new Mock<IExpenseService>();
+            _mockHouseSearchService = new Mock<IHouseSearchService>();
             _mockOutOfPocketCostEstimator = new Mock<ITotalInvestmentEstimator>();
             _mockListingService = new Mock<IListingService>();
             _ = new Mock<IPriceRentalService>();
-            _mockIncomeEstimator = new Mock<IIncomesEstimator>();
+            _mockIncomeEstimator = new Mock<IIncomesService>();
             _propertiesAnalyzer = new PropertiesAnalyzer(
-                _mockZillowClient.Object,
-                _mockHouseSearchParser.Object,
+
                 _mockMortgageInterestEstimator.Object,
                 _mockOutOfPocketCostEstimator.Object,
-                _mockExpenseEstimator.Object,
+                _mockExpenseService.Object,
                 _mockIncomeEstimator.Object,
                 _mockListingService.Object,
+                _mockHouseSearchService.Object,
                 _appOptions);
-
         }
 
         [Fact]
@@ -56,8 +54,6 @@ namespace Core.Tests.Analysis
         {
             // arrange. 
             var address = "123 Heaven St, Happiness City, Awesome State";
-            var mockHtml = "<html></html>";
-            _mockZillowClient.Setup(mockZillowClient => mockZillowClient.GetPriceMyRentalHtmlPage(It.Is<string>(value => value == address))).ReturnsAsync(mockHtml);
 
             const double ExpectedRentalIncome = 3000;
 
@@ -66,7 +62,6 @@ namespace Core.Tests.Analysis
                 { nameof(CommonIncomeType.Rental), ExpectedRentalIncome }
             });
 
-            _mockZillowClient.Setup(mockZillowClient => mockZillowClient.GetListingHtmlPage(It.Is<string>(value => value == address))).ReturnsAsync(mockHtml);
             var listingDetail = new ListingDetail();
             listingDetail.ListingPrice = 123456;
 
@@ -87,7 +82,7 @@ namespace Core.Tests.Analysis
                 { nameof(CommonExpenseType.HoaFee), 200 }
     };
 
-            _mockExpenseEstimator.Setup(expenseEstimator => expenseEstimator.EstimateExpenses(It.IsAny<EstimateExpensesRequest>())).Returns(expenses);
+            _mockExpenseService.Setup(expenseService => expenseService.CalculateExpenses(It.Is<string>(addr => addr == address))).ReturnsAsync(expenses);
 
             // act 
             var propertyAnalysisDetail = _propertiesAnalyzer.Analyze(address).Result;

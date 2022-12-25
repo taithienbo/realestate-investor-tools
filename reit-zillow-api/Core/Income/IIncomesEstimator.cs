@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Core.Income
 {
-    public interface IIncomesEstimator
+    public interface IIncomesService
     {
         public Task<IDictionary<string, double>> EstimateIncomes(string address);
     }

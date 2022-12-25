@@ -9,12 +9,12 @@ using System.Threading.Tasks;
 
 namespace Core.CashFlow
 {
-    public class CashFlowCalculator : ICashFlowCalculator
+    public class CashFlowService : ICashFlowService
     {
-        private readonly IIncomesEstimator _incomesEstimator;
+        private readonly IIncomesService _incomesEstimator;
         private readonly IExpenseService _expenseService;
 
-        public CashFlowCalculator(IIncomesEstimator incomesEstimator, IExpenseService expenseService)
+        public CashFlowService(IIncomesService incomesEstimator, IExpenseService expenseService)
         {
             _incomesEstimator = incomesEstimator;
             _expenseService = expenseService;
