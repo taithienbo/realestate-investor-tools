@@ -13,7 +13,7 @@ namespace Core.Analyzer
     public class PropertiesAnalyzer : IPropertiesAnalyzer
     {
         private readonly AppOptions _appOptions;
-        private readonly IMortgageInterestEstimator _mortgageInterestEstimator;
+        private readonly IMortgageInterestService _mortgageInterestEstimator;
         private readonly ITotalInvestmentEstimator _outOfPocketCostEstimator;
         private readonly IExpenseService _expenseService;
         private readonly IListingService _listingService;
@@ -21,7 +21,7 @@ namespace Core.Analyzer
         private readonly IHouseSearchService _houseSearchService;
 
         public PropertiesAnalyzer(
-           IMortgageInterestEstimator mortgageInterestEstimator,
+           IMortgageInterestService mortgageInterestEstimator,
            ITotalInvestmentEstimator outOfPocketCostEstimator,
            IExpenseService expenseService,
            IIncomesService incomesService,

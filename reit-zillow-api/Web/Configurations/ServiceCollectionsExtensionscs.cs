@@ -32,7 +32,7 @@ namespace reit_zillow_api.Configurations
             builder.Services.AddSingleton<IPropertyManagementExpenseEstimator, PropertyManagementExpenseEstimator>();
             builder.Services.AddSingleton<IMiscExpenseEstimator, MiscExpenseEstimator>();
             builder.Services.AddSingleton<IPriceRentalParser, PriceRentalParser>();
-            builder.Services.AddSingleton<IMortgageInterestEstimator, MortgageInterestEstimator>();
+            builder.Services.AddSingleton<IMortgageInterestService, MortgageInterestEstimator>();
             builder.Services.AddHttpClient<IRateCheckerApiClient>();
             builder.Services.AddSingleton<IRateCheckerApiClient, RateCheckerApiClient>();
             builder.Services.AddSingleton<ITotalInvestmentEstimator, TotalInvestmentEstimator>();

@@ -1,6 +1,6 @@
 ﻿namespace Core.Interest
 {
-    public interface IMortgageInterestEstimator
+    public interface IMortgageInterestService
     {
         public Task<double> GetCurrentInterest(double loanAmount, double propertyPrice);
 

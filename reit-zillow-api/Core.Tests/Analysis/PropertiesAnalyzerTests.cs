@@ -14,7 +14,7 @@ namespace Core.Tests.Analysis
     public class PropertiesAnalyzerTests
     {
         private readonly IPropertiesAnalyzer _propertiesAnalyzer;
-        private readonly Mock<IMortgageInterestEstimator> _mockMortgageInterestEstimator;
+        private readonly Mock<IMortgageInterestService> _mockMortgageInterestEstimator;
         private readonly Mock<IExpenseService> _mockExpenseService;
         private readonly Mock<ITotalInvestmentEstimator> _mockOutOfPocketCostEstimator;
         private readonly Mock<IListingService> _mockListingService;
@@ -31,7 +31,7 @@ namespace Core.Tests.Analysis
                 DefaultClosingCostOnBuy = 15000
             };
 
-            _mockMortgageInterestEstimator = new Mock<IMortgageInterestEstimator>();
+            _mockMortgageInterestEstimator = new Mock<IMortgageInterestService>();
             _mockExpenseService = new Mock<IExpenseService>();
             _mockHouseSearchService = new Mock<IHouseSearchService>();
             _mockOutOfPocketCostEstimator = new Mock<ITotalInvestmentEstimator>();

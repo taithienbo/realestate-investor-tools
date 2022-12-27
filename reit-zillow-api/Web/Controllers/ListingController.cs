@@ -9,18 +9,11 @@ namespace reit_zillow_api.Controllers
     [Route("[controller]")]
     public class ListingController : ControllerBase
     {
-        private readonly IZillowClient _zillowClient;
+        private readonly IListingService _listingService;
 
-        private readonly ILogger<ListingController> _logger;
-        private readonly IZillowListingParser _listingParser;
-
-        public ListingController(ILogger<ListingController> logger,
-            IZillowClient zillowClient,
-            IZillowListingParser listingParser)
+        public ListingController(IListingService listingService)
         {
-            _logger = logger;
-            _zillowClient = zillowClient;
-            _listingParser = listingParser;
+            _listingService = listingService;
         }
 
         [HttpGet]
@@ -31,8 +24,7 @@ namespace reit_zillow_api.Controllers
             {
                 throw new ArgumentNullException("Address cannot be null");
             }
-            var html = await _zillowClient.GetListingHtmlPage(address);
-            return _listingParser.Parse(html);
+            return await _listingService.GetListingDetail(address);
         }
     }
 }

@@ -13,13 +13,13 @@ namespace Core.Expense
     public class ExpenseService : IExpenseService
     {
         private IExpenseEstimator _expenseEstimator;
-        private IMortgageInterestEstimator _mortgageInterestEstimator;
+        private IMortgageInterestService _mortgageInterestEstimator;
         private IPriceRentalService _priceRentalService;
         private IListingService _listingService;
 
         public ExpenseService(IListingService listingService,
             IPriceRentalService priceRentalService,
-            IMortgageInterestEstimator mortgageInterestEstimator,
+            IMortgageInterestService mortgageInterestEstimator,
             IExpenseEstimator expenseEstimator)
         {
             _listingService = listingService;

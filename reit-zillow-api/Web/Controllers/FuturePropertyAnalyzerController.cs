@@ -18,21 +18,21 @@ namespace reit_zillow_api.Controllers
     {
         private readonly IFutureAnalyzer _futureAnalyzer;
         private readonly IListingService _zillowListingService;
-        private readonly IMortgageInterestEstimator _mortgageInterestEstimator;
-        private readonly ICashFlowService _cashFlowCalculator;
+        private readonly IMortgageInterestService _mortgageInterestServive;
+        private readonly ICashFlowService _cashFlowService;
         private readonly AppOptions _appOptions;
 
         public FuturePropertyAnalyzerController(
             IFutureAnalyzer futureAnalyzer,
             IListingService zillowListingService,
-            IMortgageInterestEstimator interestEstimator,
+            IMortgageInterestService interestEstimator,
             ICashFlowService cashFlowCalculator,
             AppOptions appOptions)
         {
             _futureAnalyzer = futureAnalyzer;
             _zillowListingService = zillowListingService;
-            _mortgageInterestEstimator = interestEstimator;
-            _cashFlowCalculator = cashFlowCalculator;
+            _mortgageInterestServive = interestEstimator;
+            _cashFlowService = cashFlowCalculator;
             _appOptions = appOptions;
         }
 
@@ -59,7 +59,7 @@ namespace reit_zillow_api.Controllers
             double loanAmount =
             Calculators.CalculateLoanAmount(listingDetail.ListingPrice, _appOptions.DefaultDownPaymentPercent);
 
-            double interestRate = await _mortgageInterestEstimator.GetCurrentInterest(listingDetail.ListingPrice);
+            double interestRate = await _mortgageInterestServive.GetCurrentInterest(listingDetail.ListingPrice);
 
             var inputs = new FutureAnalyzerRequest()
             {
@@ -69,7 +69,7 @@ namespace reit_zillow_api.Controllers
                 HoldingPeriodInYears = numOfYearsHold,
                 InterestRate = interestRate,
                 LoanProgram = LoanProgram.ThirtyYearFixed,
-                EstimatedMonthlyCashflow = await _cashFlowCalculator.CalculateCashFlow(address)
+                EstimatedMonthlyCashflow = await _cashFlowService.CalculateCashFlow(address)
             };
 
             return AnalyzeInvestmentAfterHoldingPeriod(inputs);

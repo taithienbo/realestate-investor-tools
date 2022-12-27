@@ -7,7 +7,7 @@ namespace Infrastructure.Tests.Interest
 {
     public class MortgageInterestEstimatorTests
     {
-        private IMortgageInterestEstimator _mortgageInterestEstimator;
+        private IMortgageInterestService _mortgageInterestEstimator;
         private Mock<IRateCheckerApiClient> _mockRateCheckerApiClient;
         private readonly AppOptions _appOptions;
 

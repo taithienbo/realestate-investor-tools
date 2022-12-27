@@ -33,7 +33,6 @@ namespace Core.Tests.Analysis
         {
             // arrange 
 
-
             const int HoldingPeriodInYears = 5;
             const double DownPaymentAmount = 60000;
             const double OriginalLoanAmount = 432200;
@@ -47,7 +46,7 @@ namespace Core.Tests.Analysis
 
             const double TaxOnSell = 8424.53;  // 15% of ProfitOnSell
 
-            const double SellingCosts = 69669.08; // DefaultClosingCostOnSell + Agent fees + TaxOnSell + DefaultRepaitCostOnSell
+            const double SellingCosts = 69669.08; // DefaultClosingCostOnSell + Agent fees + TaxOnSell + DefaultRepairCostOnSell
 
             const double NetProfit = 180259.72; // PropertyValueAtSell - SellingCosts
 

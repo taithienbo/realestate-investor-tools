@@ -5,7 +5,7 @@ using Core.Options;
 
 namespace Core.Interest
 {
-    public class MortgageInterestEstimator : IMortgageInterestEstimator
+    public class MortgageInterestEstimator : IMortgageInterestService
     {
         private readonly IRateCheckerApiClient _rateCheckerApiClient;
         private readonly AppOptions _appOptions;

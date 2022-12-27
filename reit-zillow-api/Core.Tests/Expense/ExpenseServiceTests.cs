@@ -14,14 +14,14 @@ namespace Core.Tests.Expense
         private readonly IExpenseService _expenseService;
         private readonly Mock<IListingService> _mockListingService;
         private readonly Mock<IPriceRentalService> _mockPriceRentalService;
-        private readonly Mock<IMortgageInterestEstimator> _mockMortgageInterestEstimator;
+        private readonly Mock<IMortgageInterestService> _mockMortgageInterestEstimator;
         private readonly Mock<IExpenseEstimator> _mockExpenseEstimator;
 
         public ExpenseServiceTests()
         {
             _mockListingService = new Mock<IListingService>();
             _mockPriceRentalService = new Mock<IPriceRentalService>();
-            _mockMortgageInterestEstimator = new Mock<IMortgageInterestEstimator>();
+            _mockMortgageInterestEstimator = new Mock<IMortgageInterestService>();
             _mockExpenseEstimator = new Mock<IExpenseEstimator>();
 
             _expenseService = new ExpenseService(_mockListingService.Object, _mockPriceRentalService.Object, _mockMortgageInterestEstimator.Object,

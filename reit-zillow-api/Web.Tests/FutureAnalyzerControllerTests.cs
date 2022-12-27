@@ -22,7 +22,7 @@ namespace Web.Tests
     {
         private readonly FuturePropertyAnalyzerController _controller;
         private readonly Mock<IFutureAnalyzer> _futureAnalyzerMock;
-        private readonly Mock<IMortgageInterestEstimator> _mockMortgageInterestEstimator;
+        private readonly Mock<IMortgageInterestService> _mockMortgageInterestEstimator;
         private readonly Mock<IListingService> _mockZillowListingService;
         private readonly Mock<ICashFlowService> _mockCashFlowCalculator;
         private readonly AppOptions _appOptions;
@@ -30,7 +30,7 @@ namespace Web.Tests
         public FutureAnalyzerControllerTests()
         {
             _futureAnalyzerMock = new Mock<IFutureAnalyzer>();
-            _mockMortgageInterestEstimator = new Mock<IMortgageInterestEstimator>();
+            _mockMortgageInterestEstimator = new Mock<IMortgageInterestService>();
             _mockZillowListingService = new Mock<IListingService>();
             _mockCashFlowCalculator = new Mock<ICashFlowService>();
 

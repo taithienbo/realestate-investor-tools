@@ -15,10 +15,9 @@ namespace Web.Tests
     {
         private readonly ExpenseController _expenseController;
         private readonly IExpenseEstimator _expenseEstimator;
-        private readonly Mock<IZillowClient> _mockZillowClient;
-        private readonly Mock<IZillowListingParser> _mockListingParser;
-        private readonly Mock<IPriceRentalParser> _mockPriceRentalParser;
-        private readonly Mock<IMortgageInterestEstimator> _mockMortgageInterestEstimator;
+
+        private readonly Mock<IExpenseService> _mockExpenseService;
+
         private readonly AppOptions _appOptions;
 
         public ExpenseControllerTests()
@@ -40,13 +39,10 @@ namespace Web.Tests
                 new PropertyManagementExpenseEstimator(_appOptions),
                 new MiscExpenseEstimator(_appOptions));
 
-            _mockZillowClient = new Mock<IZillowClient>();
-            _mockListingParser = new Mock<IZillowListingParser>();
-            _mockPriceRentalParser = new Mock<IPriceRentalParser>();
-            _mockMortgageInterestEstimator = new Mock<IMortgageInterestEstimator>();
+            _mockExpenseService = new Mock<IExpenseService>();
 
-            _expenseController = new ExpenseController(_expenseEstimator, _mockZillowClient.Object, _mockListingParser.Object, _mockPriceRentalParser.Object,
-              _mockMortgageInterestEstimator.Object);
+            _expenseController = new ExpenseController(_expenseEstimator,
+              _mockExpenseService.Object);
         }
 
         [Fact]
@@ -64,29 +60,24 @@ namespace Web.Tests
             var testAddress = "1234 Heaven St, Anaheim, CA";
             var testHTML = "<html></html>";
             var interestRate = 7.0;
-            _mockMortgageInterestEstimator.Setup(mortageInterestEstimator => mortageInterestEstimator.GetCurrentInterest(It.IsAny<double>(), It.IsAny<double>())).ReturnsAsync(interestRate);
-            _mockZillowClient.Setup(zillowClient => zillowClient.GetListingHtmlPage(It.IsAny<string>())).ReturnsAsync(testHTML);
+
+
             var testListingDetail = new ListingDetail()
             {
                 ListingPrice = 600000,
                 YearBuilt = 1950,
                 HoaFee = 200
             };
-            var testPriceRentalDetail = new PriceRentalDetail()
+
+            var expectedExpenseDetail = new Dictionary<string, double>()
             {
-                ZEstimateLow = 1,
-                ZEstimateHigh = 10,
-                ZEstimate = 5
+                {nameof(CommonExpenseType.Misc), new Random().NextDouble() }
             };
-            _mockListingParser.Setup(listingParser => listingParser.Parse(It.IsAny<string>())).Returns(testListingDetail);
-            _mockPriceRentalParser.Setup(priceRentalParser => priceRentalParser.Parse(It.IsAny<string>())).Returns(testPriceRentalDetail);
+            _mockExpenseService.Setup(expenseService => expenseService.CalculateExpenses(It.Is<string>(addr => addr == testAddress))).ReturnsAsync(expectedExpenseDetail);
             // act 
             var expenseDetail = _expenseController.EstimateExpenses(testAddress).Result;
             Assert.NotNull(expenseDetail);
-            foreach (var commonExpense in Enum.GetNames(typeof(CommonExpenseType)))
-            {
-                Assert.True(expenseDetail.ContainsKey(commonExpense));
-            }
+            Assert.Equal(expectedExpenseDetail, expenseDetail);
 
         }
 

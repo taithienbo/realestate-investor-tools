@@ -1,3 +1,4 @@
+using Core.Dto;
 using Core.Listing;
 using Core.Zillow;
 using Infrastructure.Listing;
@@ -9,35 +10,31 @@ namespace Web.Tests
 {
     public class ListingControllerTest
     {
-        private readonly ILogger<ListingController> _mockLogger;
-        private readonly IZillowListingParser _listingParser;
-        private readonly string _testFile;
-        private readonly string _testHtml;
-        private readonly Mock<IZillowClient> _mockZillowClient;
+        private readonly Mock<IListingService> _mockListingService;
         private readonly ListingController _listingController;
 
         public ListingControllerTest()
         {
-            _mockLogger = Mock.Of<ILogger<ListingController>>();
-            _listingParser = new ZillowListingParser();
-            _testFile = "TestFiles" + Path.DirectorySeparatorChar + "zillow_listing_1.html";
-            _testHtml = File.ReadAllText(_testFile);
-            _mockZillowClient = new Mock<IZillowClient>();
-            _mockZillowClient.Setup(zillowClient => zillowClient.GetListingHtmlPage(It.IsAny<string>())).ReturnsAsync(_testHtml);
-            _listingController = new ListingController(_mockLogger, _mockZillowClient.Object, _listingParser);
+            _mockListingService = new Mock<IListingService>();
+            _listingController = new ListingController(_mockListingService.Object);
         }
 
         [Fact]
         public async void GetListingInfo()
         {
 
-            var address = "829 N Lenz Dr, Anaheim, CA 92805";
+            const string Address = "829 N Lenz Dr, Anaheim, CA 92805";
+            var expectedListingDetail = new ListingDetail()
+            {
+                ListingPrice = new Random().NextDouble()
+            };
+            _mockListingService.Setup(listingService => listingService.GetListingDetail(Address)).ReturnsAsync(expectedListingDetail);
             // act
-            var listingDetail = await _listingController.GetListingInfo(address);
+
+            var listingDetail = await _listingController.GetListingInfo(Address);
             // assert
             Assert.NotNull(listingDetail);
-            _mockZillowClient.Verify(mockZillowClient => mockZillowClient.GetListingHtmlPage(It.Is<string>(value => value.Equals(address))));
-            Assert.True(listingDetail.ListingPrice > 0);
+            Assert.Equal(expectedListingDetail, listingDetail);
         }
 
         [Fact]
