@@ -1,29 +1,32 @@
 ﻿using Core.Dto;
 using Core.Listing;
 using Core.Zillow;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Infrastructure.Listing
 {
     public class ZillowListingService : IListingService
     {
-        private readonly IZillowClient _zillowClient;
         private readonly IZillowListingParser _zillowListingParser;
+        private readonly HttpClient _httpClient;
 
-        public ZillowListingService(IZillowClient zillowClient, IZillowListingParser zillowListingParser)
+        public ZillowListingService(
+            IHttpClientFactory httpClientFactory,
+            IZillowListingParser zillowListingParser)
         {
-            _zillowClient = zillowClient;
+            _httpClient = httpClientFactory.CreateClient("Zillow");
             _zillowListingParser = zillowListingParser;
         }
 
         public async Task<ListingDetail> GetListingDetail(string address)
         {
-            var listingDetailHtml = await _zillowClient.GetListingHtmlPage(address);
+            var listingDetailHtml = await GetListingHtmlPage(address);
             return _zillowListingParser.Parse(listingDetailHtml);
+        }
+
+        private async Task<string> GetListingHtmlPage(string address)
+        {
+
+            return await _httpClient.GetStringAsync(ZillowUtil.BuildListingUrl(address));
         }
     }
 }

@@ -1,27 +1,25 @@
 ﻿using Core.Dto;
+using Core.Income;
 using Core.Zillow;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Core.Income
+
+namespace Infrastructure.Income
 {
     public class PriceRentalService : IPriceRentalService
     {
-        private readonly IZillowClient _zillowClient;
         private readonly IPriceRentalParser _priceRentalParser;
-
-        public PriceRentalService(IZillowClient zillowClient, IPriceRentalParser priceRentalParser)
+        private readonly HttpClient _httpClient;
+        public PriceRentalService(
+            IHttpClientFactory httpClientFactory,
+            IPriceRentalParser priceRentalParser)
         {
-            _zillowClient = zillowClient;
+            _httpClient = httpClientFactory.CreateClient("Zillow");
             _priceRentalParser = priceRentalParser;
         }
 
         public async Task<double> PriceMyRental(string address)
         {
-            string priceRentalHtmlPage = await _zillowClient.GetPriceMyRentalHtmlPage(address);
+            string priceRentalHtmlPage = await _httpClient.GetStringAsync(ZillowUtil.BuildPriceMyRentalUrl(address));
             PriceRentalDetail priceRentalDetail = _priceRentalParser.Parse(priceRentalHtmlPage);
             return priceRentalDetail.ZEstimate;
         }

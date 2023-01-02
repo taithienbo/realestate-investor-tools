@@ -11,6 +11,7 @@ using Core.PropertyValue;
 using Core.Selling;
 using Core.Zillow;
 using Infrastructure.ConsumerFinance;
+using Infrastructure.Income;
 using Infrastructure.Listing;
 using Infrastructure.Zillow;
 
@@ -46,7 +47,7 @@ namespace reit_zillow_api.Configurations
             builder.Services.AddSingleton<IPriceRentalService, PriceRentalService>();
             builder.Services.AddSingleton<ICashFlowService, CashFlowService>();
             builder.Services.AddSingleton<IIncomesService, IncomesEstimator>();
-            builder.Services.AddSingleton<IExpenseService, ExpenseService>(); 
+            builder.Services.AddSingleton<IExpenseService, ExpenseService>();
             builder.Services.AddSingleton<IHouseSearchService, HouseSearchService>();
             return builder;
         }

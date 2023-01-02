@@ -11,19 +11,6 @@ namespace Infrastructure.Zillow
             _httpClient = httpClientFactory.CreateClient("Zillow");
         }
 
-        public Task<string> GetListingHtmlPage(string address)
-        {
-            var handler = new HttpClientHandler
-            {
-                UseCookies = false
-            };
-            return _httpClient.GetStringAsync(ZillowUtil.BuildListingUrl(address));
-        }
-
-        public Task<string> GetPriceMyRentalHtmlPage(string address)
-        {
-            return _httpClient.GetStringAsync(ZillowUtil.BuildPriceMyRentalUrl(address));
-        }
 
         public Task<string> SearchListingsByZipCode(int zipCode)
         {
