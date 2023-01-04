@@ -1,17 +1,4 @@
-using Core.Amortization;
-using Core.Analyzer;
-using Core.ConsumerFinance;
-using Core.Expense;
-using Core.Income;
-using Core.Interest;
-using Core.Listing;
 using Core.Options;
-using Core.PropertyValue;
-using Core.Selling;
-using Core.Zillow;
-using Infrastructure.ConsumerFinance;
-using Infrastructure.Listing;
-using Infrastructure.Zillow;
 using reit_zillow_api.JsonConverters;
 using System.Net.Http.Headers;
 using Serilog;

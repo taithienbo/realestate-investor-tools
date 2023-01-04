@@ -13,7 +13,6 @@ using Core.Zillow;
 using Infrastructure.ConsumerFinance;
 using Infrastructure.Income;
 using Infrastructure.Listing;
-using Infrastructure.Zillow;
 
 namespace reit_zillow_api.Configurations
 {
@@ -22,7 +21,6 @@ namespace reit_zillow_api.Configurations
         public static WebApplicationBuilder AddServices(this WebApplicationBuilder builder)
         {
             builder.Services.AddSingleton(builder.Configuration.GetSection(AppOptions.App).Get<AppOptions>());
-            builder.Services.AddSingleton<IZillowClient, ZillowClient>();
             builder.Services.AddSingleton<IZillowListingParser, ZillowListingParser>();
             builder.Services.AddSingleton<IExpenseEstimator, ExpenseEstimator>();
             builder.Services.AddSingleton<IMortgageExpenseEstimator, MortgageExpenseEstimator>();
