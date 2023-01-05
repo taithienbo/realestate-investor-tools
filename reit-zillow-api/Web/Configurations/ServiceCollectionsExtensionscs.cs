@@ -47,6 +47,8 @@ namespace reit_zillow_api.Configurations
             builder.Services.AddSingleton<IIncomesService, IncomesEstimator>();
             builder.Services.AddSingleton<IExpenseService, ExpenseService>();
             builder.Services.AddSingleton<IHouseSearchService, HouseSearchService>();
+
+            builder.Services.AddMemoryCache();
             return builder;
         }
     }
