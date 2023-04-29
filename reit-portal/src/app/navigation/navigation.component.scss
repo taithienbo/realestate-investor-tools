@@ -1,0 +1,27 @@
+/* 
+SPACING SYSTEM (px)
+2 / 4 / 8 / 12 / 16 / 24 / 32 / 48 / 64 / 80 / 96 / 128
+
+FONT SIZE SYSTEM (px)
+10 / 12 / 14 / 16 / 18 / 20 / 24 / 30 / 36 / 44 / 52 / 62 / 74 / 86 / 98
+
+*/
+
+.navigation {
+  display: flex;
+  align-items: center;
+  padding: 12px 24px;
+  row-gap: 48px;
+  background-color: grey;
+}
+.logo-icon {
+  width: 48px;
+}
+
+.logo-text {
+  font-size: 48px;
+  font-weight: 600;
+  margin-left: 8px;
+  color: black;
+  letter-spacing: 1.1;
+}
