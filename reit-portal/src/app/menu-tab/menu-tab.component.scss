@@ -1,0 +1,13 @@
+.tabs {
+  display: flex;
+  gap: 3.2rem;
+}
+
+.tab {
+  flex-grow: 1;
+  padding: 1.2rem 2.4rem;
+}
+
+.active {
+  background-color: yellowgreen;
+}

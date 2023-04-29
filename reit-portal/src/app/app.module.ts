@@ -6,13 +6,15 @@ import { AppComponent } from './app.component';
 import { NavigationComponent } from './navigation/navigation.component';
 import { SearchComponent } from './search/search.component';
 import { SummaryComponent } from './summary/summary.component';
+import { MenuTabComponent } from './menu-tab/menu-tab.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     NavigationComponent,
     SearchComponent,
-    SummaryComponent
+    SummaryComponent,
+    MenuTabComponent
   ],
   imports: [
     BrowserModule,
