@@ -40,6 +40,19 @@ namespace Infrastructure.Tests.Listing
             AssertCorrectListingDetail(expectedListingDetail, listingDetail);
         }
 
+
+        [Fact]
+        public void GetListingDetail_Test1_PictureURLs()
+        {
+            var expectedImageURL = "https://photos.zillowstatic.com/fp/de2fdd9316bb9837c59d4b55e0797e0f-cc_ft_960.jpg";
+            // arrange 
+            string html = File.ReadAllText("TestFiles" + Path.DirectorySeparatorChar + "zillow_listing_1.html");
+            // act 
+            var listingDetail = _listingParser.Parse(html);
+            // assert
+            Assert.Equal(expectedImageURL, listingDetail.ImageURL);
+        }
+
         [Fact]
         public void GetListingDetail_Test2()
         {

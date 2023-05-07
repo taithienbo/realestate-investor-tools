@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-menu-tab',
@@ -7,7 +8,8 @@ import { Component } from '@angular/core';
 })
 export class MenuTabComponent {
   tabs: Tab[];
-  constructor() {
+
+  constructor(private router: Router) {
     this.tabs = [
       new Tab('Summary', true),
       new Tab('Listing', false),
@@ -21,6 +23,15 @@ export class MenuTabComponent {
   selectTab(tab: Tab) {
     this.tabs.forEach((tab) => (tab.isActive = false));
     tab.isActive = true;
+    this.displayTab(tab.title);
+  }
+
+  private displayTab(title: string) {
+    if (title === 'Summary') {
+      this.router.navigate(['/summary']);
+    } else if (title === 'Listing') {
+      this.router.navigate(['/listing']);
+    }
   }
 }
 

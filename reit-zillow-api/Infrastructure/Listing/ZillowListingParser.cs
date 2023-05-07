@@ -15,7 +15,24 @@ namespace Infrastructure.Listing
 
             var listingDetail = new ListingDetail();
             UpdateListingDetailWithFacts(htmlDoc, listingDetail);
+
+            UpdateListingDetailWithImageURL(htmlDoc, listingDetail);
+
             return listingDetail;
+        }
+
+        private void UpdateListingDetailWithImageURL(HtmlDocument htmlDoc, ListingDetail listingDetail)
+        {
+            var imageURLElement = htmlDoc.DocumentNode.SelectSingleNode("//picture/img[1]");
+            if (imageURLElement != null)
+            {
+                var srcAttribute = imageURLElement.Attributes.Where(attribute => attribute.Name.Equals("src"));
+                if (srcAttribute != null && srcAttribute.Any())
+                {
+                    listingDetail.ImageURL = srcAttribute.First().Value;
+                }
+            }
+            // //*[@id="home-details-content"]/div/div/div[1]/div[2]/div[1]/div/div/div/div[1]/div/ul/li[1]/figure/button/picture/img
         }
 
         private void UpdateListingDetailWithFacts(HtmlDocument htmlDoc, ListingDetail listingDetail)

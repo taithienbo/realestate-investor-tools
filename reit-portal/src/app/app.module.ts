@@ -3,24 +3,22 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { NavigationComponent } from './navigation/navigation.component';
 import { SearchComponent } from './search/search.component';
 import { SummaryComponent } from './summary/summary.component';
-import { MenuTabComponent } from './menu-tab/menu-tab.component';
+import { HttpClientModule } from '@angular/common/http';
+import { CoreModule } from './core/core.module';
+import { SharedModule } from './shared/shared.module';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    NavigationComponent,
-    SearchComponent,
-    SummaryComponent,
-    MenuTabComponent
-  ],
+  declarations: [AppComponent, SearchComponent, SummaryComponent],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    HttpClientModule,
+    AppRoutingModule,
+    CoreModule,
+    SharedModule,
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
