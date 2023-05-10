@@ -3,10 +3,10 @@ import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-menu-tab',
-  templateUrl: './menu-tab.component.html',
-  styleUrls: ['./menu-tab.component.scss'],
+  templateUrl: './tool-bar.component.html',
+  styleUrls: ['./tool-bar.component.scss'],
 })
-export class MenuTabComponent {
+export class ToolbarComponent {
   tabs: Tab[];
 
   constructor(private router: Router) {

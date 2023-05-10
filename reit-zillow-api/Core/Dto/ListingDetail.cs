@@ -2,7 +2,7 @@
 {
     public class ListingDetail
     {
-        public string ImageURL { get; set; }
+        public string? ImageURL { get; set; }
         public double ListingPrice { get; set; }
         public int NumOfBedrooms { get; set; }
         public int NumOfBathrooms { get; set; }

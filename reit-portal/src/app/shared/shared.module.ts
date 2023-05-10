@@ -1,10 +1,10 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MenuTabComponent } from './menu-tab/menu-tab.component';
+import { ToolbarComponent } from './tool-bar/tool-bar.component';
 
 @NgModule({
-  declarations: [MenuTabComponent],
+  declarations: [ToolbarComponent],
   imports: [CommonModule],
-  exports: [MenuTabComponent],
+  exports: [ToolbarComponent],
 })
 export class SharedModule {}
