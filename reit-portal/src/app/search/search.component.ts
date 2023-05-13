@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Output } from '@angular/core';
+import { DataService } from '../core/services/data.service';
 
 @Component({
   selector: 'app-search',
@@ -6,12 +7,11 @@ import { Component, EventEmitter, Output } from '@angular/core';
   styleUrls: ['./search.component.scss'],
 })
 export class SearchComponent {
-  @Output()
-  searchQueryEmitter = new EventEmitter<string>();
-
   searchQuery: string = '';
 
+  constructor(private dataService: DataService) {}
+
   onSearchButtonClick() {
-    this.searchQueryEmitter.emit(this.searchQuery);
+    this.dataService.setSearchQuery(this.searchQuery);
   }
 }

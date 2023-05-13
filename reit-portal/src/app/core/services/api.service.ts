@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 @Injectable({
   providedIn: 'root',
 })
-export class AppService {
+export class ApiService {
   // create a constructor with http client for calling api
   constructor(private http: HttpClient) {
     // configure http client with base url
@@ -18,5 +18,14 @@ export class AppService {
       address: '5411-Christal-Ave-Garden-Grove-CA-92845',
     };
     return this.http.get(url, { params: params });
+  }
+
+  getListingDetails(searchQuery: string) {
+    return {
+      numOfBathrooms: 2,
+      numOfBedrooms: 3,
+      numOfGarageSpaces: 2,
+      hasHOA: false,
+    };
   }
 }

@@ -4,6 +4,43 @@ import { SummaryComponent } from './summary.component';
 import { HttpClientModule } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { IListingDetail } from '../models/listing-detail';
+import { BehaviorSubject, of } from 'rxjs';
+import { DataService } from '../core/services/data.service';
+import { ApiService } from '../core/services/api.service';
+
+class MockApiService {
+  getListingDetails() {
+    return {
+      numOfBathrooms: 2,
+      numOfBedrooms: 3,
+      numOfGarageSpaces: 2,
+      hasHOA: false,
+    };
+  }
+}
+
+class MockDataService {
+  private searchQuery$: BehaviorSubject<string | undefined> =
+    new BehaviorSubject<string | undefined>(undefined);
+
+  get listingDetailObservable$() {
+    return of({
+      numOfBathrooms: 2,
+      numOfBedrooms: 3,
+      numOfGarageSpaces: 2,
+      hasHOA: false,
+    });
+  }
+
+  get searchQueryObservables$() {
+    return of('test');
+  }
+
+  setSearchQuery(searchQuery: string) {
+    console.log('setSearchQuery() called');
+    this.searchQuery$.next(searchQuery);
+  }
+}
 
 describe('SummaryComponent', () => {
   let component: SummaryComponent;
@@ -19,6 +56,10 @@ describe('SummaryComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [SummaryComponent],
+      providers: [
+        { provide: ApiService, useClass: MockApiService },
+        { provide: DataService, useClass: MockDataService },
+      ],
       imports: [HttpClientTestingModule],
     }).compileComponents();
 
@@ -29,6 +70,16 @@ describe('SummaryComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('call api service to retrieve listing details when search query changes', () => {
+    const apiService = TestBed.inject(ApiService);
+    spyOn(apiService, 'getListingDetails').and.callThrough();
+
+    const dataService = TestBed.inject(DataService);
+    dataService.setSearchQuery('test');
+
+    expect(apiService.getListingDetails).toHaveBeenCalled();
   });
 
   it('should have listing detail model as input', () => {

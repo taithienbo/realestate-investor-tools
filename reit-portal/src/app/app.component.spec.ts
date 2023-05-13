@@ -46,23 +46,4 @@ describe('AppComponent', () => {
     const app = fixture.componentInstance;
     expect(app.title).toEqual('reit-portal');
   });
-
-  it('should receive search query from search component', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-
-    // spy on app.onSearch to make sure it's called later
-    const searchQuery = 'search query';
-    // retrieve the mock search component to trigger the search event
-    const searchComponent =
-      fixture.debugElement.injector.get(MockSearchComponent);
-
-    searchComponent.searchQuery = searchQuery;
-
-    spyOn(app, 'onSearch');
-    // trigger the search event by clicking on the Search button
-    fixture.nativeElement.querySelector('.search-button').click();
-
-    expect(app.onSearch).toHaveBeenCalled();
-  });
 });
