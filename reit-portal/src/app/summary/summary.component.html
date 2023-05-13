@@ -1,1 +1,17 @@
-<p>summary works!</p>
+<section class="listing">
+  <div class="listing-image">
+    <img [src]="listingDetail?.imageURL" alt="Listing Image" />
+  </div>
+  <div class="listing-info">
+    <ul>
+      <li>Listing price: ${{ listingDetail?.listingPrice }}</li>
+      <li>Property type: ${{ listingDetail?.homeType }}</li>
+      <li>{{ listingDetail?.numOfBedrooms }} bedrooms</li>
+      <li>{{ listingDetail?.numOfBathrooms }} bathrooms</li>
+      <li>Lot size: {{ listingDetail?.lotSize }}</li>
+      <li>Built in {{ listingDetail?.yearBuilt }}</li>
+      <li>Property condition: {{ listingDetail?.propertyCondition }}</li>
+      <li>HOA fee: ${{ listingDetail?.hoaFee }} / month</li>
+    </ul>
+  </div>
+</section>

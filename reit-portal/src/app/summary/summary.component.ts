@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { AppService } from '../core/services/app.service';
+import { IListingDetail } from '../models/listing-detail';
 
 @Component({
   selector: 'app-summary',
@@ -8,6 +9,9 @@ import { AppService } from '../core/services/app.service';
 })
 export class SummaryComponent implements OnInit {
   constructor(private appService: AppService) {}
+
+  @Input()
+  listingDetail?: IListingDetail;
 
   ngOnInit() {
     this.appService.getData().subscribe((data) => {

@@ -1,6 +1,6 @@
 <app-navigation></app-navigation>
 <div class="container">
-  <app-search></app-search>
+  <app-search (searchQueryEmitter)="onSearch($event)"></app-search>
   <app-menu-tab></app-menu-tab>
   <router-outlet></router-outlet>
 </div>

@@ -3,6 +3,8 @@
     type="search"
     class="search-box"
     placeholder="Enter Zillow URL or propery address to begin analysis"
+    [(ngModel)]="searchQuery"
+    name="searchQuery"
   />
-  <button class="search-button">Search</button>
+  <button class="search-button" (click)="onSearchButtonClick()">Search</button>
 </form>

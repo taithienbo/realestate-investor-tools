@@ -8,6 +8,7 @@ import { SummaryComponent } from './summary/summary.component';
 import { HttpClientModule } from '@angular/common/http';
 import { CoreModule } from './core/core.module';
 import { SharedModule } from './shared/shared.module';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [AppComponent, SearchComponent, SummaryComponent],
@@ -17,6 +18,7 @@ import { SharedModule } from './shared/shared.module';
     AppRoutingModule,
     CoreModule,
     SharedModule,
+    FormsModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
