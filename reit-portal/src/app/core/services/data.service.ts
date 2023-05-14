@@ -27,6 +27,7 @@ export class DataService {
   }
 
   setSearchQuery(searchQuery: string) {
+    console.log(`setSearchQuery() called. Emitting ${searchQuery}`);
     this.searchQuery$.next(searchQuery);
   }
 }

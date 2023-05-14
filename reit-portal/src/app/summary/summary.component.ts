@@ -2,7 +2,7 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { ApiService } from '../core/services/api.service';
 import { IListingDetail } from '../models/listing-detail';
 import { DataService } from '../core/services/data.service';
-import { Subject, takeUntil } from 'rxjs';
+import { EMPTY, Subject, switchMap, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-summary',
@@ -14,13 +14,7 @@ export class SummaryComponent implements OnInit, OnDestroy {
     private apiService: ApiService,
     private dataService: DataService
   ) {
-    this.dataService.searchQueryObservables$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((searchQuery) => {
-        if (searchQuery) {
-          this.apiService.getListingDetails(searchQuery);
-        }
-      });
+    console.log('Subscribing to searchQueryObservables$');
   }
 
   private destroy$ = new Subject<void>();
@@ -28,10 +22,40 @@ export class SummaryComponent implements OnInit, OnDestroy {
   @Input()
   listingDetail?: IListingDetail;
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.monitorSearchQuery();
+    this.monitorListingDetail();
+  }
 
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  private monitorListingDetail() {
+    this.dataService.listingDetailObservable$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((listingDetail) => {
+        this.listingDetail = listingDetail;
+      });
+  }
+
+  private monitorSearchQuery() {
+    this.dataService.searchQueryObservables$
+      .pipe(
+        switchMap((searchQuery) => {
+          console.log(
+            `SummaryComponent#ngOnInit called. SearchQuery: ${searchQuery}`
+          );
+          if (searchQuery) {
+            return this.apiService.getListingDetails(searchQuery);
+          }
+          return EMPTY;
+        }),
+        takeUntil(this.destroy$)
+      )
+      .subscribe((listingDetail) => {
+        this.dataService.setListingDetail(listingDetail);
+      });
   }
 }

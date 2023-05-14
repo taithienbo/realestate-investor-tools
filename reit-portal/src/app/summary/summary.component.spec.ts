@@ -1,4 +1,9 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {
+  ComponentFixture,
+  TestBed,
+  fakeAsync,
+  tick,
+} from '@angular/core/testing';
 
 import { SummaryComponent } from './summary.component';
 import { HttpClientModule } from '@angular/common/http';
@@ -10,12 +15,13 @@ import { ApiService } from '../core/services/api.service';
 
 class MockApiService {
   getListingDetails() {
-    return {
+    console.log(`MockApiService#getListingDetails() called.`);
+    return of({
       numOfBathrooms: 2,
       numOfBedrooms: 3,
       numOfGarageSpaces: 2,
       hasHOA: false,
-    };
+    });
   }
 }
 
@@ -33,12 +39,16 @@ class MockDataService {
   }
 
   get searchQueryObservables$() {
-    return of('test');
+    return this.searchQuery$.asObservable();
   }
 
   setSearchQuery(searchQuery: string) {
-    console.log('setSearchQuery() called');
+    console.log(`setSearchQuery() called. Emitting ${searchQuery}`);
     this.searchQuery$.next(searchQuery);
+  }
+
+  setListingDetail(listingDetail: IListingDetail) {
+    console.log('MockDataService#setListingDetail() called');
   }
 }
 
@@ -72,15 +82,16 @@ describe('SummaryComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('call api service to retrieve listing details when search query changes', () => {
+  it('call api service to retrieve listing details when search query changes', fakeAsync(() => {
     const apiService = TestBed.inject(ApiService);
     spyOn(apiService, 'getListingDetails').and.callThrough();
 
     const dataService = TestBed.inject(DataService);
     dataService.setSearchQuery('test');
-
+    // wait for the observable to emit
+    tick();
     expect(apiService.getListingDetails).toHaveBeenCalled();
-  });
+  }));
 
   it('should have listing detail model as input', () => {
     let listingDetail: IListingDetail = {
@@ -90,6 +101,13 @@ describe('SummaryComponent', () => {
     };
     component.listingDetail = listingDetail;
     expect(component.listingDetail).toBeTruthy();
+  });
+
+  it('hide listing detail when listing detail model is undefined', () => {
+    component.listingDetail = undefined;
+    fixture.detectChanges();
+    const compiled = fixture.nativeElement;
+    expect(compiled.querySelector('.listing-info')).toBeFalsy();
   });
 
   it('should display number of bedrooms', () => {
@@ -103,4 +121,17 @@ describe('SummaryComponent', () => {
       `${listingModel.numOfBathrooms} bathrooms`
     );
   });
+
+  it('calls API to retrieve listing details and save to data store when search query changes', fakeAsync(() => {
+    const dataService = TestBed.inject(DataService);
+    spyOn(dataService, 'setListingDetail');
+
+    const apiService = TestBed.inject(ApiService);
+    spyOn(apiService, 'getListingDetails').and.callThrough();
+
+    dataService.setSearchQuery('test');
+    tick();
+    expect(apiService.getListingDetails).toHaveBeenCalled();
+    expect(dataService.setListingDetail).toHaveBeenCalled();
+  }));
 });

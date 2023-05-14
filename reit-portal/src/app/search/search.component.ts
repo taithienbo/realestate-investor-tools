@@ -12,6 +12,7 @@ export class SearchComponent {
   constructor(private dataService: DataService) {}
 
   onSearchButtonClick() {
+    console.log('onsearchButtonClick() called.');
     this.dataService.setSearchQuery(this.searchQuery);
   }
 }

@@ -18,7 +18,7 @@ describe('DataService', () => {
     expect(service.listingDetailObservable$).toBeTruthy();
   });
 
-  it('should have set listingDetail method', () => {
+  it('should have setListingDetail method', () => {
     expect(service.setListingDetail).toBeTruthy();
   });
 

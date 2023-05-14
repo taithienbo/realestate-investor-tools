@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Observable, of } from 'rxjs';
+import { IListingDetail } from 'src/app/models/listing-detail';
 
 @Injectable({
   providedIn: 'root',
@@ -20,12 +22,13 @@ export class ApiService {
     return this.http.get(url, { params: params });
   }
 
-  getListingDetails(searchQuery: string) {
-    return {
+  getListingDetails(searchQuery: string): Observable<IListingDetail> {
+    console.log('getListingDetails() called.');
+    return of({
       numOfBathrooms: 2,
       numOfBedrooms: 3,
       numOfGarageSpaces: 2,
       hasHOA: false,
-    };
+    });
   }
 }
