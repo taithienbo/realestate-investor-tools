@@ -3,6 +3,7 @@ using reit_zillow_api.JsonConverters;
 using System.Net.Http.Headers;
 using Serilog;
 using reit_zillow_api.Configurations;
+using System.Net.Http;
 
 
 #if !DEBUG
@@ -31,7 +32,7 @@ try
 
     builder.Services.AddHttpClient("Zillow", client =>
     {
-        client.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("Mozilla", "5.0"));
+        client.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3");
 
     }).ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler() { UseCookies = false });
 

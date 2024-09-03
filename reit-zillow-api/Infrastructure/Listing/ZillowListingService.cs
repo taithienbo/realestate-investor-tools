@@ -29,7 +29,7 @@ namespace Infrastructure.Listing
 
         public async Task<ListingDetail> GetListingDetail(string address)
         {
-            ListingDetail listingDetail = new ListingDetail();
+            ListingDetail listingDetail;
             if (!_memoryCache.TryGetValue(address, out listingDetail!))
             {
                 var listingDetailHtml = await GetListingHtmlPage(address);
@@ -42,7 +42,15 @@ namespace Infrastructure.Listing
 
         private async Task<string> GetListingHtmlPage(string address)
         {
-            return await _httpClient.GetStringAsync(ZillowUtil.BuildListingUrl(address));
+            var url = ZillowUtil.BuildListingUrl(address);
+            try
+            {
+                return await _httpClient.GetStringAsync(url);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Failed to get listing page for {address}", ex);
+            }
         }
     }
 }
